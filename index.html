@@ -29,9 +29,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* スマホの下スワイプ更新（Pull-to-Refresh）を防止しつつ縦スクロールは許可 */
     html, body {
-      overscroll-behavior-y: contain;
+      overscroll-behavior-y: auto;
+      touch-action: manipulation;
     }
 
     body {
@@ -46,6 +46,7 @@
       overflow-x: hidden;
       overflow-y: auto;
       user-select: none;
+      -webkit-user-select: none;
     }
 
     /* PC画面（1024px以上）のみ1画面固定レイアウトにする */
@@ -57,42 +58,22 @@
       }
     }
 
-    .font-cinzel {
-      font-family: 'Cinzel', serif;
-    }
+    .font-cinzel { font-family: 'Cinzel', serif; }
+    .font-mincho { font-family: 'Shippori Mincho', 'Noto Serif JP', serif; }
 
-    .font-mincho {
-      font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
-    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.25); }
+    ::-webkit-scrollbar-thumb { background: #7c5f32; border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: #b58d4c; }
 
-    /* カスタムスクロールバー */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
-    }
-    ::-webkit-scrollbar-track {
-      background: rgba(0, 0, 0, 0.25);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: #7c5f32;
-      border-radius: 3px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: #b58d4c;
-    }
-
-    /* 真鍮枠とアンティーク質感 */
     .brass-panel {
       background: linear-gradient(180deg, #1d1612 0%, #130e0c 100%);
       border: 1px solid #695028;
       box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.6);
     }
 
-    .brass-border {
-      border: 1px solid var(--border-brass);
-    }
+    .brass-border { border: 1px solid var(--border-brass); }
 
-    /* 羊皮紙スタイル（高コントラスト＆太字） */
     .parchment-bg {
       background-color: var(--parchment);
       background-image:
@@ -103,31 +84,24 @@
       box-shadow: inset 0 0 30px rgba(84, 58, 28, 0.35);
     }
 
-    /* ドラッグ＆ドロップ用スタイル（スマホの縦スクロールを阻害しないようpan-yを許可） */
+    /* スマホでは縦スクロールを完全に邪魔しないよう pan-y を明示 */
     .draggable-item {
       touch-action: pan-y;
       cursor: grab;
       transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
     }
     @media (min-width: 1024px) {
-      .draggable-item {
-        touch-action: none;
-      }
+      .draggable-item { touch-action: none; }
     }
-    .draggable-item:active {
-      cursor: grabbing;
-    }
+    .draggable-item:active { cursor: grabbing; }
 
-    /* ドラッグ実行中のみブラウザのスクロール・ジェスチャーを完全遮断 */
     body.is-dragging-active,
     body.is-dragging-active * {
       touch-action: none !important;
       overscroll-behavior: none !important;
     }
 
-    .drop-zone {
-      transition: all 0.18s ease;
-    }
+    .drop-zone { transition: all 0.18s ease; }
     .drop-zone.drag-over {
       border-color: #f59e0b !important;
       background-color: rgba(217, 119, 6, 0.22) !important;
@@ -144,7 +118,6 @@
       display: none;
     }
 
-    /* ボタンエフェクト */
     .btn-gothic {
       background: linear-gradient(180deg, #32241b 0%, #1f1610 100%);
       border: 1px solid #8f6e38;
@@ -157,13 +130,8 @@
       background: linear-gradient(180deg, #423024 0%, #2a1e16 100%);
       box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
     }
-    .btn-gothic:active:not(:disabled) {
-      transform: translateY(1px);
-    }
-    .btn-gothic:disabled {
-      opacity: 0.42;
-      cursor: not-allowed;
-    }
+    .btn-gothic:active:not(:disabled) { transform: translateY(1px); }
+    .btn-gothic:disabled { opacity: 0.42; cursor: not-allowed; }
 
     .btn-crimson {
       background: linear-gradient(180deg, #88181f 0%, #580d12 100%);
@@ -176,15 +144,8 @@
       background: linear-gradient(180deg, #a31d26 0%, #6e1117 100%);
       box-shadow: 0 0 14px rgba(220, 38, 38, 0.45);
     }
-    .btn-crimson:disabled {
-      opacity: 0.42;
-      cursor: not-allowed;
-    }
+    .btn-crimson:disabled { opacity: 0.42; cursor: not-allowed; }
 
-    @keyframes pulseSubtle {
-      0%, 100% { opacity: 0.92; }
-      50% { opacity: 1; }
-    }
     .bottle-selected {
       border-color: #eab308 !important;
       box-shadow: 0 0 14px rgba(234, 179, 8, 0.55), inset 0 0 8px rgba(234, 179, 8, 0.25) !important;
@@ -195,20 +156,16 @@
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    .animate-fade-in {
-      animation: fadeIn 0.22s ease-out forwards;
-    }
+    .animate-fade-in { animation: fadeIn 0.22s ease-out forwards; }
   </style>
 </head>
 <body class="flex flex-col min-h-[100dvh] lg:h-[100dvh] w-full lg:w-screen overflow-y-auto lg:overflow-hidden select-none">
 
-  <!-- ドラッグ中のゴースト要素 -->
   <div id="drag-ghost" class="px-3 py-2 rounded-lg bg-[#241913] border-2 border-amber-400 text-amber-100 flex items-center gap-2 shadow-2xl">
     <span id="drag-ghost-icon" class="w-6 h-6 flex items-center justify-center"></span>
     <span id="drag-ghost-label" class="text-xs font-extrabold tracking-wide whitespace-nowrap"></span>
   </div>
 
-  <!-- クイックラベル選択ポップアップ（画面全体オーバーレイ） -->
   <div id="label-picker-popover" class="fixed inset-0 z-50 hidden bg-black/65 backdrop-blur-[1px] flex items-center justify-center p-4" onclick="closeLabelPicker(event)">
     <div class="w-full max-w-md rounded-xl brass-panel border-2 border-[#b58d4c] p-4 shadow-2xl animate-fade-in" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between border-b border-[#5e4724] pb-2.5 mb-3">
@@ -218,15 +175,8 @@
         </div>
         <button onclick="forceCloseLabelPicker()" class="px-2.5 py-1 rounded bg-[#2d2119] border border-[#75582b] text-amber-200 text-xs font-bold hover:bg-[#3d2d22]">✕ 閉じる</button>
       </div>
-
       <p class="text-xs text-[#cbb898] mb-2.5 font-semibold">仕入れ済みの生薬名からワンタップで貼り付け、または自由記述が可能です。</p>
-
-      <!-- ワンタップ候補リスト（フラット表示） -->
-      <div id="picker-candidates" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1 mb-3">
-        <!-- JSで動的生成 -->
-      </div>
-
-      <!-- 自由メモ入力切替 -->
+      <div id="picker-candidates" class="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-56 overflow-y-auto pr-1 mb-3"></div>
       <div class="border-t border-[#4d391d] pt-3">
         <label class="block text-xs font-bold text-amber-300 mb-1">自由記述メモ（手書きラベル）</label>
         <div class="flex gap-2">
@@ -238,14 +188,11 @@
     </div>
   </div>
 
-  <!-- データ初期化確認モーダル -->
   <div id="reset-confirm-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-[1px] flex items-center justify-center p-4" onclick="if(event.target.id==='reset-confirm-modal') closeResetModal()">
     <div class="w-full max-w-sm rounded-xl brass-panel border-2 border-red-800/80 p-5 shadow-2xl animate-fade-in text-center" onclick="event.stopPropagation()">
       <span class="font-cinzel text-[11px] tracking-widest text-red-400 block mb-1">RESET ARCHIVE</span>
       <h3 class="text-lg font-black text-[#f7eedc] mb-2">記録を破棄して最初から始めますか？</h3>
-      <p class="text-xs text-[#cbb898] font-semibold leading-relaxed mb-4">
-        現在の営業日数・所持金・瓶のラベル・診療録はすべて消去され、1日目から新しく開始します。
-      </p>
+      <p class="text-xs text-[#cbb898] font-semibold leading-relaxed mb-4">現在の営業日数・所持金・瓶のラベル・診療録はすべて消去され、1日目から新しく開始します。</p>
       <div class="flex gap-2">
         <button onclick="closeResetModal()" class="flex-1 py-2.5 rounded-lg btn-gothic text-xs">キャンセル</button>
         <button onclick="confirmFullReset()" class="flex-1 py-2.5 rounded-lg btn-crimson text-xs">初期化して開始</button>
@@ -253,7 +200,6 @@
     </div>
   </div>
 
-  <!-- トップヘッダー（スマホ縦スクロール時も上部に追従） -->
   <header class="sticky top-0 lg:static shrink-0 h-12 sm:h-13 px-2.5 sm:px-5 bg-gradient-to-r from-[#120d0a] via-[#1e1511] to-[#120d0a] border-b border-[#7a5c2e] flex items-center justify-between z-20 gap-1.5">
     <div class="flex items-center gap-2 min-w-0">
       <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#3a1216] border border-[#c59b48] flex items-center justify-center shrink-0 shadow-inner">
@@ -270,7 +216,6 @@
       </div>
     </div>
 
-    <!-- ステータスバー -->
     <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
       <div class="px-1.5 sm:px-3 py-1 rounded bg-[#140f0c] border border-[#5e4724] flex items-center gap-1">
         <span class="text-[10px] sm:text-[11px] text-[#b89f78] font-bold hidden sm:inline">営業</span>
@@ -289,20 +234,15 @@
         </div>
         <span id="stat-rep-text" class="text-[11px] sm:text-xs font-black text-red-300">70</span>
       </div>
-      <!-- データ初期化ボタン -->
       <button type="button" onclick="openResetModal()" class="px-2 py-1 rounded bg-[#211512] border border-[#6e463a] text-[#d9a79c] hover:border-red-400 hover:text-red-200 text-[10px] sm:text-xs font-bold transition" title="データを初期化して最初からやり直す">
         ↺ 最初へ
       </button>
     </div>
   </header>
 
-  <!-- メイン3ペインコンテナ（スマホでは縦スクロール展開、PCでは3ペイン1画面固定） -->
   <main class="flex-1 lg:min-h-0 w-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-2.5 p-2 sm:p-2.5 pb-6 lg:pb-2.5 overflow-visible lg:overflow-hidden relative">
 
-    <!-- 【左ペイン】薬棚 ＋ 鑑識ウィンドウ ＋ 調合台 -->
     <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-2 lg:order-1">
-      
-      <!-- 薬棚（ボトルラック） -->
       <div class="brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col lg:flex-1 lg:min-h-0">
         <div class="flex items-center justify-between mb-1.5 shrink-0">
           <div class="flex items-center gap-1.5">
@@ -311,21 +251,13 @@
           </div>
           <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">ドラッグ／選択で処方・ラベル命名</span>
         </div>
-
-        <div id="medicine-shelf" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 lg:overflow-y-auto pr-0.5 lg:flex-1 content-start">
-          <!-- JSで薬瓶カードを生成 -->
-        </div>
+        <div id="medicine-shelf" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 lg:overflow-y-auto pr-0.5 lg:flex-1 content-start"></div>
       </div>
 
-      <!-- 下部サブエリア：鑑識ウィンドウ & 調合台 -->
       <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 shrink-0">
-        
-        <!-- 鑑識ウィンドウ（5つの観察特徴のみ表示・ヒントなし） -->
         <div class="sm:col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
           <div class="flex items-center justify-between border-b border-[#4a371c] pb-1 mb-1">
-            <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1">
-              <span>🔍</span> 鑑識レンズ
-            </span>
+            <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1"><span>🔍</span> 鑑識レンズ</span>
             <span id="inspect-bottle-id" class="text-[10px] font-cinzel text-[#a88d63] font-bold">NO SELECTION</span>
           </div>
           <div id="inspect-details" class="text-[11px] sm:text-xs leading-snug space-y-0.5 text-[#e8dcc5] font-semibold">
@@ -333,48 +265,31 @@
           </div>
         </div>
 
-        <!-- 調合台（るつぼ：ドラッグ＆ドロップ対応） -->
         <div class="sm:col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
           <div class="flex items-center justify-between border-b border-[#4a371c] pb-1 mb-1.5">
-            <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1">
-              <span>⚗️</span> 調合台
-            </span>
+            <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1"><span>⚗️</span> 調合台</span>
             <button onclick="clearAlchemySlots()" class="text-[10px] text-[#b5996e] hover:text-amber-300 font-bold underline">空にする</button>
           </div>
-
           <div class="flex items-center justify-between gap-1 my-auto">
-            <!-- スロットA -->
             <div id="alchemy-slot-0" data-drop-target="alchemy-0" onclick="handleSlotClick(0)" class="drop-zone flex-1 h-14 sm:h-16 rounded-lg bg-[#110c09] border border-dashed border-[#7d6033] flex flex-col items-center justify-center p-1 text-center cursor-pointer relative">
               <span class="text-[10px] text-[#8a724d] font-bold">素材 A</span>
             </div>
-
             <span class="text-amber-500 font-black text-xs">+</span>
-
-            <!-- スロットB -->
             <div id="alchemy-slot-1" data-drop-target="alchemy-1" onclick="handleSlotClick(1)" class="drop-zone flex-1 h-14 sm:h-16 rounded-lg bg-[#110c09] border border-dashed border-[#7d6033] flex flex-col items-center justify-center p-1 text-center cursor-pointer relative">
               <span class="text-[10px] text-[#8a724d] font-bold">素材 B</span>
             </div>
           </div>
-
           <div class="mt-1.5 flex items-center gap-1.5">
-            <button id="btn-brew" onclick="brewMixture()" disabled class="flex-1 py-1.5 px-2 rounded-lg btn-gothic text-[11px] sm:text-xs tracking-wider">
-              調合する
-            </button>
+            <button id="btn-brew" onclick="brewMixture()" disabled class="flex-1 py-1.5 px-2 rounded-lg btn-gothic text-[11px] sm:text-xs tracking-wider">調合する</button>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- 【中央ペイン】診察室（患者・セリフ・問診・処方トレイ） -->
     <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-1 lg:order-2">
       <div class="brass-panel rounded-xl p-2.5 sm:p-3.5 flex flex-col justify-between lg:h-full lg:min-h-0 relative lg:overflow-y-auto">
-        
-        <!-- 患者プロフィール＆グラフィック -->
         <div class="flex items-center gap-3 border-b border-[#4d391d] pb-2 shrink-0">
-          <div id="patient-avatar" class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-b from-[#2b1d17] to-[#140d0a] border border-[#8a6a36] flex items-center justify-center shrink-0 shadow-inner overflow-hidden">
-            <!-- SVGアバター -->
-          </div>
+          <div id="patient-avatar" class="w-14 h-14 sm:w-20 sm:h-20 rounded-xl bg-gradient-to-b from-[#2b1d17] to-[#140d0a] border border-[#8a6a36] flex items-center justify-center shrink-0 shadow-inner overflow-hidden"></div>
           <div class="min-w-0 flex-1">
             <div class="flex items-center gap-2 flex-wrap">
               <span id="patient-role-badge" class="px-2 py-0.5 rounded bg-[#3b1519] border border-[#96363e] text-[#ffd4d4] text-[10px] sm:text-[11px] font-extrabold">来院患者</span>
@@ -385,29 +300,20 @@
           </div>
         </div>
 
-        <!-- 患者の訴え＆問診ログ -->
         <div class="my-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto space-y-1.5 pr-0.5">
           <div class="p-2 sm:p-2.5 rounded-lg bg-[#120d0a]/90 border border-[#5e4724]">
             <div class="text-[10px] font-cinzel tracking-wider text-amber-400 font-bold mb-0.5">SYMPTOMS // 患者の訴え</div>
             <p id="patient-dialogue" class="text-xs sm:text-sm leading-relaxed text-[#f7eedc] font-bold">「……」</p>
           </div>
-
-          <!-- 問診で判明した隠された禁忌・体質 -->
-          <div id="interrogation-notes" class="space-y-1">
-            <!-- 問診結果がここに追加される -->
-          </div>
+          <div id="interrogation-notes" class="space-y-1"></div>
         </div>
 
-        <!-- 問診ボタン ＆ 処方トレイ（ドラッグ＆ドロップ対応） -->
         <div class="shrink-0 pt-1.5 border-t border-[#4d391d] space-y-2">
           <div class="flex items-center justify-between gap-2">
             <button id="btn-interrogate" onclick="interrogatePatient()" class="px-3 py-2 rounded-lg btn-gothic text-xs sm:text-sm flex items-center gap-1.5 shrink-0">
-              <span>🩺</span>
-              <span>問診する</span>
+              <span>🩺</span><span>問診する</span>
               <span id="interrogate-count" class="px-1.5 py-0.2 rounded bg-black/50 text-amber-300 text-xs font-black">残2</span>
             </button>
-
-            <!-- 処方トレイ（ドロップゾーン） -->
             <div id="prescribe-drop-zone" data-drop-target="prescribe" onclick="handlePrescribeSlotClick()" class="drop-zone flex-1 h-12 sm:h-14 rounded-lg bg-[#160e0c] border-2 border-dashed border-[#9e4747] px-2.5 flex items-center justify-between cursor-pointer">
               <div id="prescribe-slot-content" class="flex items-center gap-2 min-w-0">
                 <span class="text-xs text-[#c78b8b] font-bold truncate">ここに薬をドラッグ／選択して処方</span>
@@ -420,22 +326,16 @@
             <button id="btn-deliver" onclick="deliverMedicine()" disabled class="flex-1 py-2.5 rounded-lg btn-crimson text-xs sm:text-sm tracking-wider shadow-lg">
               💉 この薬を処方して治療する
             </button>
-            <!-- スマホ専用：医学書を開くボタン -->
             <button onclick="toggleMobileGrimoire(true)" class="lg:hidden px-3 py-2.5 rounded-lg bg-[#d9c7a3] border-2 border-[#7c5828] text-[#1c130d] text-xs font-black flex items-center gap-1 shrink-0 shadow">
-              <span>📖</span>
-              <span>医学書</span>
+              <span>📖</span><span>医学書</span>
             </button>
           </div>
         </div>
-
       </div>
     </section>
 
-    <!-- 【右ペイン】古い医学書（PCでは常時表示、スマホでは全画面ドロワー開閉） -->
     <aside id="grimoire-pane" class="fixed inset-0 z-40 lg:static lg:z-auto lg:col-span-4 hidden lg:flex flex-col min-h-0 p-2 lg:p-0 bg-black/80 lg:bg-transparent order-3">
       <div class="parchment-bg rounded-xl border-2 border-[#8c6932] flex flex-col h-full min-h-0 overflow-hidden shadow-2xl">
-        
-        <!-- 医学書ヘッダー＆タブ -->
         <div class="bg-[#261a12] text-[#f3e6cc] px-3 pt-2.5 pb-2 border-b-2 border-[#8c6932] shrink-0">
           <div class="flex items-center justify-between mb-2">
             <div class="flex items-center gap-2">
@@ -444,8 +344,6 @@
             </div>
             <button onclick="toggleMobileGrimoire(false)" class="lg:hidden px-2.5 py-1 rounded bg-[#422c1e] border border-[#a88246] text-amber-200 text-xs font-extrabold">✕ 閉じる</button>
           </div>
-
-          <!-- タブボタン -->
           <div class="grid grid-cols-4 gap-1">
             <button onclick="switchGrimoireTab('guide')" id="tab-btn-guide" class="grimoire-tab py-1.5 px-1 rounded text-[11px] sm:text-xs font-extrabold bg-[#efe5cf] text-[#1c130d] transition">診療手引き</button>
             <button onclick="switchGrimoireTab('herbs')" id="tab-btn-herbs" class="grimoire-tab py-1.5 px-1 rounded text-[11px] sm:text-xs font-extrabold bg-[#38271c] text-[#d6c3a1] hover:bg-[#4a3426] transition">生薬図鑑</button>
@@ -453,18 +351,12 @@
             <button onclick="switchGrimoireTab('records')" id="tab-btn-records" class="grimoire-tab py-1.5 px-1 rounded text-[11px] sm:text-xs font-extrabold bg-[#38271c] text-[#d6c3a1] hover:bg-[#4a3426] transition">診療録</button>
           </div>
         </div>
-
-        <!-- 医学書コンテンツ領域 -->
-        <div id="grimoire-content" class="flex-1 min-h-0 overflow-y-auto p-3 sm:p-3.5 text-[#1c130d] space-y-3 overscroll-contain">
-          <!-- タブ内容がここに描画される -->
-        </div>
-
+        <div id="grimoire-content" class="flex-1 min-h-0 overflow-y-auto p-3 sm:p-3.5 text-[#1c130d] space-y-3 overscroll-contain"></div>
       </div>
     </aside>
 
   </main>
 
-  <!-- 診察結果モーダル -->
   <div id="result-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="w-full max-w-md brass-panel border-2 border-[#b58d4c] rounded-xl p-5 shadow-2xl animate-fade-in text-center">
       <div id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2"></div>
@@ -475,7 +367,6 @@
     </div>
   </div>
 
-  <!-- 夜の仕入れ画面（ローグライト・ショップモーダル） -->
   <div id="market-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="w-full max-w-lg brass-panel border-2 border-[#c59b48] rounded-xl p-4 sm:p-5 shadow-2xl animate-fade-in max-h-[90dvh] flex flex-col">
       <div class="flex items-center justify-between border-b border-[#5e4724] pb-3 mb-3 shrink-0">
@@ -487,27 +378,17 @@
           所持金: <span id="market-gold">0</span> S
         </div>
       </div>
-
       <p class="text-xs text-[#cbb898] font-semibold mb-3 shrink-0">翌日の診療に備え、新たな無銘の生薬の仕入れや診療設備の強化を行えます。</p>
-
-      <div id="market-items" class="space-y-2.5 overflow-y-auto flex-1 pr-1 mb-4 overscroll-contain">
-        <!-- JSでショップ項目生成 -->
-      </div>
-
-      <button onclick="startNextDay()" class="w-full py-3 rounded-lg btn-crimson text-sm tracking-wider shrink-0">
-        夜明けを迎える（次の営業日へ）
-      </button>
+      <div id="market-items" class="space-y-2.5 overflow-y-auto flex-1 pr-1 mb-4 overscroll-contain"></div>
+      <button onclick="startNextDay()" class="w-full py-3 rounded-lg btn-crimson text-sm tracking-wider shrink-0">夜明けを迎える（次の営業日へ）</button>
     </div>
   </div>
 
-  <!-- ゲームオーバーモーダル -->
   <div id="gameover-modal" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
     <div class="w-full max-w-md brass-panel border-2 border-red-800 rounded-xl p-6 shadow-2xl text-center">
       <span class="font-cinzel text-xs tracking-widest text-red-400 block mb-1">CLINIC CLOSED // LICENSE REVOKED</span>
       <h2 class="text-2xl font-black text-red-200 mb-3">診療所 閉鎖</h2>
-      <p class="text-xs sm:text-sm text-[#d9cbb2] font-semibold leading-relaxed mb-4">
-        誤診と薬害の噂が街中に広まり、あなたの診療所は治安当局によって封鎖されました。
-      </p>
+      <p class="text-xs sm:text-sm text-[#d9cbb2] font-semibold leading-relaxed mb-4">誤診と薬害の噂が街中に広まり、あなたの診療所は治安当局によって封鎖されました。</p>
       <div class="bg-black/50 border border-[#5e4724] rounded-lg p-3.5 mb-5 space-y-1.5 text-sm">
         <div class="flex justify-between"><span class="text-[#b59e7a]">営業日数:</span><span id="go-days" class="font-black text-amber-300"></span></div>
         <div class="flex justify-between"><span class="text-[#b59e7a]">治療成功人数:</span><span id="go-cured" class="font-black text-emerald-300"></span></div>
@@ -519,712 +400,114 @@
   </div>
 
   <script>
-    // =========================================================================
-    // 0. セーブデータ管理定数（Googleサイトiframe環境向け二重ストレージ対応）
-    // =========================================================================
     const SAVE_STORAGE_KEY = 'materia_obscura_save_v1';
 
-    // ドラッグ中のみブラウザのスクロールを抑止（通常時のスマホ縦スクロールは通す）
-    document.addEventListener('touchmove', (e) => {
-      if (document.body.classList.contains('is-dragging-active')) {
-        e.preventDefault();
-      }
-    }, { passive: false });
-
     function saveGameState() {
-      const snapshot = {
-        ...state,
-        pickerTargetIndex: null // 一時UI状態は保存しない
-      };
+      const snapshot = { ...state, pickerTargetIndex: null };
       const serialized = JSON.stringify(snapshot);
-      try {
-        localStorage.setItem(SAVE_STORAGE_KEY, serialized);
-      } catch (err) {
-        console.warn('localStorageへの保存制限:', err);
-      }
-      // Googleサイトのiframe等でlocalStorageが制限される環境向けのフォールバック保存
-      try {
-        sessionStorage.setItem(SAVE_STORAGE_KEY, serialized);
-      } catch (err) {
-        console.warn('sessionStorageへの保存制限:', err);
-      }
+      try { localStorage.setItem(SAVE_STORAGE_KEY, serialized); } catch (_) {}
+      try { sessionStorage.setItem(SAVE_STORAGE_KEY, serialized); } catch (_) {}
     }
 
     function clearSavedGameState() {
-      try {
-        localStorage.removeItem(SAVE_STORAGE_KEY);
-      } catch (_) {}
-      try {
-        sessionStorage.removeItem(SAVE_STORAGE_KEY);
-      } catch (_) {}
+      try { localStorage.removeItem(SAVE_STORAGE_KEY); } catch (_) {}
+      try { sessionStorage.removeItem(SAVE_STORAGE_KEY); } catch (_) {}
     }
 
     function loadSavedGameState() {
       try {
-        let raw = null;
-        try {
-          raw = localStorage.getItem(SAVE_STORAGE_KEY);
-        } catch (_) {}
-        if (!raw) {
-          try {
-            raw = sessionStorage.getItem(SAVE_STORAGE_KEY);
-          } catch (_) {}
-        }
+        let raw = localStorage.getItem(SAVE_STORAGE_KEY) || sessionStorage.getItem(SAVE_STORAGE_KEY);
         if (!raw) return false;
         const parsed = JSON.parse(raw);
-
-        // データの最低限の整合性チェック
-        if (
-          !parsed ||
-          typeof parsed.day !== 'number' ||
-          !Array.isArray(parsed.shelfBottles) ||
-          parsed.shelfBottles.length === 0 ||
-          !parsed.currentPatient ||
-          !parsed.currentPatient.solution
-        ) {
-          return false;
-        }
-
-        state = {
-          ...state,
-          ...parsed,
-          pickerTargetIndex: null
-        };
+        if (!parsed || typeof parsed.day !== 'number' || !Array.isArray(parsed.shelfBottles) || !parsed.currentPatient) return false;
+        state = { ...state, ...parsed, pickerTargetIndex: null };
         return true;
-      } catch (err) {
-        console.warn('セーブデータの復元に失敗したため新規開始します:', err);
+      } catch (_) {
         return false;
       }
     }
 
-    // ページ離脱・リロード直前にも最終状態を確実に保存
     window.addEventListener('pagehide', saveGameState);
     window.addEventListener('beforeunload', saveGameState);
 
-    // =========================================================================
-    // 1. 基本生薬データ（全20種類・5つの観察特徴＋効能＋禁忌）
-    // =========================================================================
     const MEDICINES = [
-      {
-        id: 'med_01',
-        name: 'マンドレイクの煎じ薬',
-        colorHex: '#4c1d95',
-        liquidColor: '濁った暗紫色',
-        bottleShape: '寸胴の丸瓶',
-        smell: '湿った土と根菜の苦い匂い',
-        sediment: '底に細い繊維状の根の滓が沈む',
-        sound: '重く鈍い水音',
-        effect: '激しい神経痙攣と筋肉の引きつりを鎮める',
-        contraindicationId: 'weak_heart',
-        contraindicationText: '心臓疾患（不整脈・心衰弱）'
-      },
-      {
-        id: 'med_02',
-        name: '月光草のエキス',
-        colorHex: '#0ea5e9',
-        liquidColor: '淡く透き通った蒼白色',
-        bottleShape: '細長い円筒瓶',
-        smell: '夜露とミントのような冷涼な香り',
-        sediment: '沈殿はなく微細な気泡が浮く',
-        sound: '澄んだ高い水音',
-        effect: '高熱と熱によるうわごと・錯乱を冷ます',
-        contraindicationId: 'hypothermia',
-        contraindicationText: '低体温症・極度の冷え性'
-      },
-      {
-        id: 'med_03',
-        name: 'ベラドンナの滴',
-        colorHex: '#581c87',
-        liquidColor: '艶のある漆黒に近い濃紫色',
-        bottleShape: '八角形の小瓶',
-        smell: '甘ったるく不穏な果実臭',
-        sediment: '小さな黒い種子が数粒沈んでいる',
-        sound: 'とろりとした粘性のある音',
-        effect: '気管の狭窄や激しい喘鳴・呼吸発作を和らげる',
-        contraindicationId: 'glaucoma',
-        contraindicationText: '眼圧異常・視力障害'
-      },
-      {
-        id: 'med_04',
-        name: '銀の霊薬',
-        colorHex: '#cbd5e1',
-        liquidColor: '金属光沢を帯びた乳銀色',
-        bottleShape: '首の長いフラスコ型',
-        smell: '無臭だが冷たい金属の気配',
-        sediment: '振ると銀粉が舞い上がりゆっくり沈む',
-        sound: 'さらさらと砂が混ざるような音',
-        effect: '腐敗した創傷や黒ずんだ壊死組織を浄化する',
-        contraindicationId: 'metal_allergy',
-        contraindicationText: '金属アレルギー'
-      },
-      {
-        id: 'med_05',
-        name: '硫黄のチンキ',
-        colorHex: '#eab308',
-        liquidColor: '鮮やかな山吹色',
-        bottleShape: '肩の張った四角瓶',
-        smell: '鼻を突く温泉のような刺激臭',
-        sediment: '底に黄色い結晶の粒が固まっている',
-        sound: '結晶がガラスに当たるカチャカチャ音',
-        effect: '悪性の皮膚発疹・疥癬・激しい痒みを鎮める',
-        contraindicationId: 'asthma_smoke',
-        contraindicationText: '揮発ガス過敏・重度喘息'
-      },
-      {
-        id: 'med_06',
-        name: '水銀の軟膏液',
-        colorHex: '#64748b',
-        liquidColor: '重い鉛色の不透明液',
-        bottleShape: '厚底の六角瓶',
-        smell: 'ほとんど無臭',
-        sediment: '底に水銀の小さな玉が転がっている',
-        sound: 'ガラスが割れそうなほど重い衝撃音',
-        effect: 'リンパの深い腫れ物や悪性腫瘍の膿を散らす',
-        contraindicationId: 'kidney_weak',
-        contraindicationText: '腎臓の衰弱・むくみ体質'
-      },
-      {
-        id: 'med_07',
-        name: '黒曜石の粉薬液',
-        colorHex: '#18181b',
-        liquidColor: '光を吸い込む墨黒色',
-        bottleShape: 'ずんぐりした三角フラスコ',
-        smell: '焦げた灰と炭の匂い',
-        sediment: '細かい黒砂が厚く積もっている',
-        sound: 'ザラザラと鉱物が擦れる音',
-        effect: '腐敗毒の誤飲による激しい下痢と体内毒素を吸着する',
-        contraindicationId: 'constipation',
-        contraindicationText: '重度の腸閉塞・慢性便秘'
-      },
-      {
-        id: 'med_08',
-        name: '竜血樹脂の酒',
-        colorHex: '#991b1b',
-        liquidColor: '濃密な深紅色',
-        bottleShape: '丸い洋梨型の瓶',
-        smell: '甘い樹脂とスパイスのような芳香',
-        sediment: '赤い樹脂の欠片が底に張り付いている',
-        sound: 'ねっとりと遅れて揺れる音',
-        effect: '喀血や外傷による止まらない出血を止め造血を促す',
-        contraindicationId: 'high_bp',
-        contraindicationText: '高血圧・血栓症'
-      },
-      {
-        id: 'med_09',
-        name: '白亜の乳液',
-        colorHex: '#f8fafc',
-        liquidColor: 'チョークを溶かしたような純白色',
-        bottleShape: '寸胴の丸瓶',
-        smell: '乾いた石灰と雨上がりの土の匂い',
-        sediment: '白い泥状の沈殿が半分ほど溜まる',
-        sound: 'ぽってりとした鈍い音',
-        effect: '胃酸過多による焼けるような胃痛と胸やけを中和する',
-        contraindicationId: 'dairy_allergy',
-        contraindicationText: '胆石症・乳濁液不耐'
-      },
-      {
-        id: 'med_10',
-        name: 'ヒ素の希釈水',
-        colorHex: '#10b981',
-        liquidColor: '妖しく澄んだ翡翠色',
-        bottleShape: '菱形のカットガラス瓶',
-        smell: 'かすかにニンニクに似た不気味な匂い',
-        sediment: '沈殿物は一切なく完全に透明',
-        sound: '軽やかで水のような音',
-        effect: '慢性的な極度の倦怠感と肉体衰弱を強制的に奮い立たせる',
-        contraindicationId: 'liver_weak',
-        contraindicationText: '肝臓疾患・黄疸'
-      },
-      {
-        id: 'med_11',
-        name: 'セントジョーンズ油',
-        colorHex: '#d97706',
-        liquidColor: '夕陽のような琥珀オレンジ色',
-        bottleShape: '細長い円筒瓶',
-        smell: '干し草と太陽を浴びた薬草の香り',
-        sediment: '小さな赤い花弁が1枚浮かんでいる',
-        sound: '油特有の滑らかで静かな音',
-        effect: '深い憂鬱・神経衰弱・不眠の精神症状を和らげる',
-        contraindicationId: 'sun_sensitivity',
-        contraindicationText: '光線過敏症（日光皮膚炎）'
-      },
-      {
-        id: 'med_12',
-        name: 'ジギタリスの抽出液',
-        colorHex: '#15803d',
-        liquidColor: '深い森のような濃緑色',
-        bottleShape: '八角形の小瓶',
-        smell: '青臭く強烈に苦い草の匂い',
-        sediment: '緑色の葉の砕片がわずかに沈む',
-        sound: 'さらさらと軽い水音',
-        effect: '弱りきった心臓の拍動を強め全身のむくみを引く',
-        contraindicationId: 'fast_pulse',
-        contraindicationText: '頻脈（脈拍が速すぎる状態）'
-      },
-      {
-        id: 'med_13',
-        name: '樟脳の気付け薬',
-        colorHex: '#e2e8f0',
-        liquidColor: '半透明の氷白色',
-        bottleShape: '肩の張った四角瓶',
-        smell: '目が覚めるほど強烈な防虫剤・メントール臭',
-        sediment: '白い結晶の膜が液面に浮いている',
-        sound: 'シャリシャリと氷が鳴るような音',
-        effect: '失神・虚脱状態からの意識覚醒と循環促進',
-        contraindicationId: 'epilepsy',
-        contraindicationText: 'てんかん持ち（痙攣誘発）'
-      },
-      {
-        id: 'med_14',
-        name: '麦角の暗黒滴',
-        colorHex: '#3b0764',
-        liquidColor: '赤黒い葡萄酒色',
-        bottleShape: '首の長いフラスコ型',
-        smell: 'カビたライ麦と発酵した酸っぱい匂い',
-        sediment: '黒紫色の菌糸の塊が底にある',
-        sound: '重く濁った音',
-        effect: '血管拡張による激しい偏頭痛と脳の拍動痛を鎮める',
-        contraindicationId: 'poor_circulation',
-        contraindicationText: '末梢血行障害（指先の冷え・壊疽傾向）'
-      },
-      {
-        id: 'med_15',
-        name: '白燐の懸濁液',
-        colorHex: '#a3e635',
-        liquidColor: '暗がりで淡く光る黄緑色',
-        bottleShape: '厚底の六角瓶',
-        smell: 'マッチを擦った直後のような煙臭さ',
-        sediment: '底に蝋のような白い塊が沈んでいる',
-        sound: 'こもった鈍い水音',
-        effect: '脆くなった骨格の補強と骨髄からの造血活性',
-        contraindicationId: 'jaw_decay',
-        contraindicationText: '虫歯・顎骨の炎症（燐中毒リスク）'
-      },
-      {
-        id: 'med_16',
-        name: 'アブサンの薬用酒',
-        colorHex: '#059669',
-        liquidColor: '鮮やかなエメラルドグリーン',
-        bottleShape: '丸い洋梨型の瓶',
-        smell: 'アニスとニガヨモギの強い芳香アルコール臭',
-        sediment: '沈殿なし（光に透かすとわずかに白濁）',
-        sound: '軽快で高いアルコール音',
-        effect: '冷え切った胃腸を温め食欲不振と消化不良を改善する',
-        contraindicationId: 'alcohol_intolerance',
-        contraindicationText: 'アルコール不耐症・胃潰瘍出血'
-      },
-      {
-        id: 'med_17',
-        name: '鴉片のチンキ（ラウダナム）',
-        colorHex: '#78350f',
-        liquidColor: '濃い紅茶のような赤褐色',
-        bottleShape: '菱形のカットガラス瓶',
-        smell: '焦がしたケシの実と酒精の重い香り',
-        sediment: '茶褐色のオリが底に薄く溜まる',
-        sound: 'ややとろみのある水音',
-        effect: '耐え難い激痛・神経痛を強力に遮断する',
-        contraindicationId: 'shallow_breath',
-        contraindicationText: '呼吸抑制・重度の肺炎'
-      },
-      {
-        id: 'med_18',
-        name: 'ヨウ素の褐色液',
-        colorHex: '#9a3412',
-        liquidColor: '濃い赤茶色（瓶壁を黄色く染める）',
-        bottleShape: '八角形の小瓶',
-        smell: '海藻と消毒薬のツンとする匂い',
-        sediment: '紫黒色の微細な鱗片がわずかに沈む',
-        sound: 'さらさらとした軽い音',
-        effect: '喉の激しい腫れや化膿した深部感染症を殺菌する',
-        contraindicationId: 'thyroid_hyper',
-        contraindicationText: '甲状腺機能亢進（異常発汗・手の震え）'
-      },
-      {
-        id: 'med_19',
-        name: '真珠貝の石灰水',
-        colorHex: '#e2e8f0',
-        liquidColor: '虹色の艶を帯びた乳白色',
-        bottleShape: '寸胴の丸瓶',
-        smell: '潮風と貝殻の穏やかな匂い',
-        sediment: '細かな真珠層の粉がきらきらと沈む',
-        sound: '軽やかな水音',
-        effect: '骨折やひび割れた骨の癒合を早め粘膜を保護する',
-        contraindicationId: 'kidney_stone',
-        contraindicationText: '尿路結石・胆石症'
-      },
-      {
-        id: 'med_20',
-        name: 'トリカブトの氷冷液',
-        colorHex: '#1d4ed8',
-        liquidColor: '深い群青色',
-        bottleShape: 'ずんぐりした三角フラスコ',
-        smell: '無臭だが吸い込むと舌先が痺れる気配',
-        sediment: '沈殿はなく氷のように冷たい感触',
-        sound: '澄んだ硬質な音',
-        effect: '灼熱の炎症と暴走する高熱発作を急速に冷却鎮静する',
-        contraindicationId: 'numbness',
-        contraindicationText: '神経麻痺・感覚鈍麻'
-      }
+      { id: 'med_01', name: 'マンドレイクの煎じ薬', colorHex: '#4c1d95', liquidColor: '濁った暗紫色', bottleShape: '寸胴の丸瓶', smell: '湿った土と根菜の苦い匂い', sediment: '底に細い繊維状の根の滓が沈む', sound: '重く鈍い水音', effect: '激しい神経痙攣と筋肉の引きつりを鎮める', contraindicationId: 'weak_heart', contraindicationText: '心臓疾患（不整脈・心衰弱）' },
+      { id: 'med_02', name: '月光草のエキス', colorHex: '#0ea5e9', liquidColor: '淡く透き通った蒼白色', bottleShape: '細長い円筒瓶', smell: '夜露とミントのような冷涼な香り', sediment: '沈殿はなく微細な気泡が浮く', sound: '澄んだ高い水音', effect: '高熱と熱によるうわごと・錯乱を冷ます', contraindicationId: 'hypothermia', contraindicationText: '低体温症・極度の冷え性' },
+      { id: 'med_03', name: 'ベラドンナの滴', colorHex: '#581c87', liquidColor: '艶のある漆黒に近い濃紫色', bottleShape: '八角形の小瓶', smell: '甘ったるく不穏な果実臭', sediment: '小さな黒い種子が数粒沈んでいる', sound: 'とろりとした粘性のある音', effect: '気管の狭窄や激しい喘鳴・呼吸発作を和らげる', contraindicationId: 'glaucoma', contraindicationText: '眼圧異常・視力障害' },
+      { id: 'med_04', name: '銀の霊薬', colorHex: '#cbd5e1', liquidColor: '金属光沢を帯びた乳銀色', bottleShape: '首の長いフラスコ型', smell: '無臭だが冷たい金属の気配', sediment: '振ると銀粉が舞い上がりゆっくり沈む', sound: 'さらさらと砂が混ざるような音', effect: '腐敗した創傷や黒ずんだ壊死組織を浄化する', contraindicationId: 'metal_allergy', contraindicationText: '金属アレルギー' },
+      { id: 'med_05', name: '硫黄のチンキ', colorHex: '#eab308', liquidColor: '鮮やかな山吹色', bottleShape: '肩の張った四角瓶', smell: '鼻を突く温泉のような刺激臭', sediment: '底に黄色い結晶の粒が固まっている', sound: '結晶がガラスに当たるカチャカチャ音', effect: '悪性の皮膚発疹・疥癬・激しい痒みを鎮める', contraindicationId: 'asthma_smoke', contraindicationText: '揮発ガス過敏・重度喘息' },
+      { id: 'med_06', name: '水銀の軟膏液', colorHex: '#64748b', liquidColor: '重い鉛色の不透明液', bottleShape: '厚底の六角瓶', smell: 'ほとんど無臭', sediment: '底に水銀の小さな玉が転がっている', sound: 'ガラスが割れそうなほど重い衝撃音', effect: 'リンパの深い腫れ物や悪性腫瘍の膿を散らす', contraindicationId: 'kidney_weak', contraindicationText: '腎臓の衰弱・むくみ体質' },
+      { id: 'med_07', name: '黒曜石の粉薬液', colorHex: '#18181b', liquidColor: '光を吸い込む墨黒色', bottleShape: 'ずんぐりした三角フラスコ', smell: '焦げた灰と炭の匂い', sediment: '細かい黒砂が厚く積もっている', sound: 'ザラザラと鉱物が擦れる音', effect: '腐敗毒の誤飲による激しい下痢と体内毒素を吸着する', contraindicationId: 'constipation', contraindicationText: '重度の腸閉塞・慢性便秘' },
+      { id: 'med_08', name: '竜血樹脂の酒', colorHex: '#991b1b', liquidColor: '濃密な深紅色', bottleShape: '丸い洋梨型の瓶', smell: '甘い樹脂とスパイスのような芳香', sediment: '赤い樹脂の欠片が底に張り付いている', sound: 'ねっとりと遅れて揺れる音', effect: '喀血や外傷による止まらない出血を止め造血を促す', contraindicationId: 'high_bp', contraindicationText: '高血圧・血栓症' },
+      { id: 'med_09', name: '白亜の乳液', colorHex: '#f8fafc', liquidColor: 'チョークを溶かしたような純白色', bottleShape: '寸胴の丸瓶', smell: '乾いた石灰と雨上がりの土の匂い', sediment: '白い泥状の沈殿が半分ほど溜まる', sound: 'ぽってりとした鈍い音', effect: '胃酸過多による焼けるような胃痛と胸やけを中和する', contraindicationId: 'dairy_allergy', contraindicationText: '胆石症・乳濁液不耐' },
+      { id: 'med_10', name: 'ヒ素の希釈水', colorHex: '#10b981', liquidColor: '妖しく澄んだ翡翠色', bottleShape: '菱形のカットガラス瓶', smell: 'かすかにニンニクに似た不気味な匂い', sediment: '沈殿物は一切なく完全に透明', sound: '軽やかで水のような音', effect: '慢性的な極度の倦怠感と肉体衰弱を強制的に奮い立たせる', contraindicationId: 'liver_weak', contraindicationText: '肝臓疾患・黄疸' },
+      { id: 'med_11', name: 'セントジョーンズ油', colorHex: '#d97706', liquidColor: '夕陽のような琥珀オレンジ色', bottleShape: '細長い円筒瓶', smell: '干し草と太陽を浴びた薬草の香り', sediment: '小さな赤い花弁が1枚浮かんでいる', sound: '油特有の滑らかで静かな音', effect: '深い憂鬱・神経衰弱・不眠の精神症状を和らげる', contraindicationId: 'sun_sensitivity', contraindicationText: '光線過敏症（日光皮膚炎）' },
+      { id: 'med_12', name: 'ジギタリスの抽出液', colorHex: '#15803d', liquidColor: '深い森のような濃緑色', bottleShape: '八角形の小瓶', smell: '青臭く強烈に苦い草の匂い', sediment: '緑色の葉の砕片がわずかに沈む', sound: 'さらさらと軽い水音', effect: '弱りきった心臓の拍動を強め全身のむくみを引く', contraindicationId: 'fast_pulse', contraindicationText: '頻脈（脈拍が速すぎる状態）' },
+      { id: 'med_13', name: '樟脳の気付け薬', colorHex: '#e2e8f0', liquidColor: '半透明の氷白色', bottleShape: '肩の張った四角瓶', smell: '目が覚めるほど強烈な防虫剤・メントール臭', sediment: '白い結晶の膜が液面に浮いている', sound: 'シャリシャリと氷が鳴るような音', effect: '失神・虚脱状態からの意識覚醒と循環促進', contraindicationId: 'epilepsy', contraindicationText: 'てんかん持ち（痙攣誘発）' },
+      { id: 'med_14', name: '麦角の暗黒滴', colorHex: '#3b0764', liquidColor: '赤黒い葡萄酒色', bottleShape: '首の長いフラスコ型', smell: 'カビたライ麦と発酵した酸っぱい匂い', sediment: '黒紫色の菌糸の塊が底にある', sound: '重く濁った音', effect: '血管拡張による激しい偏頭痛と脳の拍動痛を鎮める', contraindicationId: 'poor_circulation', contraindicationText: '末梢血行障害（指先の冷え・壊疽傾向）' },
+      { id: 'med_15', name: '白燐の懸濁液', colorHex: '#a3e635', liquidColor: '暗がりで淡く光る黄緑色', bottleShape: '厚底の六角瓶', smell: 'マッチを擦った直後のような煙臭さ', sediment: '底に蝋のような白い塊が沈んでいる', sound: 'こもった鈍い水音', effect: '脆くなった骨格の補強と骨髄からの造血活性', contraindicationId: 'jaw_decay', contraindicationText: '虫歯・顎骨の炎症（燐中毒リスク）' },
+      { id: 'med_16', name: 'アブサンの薬用酒', colorHex: '#059669', liquidColor: '鮮やかなエメラルドグリーン', bottleShape: '丸い洋梨型の瓶', smell: 'アニスとニガヨモギの強い芳香アルコール臭', sediment: '沈殿なし（光に透かすとわずかに白濁）', sound: '軽快で高いアルコール音', effect: '冷え切った胃腸を温め食欲不振と消化不良を改善する', contraindicationId: 'alcohol_intolerance', contraindicationText: 'アルコール不耐症・胃潰瘍出血' },
+      { id: 'med_17', name: '鴉片のチンキ（ラウダナム）', colorHex: '#78350f', liquidColor: '濃い紅茶のような赤褐色', bottleShape: '菱形のカットガラス瓶', smell: '焦がしたケシの実と酒精の重い香り', sediment: '茶褐色のオリが底に薄く溜まる', sound: 'ややとろみのある水音', effect: '耐え難い激痛・神経痛を強力に遮断する', contraindicationId: 'shallow_breath', contraindicationText: '呼吸抑制・重度の肺炎' },
+      { id: 'med_18', name: 'ヨウ素の褐色液', colorHex: '#9a3412', liquidColor: '濃い赤茶色（瓶壁を黄色く染める）', bottleShape: '八角形の小瓶', smell: '海藻と消毒薬のツンとする匂い', sediment: '紫黒色の微細な鱗片がわずかに沈む', sound: 'さらさらとした軽い音', effect: '喉の激しい腫れや化膿した深部感染症を殺菌する', contraindicationId: 'thyroid_hyper', contraindicationText: '甲状腺機能亢進（異常発汗・手の震え）' },
+      { id: 'med_19', name: '真珠貝の石灰水', colorHex: '#e2e8f0', liquidColor: '虹色の艶を帯びた乳白色', bottleShape: '寸胴の丸瓶', smell: '潮風と貝殻の穏やかな匂い', sediment: '細かな真珠層の粉がきらきらと沈む', sound: '軽やかな水音', effect: '骨折やひび割れた骨の癒合を早め粘膜を保護する', contraindicationId: 'kidney_stone', contraindicationText: '尿路結石・胆石症' },
+      { id: 'med_20', name: 'トリカブトの氷冷液', colorHex: '#1d4ed8', liquidColor: '深い群青色', bottleShape: 'ずんぐりした三角フラスコ', smell: '無臭だが吸い込むと舌先が痺れる気配', sediment: '沈殿はなく氷のように冷たい感触', sound: '澄んだ硬質な音', effect: '灼熱の炎症と暴走する高熱発作を急速に冷却鎮静する', contraindicationId: 'numbness', contraindicationText: '神経麻痺・感覚鈍麻' }
     ];
 
-    // =========================================================================
-    // 2. 調合レシピ（有効な特効薬30種 ＋ 危険な失敗10種：重複なし全40組）
-    // =========================================================================
     const VALID_RECIPES = [
-      {
-        id: 'rec_01',
-        ingredients: ['med_01', 'med_02'],
-        name: '月影の安息香',
-        colorHex: '#4f46e5',
-        effect: '高熱を伴う激しい神経痙攣（熱性錯乱）の特効薬',
-        contraindicationId: 'weak_heart',
-        contraindicationText: '心臓疾患'
-      },
-      {
-        id: 'rec_02',
-        ingredients: ['med_04', 'med_05'],
-        name: '聖銀の浄化軟膏',
-        colorHex: '#d97706',
-        effect: '悪性の皮膚潰瘍と腐敗壊死を同時に治す霊薬',
-        contraindicationId: 'metal_allergy',
-        contraindicationText: '金属アレルギー'
-      },
-      {
-        id: 'rec_03',
-        ingredients: ['med_02', 'med_03'],
-        name: '蒼夜の気管鎮静霧',
-        colorHex: '#2563eb',
-        effect: '高熱と窒息性の喘鳴発作を同時に抑える特効薬',
-        contraindicationId: 'glaucoma',
-        contraindicationText: '眼圧異常'
-      },
-      {
-        id: 'rec_04',
-        ingredients: ['med_01', 'med_04'],
-        name: '白銀の神経保護液',
-        colorHex: '#94a3b8',
-        effect: '壊死しかけた四肢の激痛と神経痙攣を救う霊薬',
-        contraindicationId: 'weak_heart',
-        contraindicationText: '心臓疾患'
-      },
-      {
-        id: 'rec_05',
-        ingredients: ['med_03', 'med_05'],
-        name: '紫煙の抗毒素チンキ',
-        colorHex: '#7e22ce',
-        effect: '毒蟲や瘴気による呼吸困難と全身発疹の特効薬',
-        contraindicationId: 'glaucoma',
-        contraindicationText: '眼圧異常'
-      },
-      {
-        id: 'rec_06',
-        ingredients: ['med_07', 'med_09'],
-        name: '黒白の胃腸吸着乳',
-        colorHex: '#78716c',
-        effect: '腐敗毒の誤飲による激しい胃痛と下痢の特効薬',
-        contraindicationId: 'constipation',
-        contraindicationText: '重度の腸閉塞'
-      },
-      {
-        id: 'rec_07',
-        ingredients: ['med_08', 'med_19'],
-        name: '竜骨の再生霊薬',
-        colorHex: '#e11d48',
-        effect: '出血を伴う開放骨折を急速に癒やす秘薬',
-        contraindicationId: 'high_bp',
-        contraindicationText: '高血圧・血栓症'
-      },
-      {
-        id: 'rec_08',
-        ingredients: ['med_11', 'med_16'],
-        name: '黄金の太陽精酒',
-        colorHex: '#f59e0b',
-        effect: '深刻な精神衰弱と食欲廃絶を回復させる強壮酒',
-        contraindicationId: 'alcohol_intolerance',
-        contraindicationText: 'アルコール不耐症'
-      },
-      {
-        id: 'rec_09',
-        ingredients: ['med_12', 'med_13'],
-        name: '王者の強心覚醒水',
-        colorHex: '#0d9488',
-        effect: '心衰弱による失神・虚脱から蘇生させる霊薬',
-        contraindicationId: 'epilepsy',
-        contraindicationText: 'てんかん持ち'
-      },
-      {
-        id: 'rec_10',
-        ingredients: ['med_14', 'med_20'],
-        name: '氷紫の偏頭痛鎮め',
-        colorHex: '#4338ca',
-        effect: '灼熱の脳圧痛と激しい偏頭痛を鎮める特効薬',
-        contraindicationId: 'numbness',
-        contraindicationText: '神経麻痺'
-      },
-      {
-        id: 'rec_11',
-        ingredients: ['med_06', 'med_18'],
-        name: '灰褐の深部殺菌液',
-        colorHex: '#92400e',
-        effect: 'リンパの激しい腫れと悪性膿瘍を散らす秘薬',
-        contraindicationId: 'kidney_weak',
-        contraindicationText: '腎臓の衰弱'
-      },
-      {
-        id: 'rec_12',
-        ingredients: ['med_01', 'med_03'],
-        name: '深宵の気道弛緩剤',
-        colorHex: '#312e81',
-        effect: '喉の筋肉痙攣を伴う窒息性発作の特効薬',
-        contraindicationId: 'weak_heart',
-        contraindicationText: '心臓疾患'
-      },
-      {
-        id: 'rec_13',
-        ingredients: ['med_02', 'med_04'],
-        name: '銀露の創傷解熱水',
-        colorHex: '#7dd3fc',
-        effect: '創傷感染による敗血症性の高熱を鎮める霊薬',
-        contraindicationId: 'metal_allergy',
-        contraindicationText: '金属アレルギー'
-      },
-      {
-        id: 'rec_14',
-        ingredients: ['med_02', 'med_05'],
-        name: '蒼黄の熱疹鎮静液',
-        colorHex: '#65a30d',
-        effect: '高熱とともに全身に吹き出す猩紅熱様発疹の特効薬',
-        contraindicationId: 'hypothermia',
-        contraindicationText: '低体温症'
-      },
-      {
-        id: 'rec_15',
-        ingredients: ['med_01', 'med_17'],
-        name: '黒根の絶対鎮痛酒',
-        colorHex: '#292524',
-        effect: '神経切断に匹敵する悶絶級の激痛と痙攣を遮断する秘薬',
-        contraindicationId: 'shallow_breath',
-        contraindicationText: '呼吸抑制・肺炎'
-      },
-      {
-        id: 'rec_16',
-        ingredients: ['med_04', 'med_18'],
-        name: '白褐の化膿阻止チンキ',
-        colorHex: '#b45309',
-        effect: '深く化膿した壊疽創を徹底殺菌・浄化する霊薬',
-        contraindicationId: 'metal_allergy',
-        contraindicationText: '金属アレルギー'
-      },
-      {
-        id: 'rec_17',
-        ingredients: ['med_06', 'med_07'],
-        name: '鉛炭の重毒排出剤',
-        colorHex: '#334155',
-        effect: '腐敗潰瘍と腸内毒素の蓄積を同時に排出する秘薬',
-        contraindicationId: 'kidney_weak',
-        contraindicationText: '腎臓の衰弱'
-      },
-      {
-        id: 'rec_18',
-        ingredients: ['med_08', 'med_12'],
-        name: '紅緑の循環強心酒',
-        colorHex: '#9f1239',
-        effect: '大量出血による心拍微弱と虚脱を立て直す特効薬',
-        contraindicationId: 'high_bp',
-        contraindicationText: '高血圧・血栓症'
-      },
-      {
-        id: 'rec_19',
-        ingredients: ['med_09', 'med_16'],
-        name: '白緑の健胃芳香乳',
-        colorHex: '#34d399',
-        effect: '胃壁の荒れと慢性の消化不良を同時に癒やす霊薬',
-        contraindicationId: 'alcohol_intolerance',
-        contraindicationText: 'アルコール不耐症'
-      },
-      {
-        id: 'rec_20',
-        ingredients: ['med_10', 'med_15'],
-        name: '翠燐の骨髄活性液',
-        colorHex: '#4d7c0f',
-        effect: '極度の栄養失調による骨軟化と衰弱を蘇らせる秘薬',
-        contraindicationId: 'liver_weak',
-        contraindicationText: '肝臓疾患'
-      },
-      {
-        id: 'rec_21',
-        ingredients: ['med_11', 'med_17'],
-        name: '琥珀の安眠鎮痛滴',
-        colorHex: '#78350f',
-        effect: '激痛と不眠による精神錯乱を深い眠りへ導く特効薬',
-        contraindicationId: 'shallow_breath',
-        contraindicationText: '呼吸抑制・肺炎'
-      },
-      {
-        id: 'rec_22',
-        ingredients: ['med_13', 'med_20'],
-        name: '氷晶の脳炎覚醒液',
-        colorHex: '#0284c7',
-        effect: '高熱による昏睡状態から脳を冷やし覚醒させる特効薬',
-        contraindicationId: 'epilepsy',
-        contraindicationText: 'てんかん持ち'
-      },
-      {
-        id: 'rec_23',
-        ingredients: ['med_14', 'med_17'],
-        name: '紫黒の偏頭痛遮断液',
-        colorHex: '#3b0764',
-        effect: '嘔吐を伴う最重度の群発頭痛・脳圧痛を断ち切る秘薬',
-        contraindicationId: 'poor_circulation',
-        contraindicationText: '末梢血行障害'
-      },
-      {
-        id: 'rec_24',
-        ingredients: ['med_15', 'med_19'],
-        name: '白燐の骨格再建乳',
-        colorHex: '#bef264',
-        effect: '複雑骨折の癒合と脆くなった骨組織の強化を促す霊薬',
-        contraindicationId: 'jaw_decay',
-        contraindicationText: '虫歯・顎骨炎症'
-      },
-      {
-        id: 'rec_25',
-        ingredients: ['med_02', 'med_20'],
-        name: '双氷の極限解熱剤',
-        colorHex: '#1d4ed8',
-        effect: '通常の解熱薬が効かない致死性の高熱発作を急冷する秘薬',
-        contraindicationId: 'hypothermia',
-        contraindicationText: '低体温症'
-      },
-      {
-        id: 'rec_26',
-        ingredients: ['med_03', 'med_17'],
-        name: '夜霧の喘息鎮痛液',
-        colorHex: '#581c87',
-        effect: '胸痛を伴う激しい気管支喘息の発作を和らげる特効薬',
-        contraindicationId: 'shallow_breath',
-        contraindicationText: '呼吸抑制・肺炎'
-      },
-      {
-        id: 'rec_27',
-        ingredients: ['med_05', 'med_18'],
-        name: '黄褐の皮膚殺菌チンキ',
-        colorHex: '#ca8a04',
-        effect: '寄生虫の掻き壊しから化膿した皮膚病変の特効薬',
-        contraindicationId: 'asthma_smoke',
-        contraindicationText: '揮発ガス過敏'
-      },
-      {
-        id: 'rec_28',
-        ingredients: ['med_07', 'med_16'],
-        name: '黒翠の食中毒回復酒',
-        colorHex: '#065f46',
-        effect: '腐敗食中毒による下痢を止め冷えた胃腸を温める霊薬',
-        contraindicationId: 'alcohol_intolerance',
-        contraindicationText: 'アルコール不耐症'
-      },
-      {
-        id: 'rec_29',
-        ingredients: ['med_08', 'med_10'],
-        name: '紅翠の造血強壮水',
-        colorHex: '#be123c',
-        effect: '慢性的な貧血と極度の肉体衰弱を同時に回復させる秘薬',
-        contraindicationId: 'liver_weak',
-        contraindicationText: '肝臓疾患'
-      },
-      {
-        id: 'rec_30',
-        ingredients: ['med_09', 'med_19'],
-        name: '真珠の胃潰瘍保護乳',
-        colorHex: '#e2e8f0',
-        effect: '過剰な胃酸を中和し傷ついた胃粘膜を厚く保護する霊薬',
-        contraindicationId: 'kidney_stone',
-        contraindicationText: '尿路結石・胆石'
-      }
+      { id: 'rec_01', ingredients: ['med_01', 'med_02'], name: '月影の安息香', colorHex: '#4f46e5', effect: '高熱を伴う激しい神経痙攣（熱性錯乱）の特効薬', contraindicationId: 'weak_heart', contraindicationText: '心臓疾患' },
+      { id: 'rec_02', ingredients: ['med_04', 'med_05'], name: '聖銀の浄化軟膏', colorHex: '#d97706', effect: '悪性の皮膚潰瘍と腐敗壊死を同時に治す霊薬', contraindicationId: 'metal_allergy', contraindicationText: '金属アレルギー' },
+      { id: 'rec_03', ingredients: ['med_02', 'med_03'], name: '蒼夜の気管鎮静霧', colorHex: '#2563eb', effect: '高熱と窒息性の喘鳴発作を同時に抑える特効薬', contraindicationId: 'glaucoma', contraindicationText: '眼圧異常' },
+      { id: 'rec_04', ingredients: ['med_01', 'med_04'], name: '白銀の神経保護液', colorHex: '#94a3b8', effect: '壊死しかけた四肢の激痛と神経痙攣を救う霊薬', contraindicationId: 'weak_heart', contraindicationText: '心臓疾患' },
+      { id: 'rec_05', ingredients: ['med_03', 'med_05'], name: '紫煙の抗毒素チンキ', colorHex: '#7e22ce', effect: '毒蟲や瘴気による呼吸困難と全身発疹の特効薬', contraindicationId: 'glaucoma', contraindicationText: '眼圧異常' },
+      { id: 'rec_06', ingredients: ['med_07', 'med_09'], name: '黒白の胃腸吸着乳', colorHex: '#78716c', effect: '腐敗毒の誤飲による激しい胃痛と下痢の特効薬', contraindicationId: 'constipation', contraindicationText: '重度の腸閉塞' },
+      { id: 'rec_07', ingredients: ['med_08', 'med_19'], name: '竜骨の再生霊薬', colorHex: '#e11d48', effect: '出血を伴う開放骨折を急速に癒やす秘薬', contraindicationId: 'high_bp', contraindicationText: '高血圧・血栓症' },
+      { id: 'rec_08', ingredients: ['med_11', 'med_16'], name: '黄金の太陽精酒', colorHex: '#f59e0b', effect: '深刻な精神衰弱と食欲廃絶を回復させる強壮酒', contraindicationId: 'alcohol_intolerance', contraindicationText: 'アルコール不耐症' },
+      { id: 'rec_09', ingredients: ['med_12', 'med_13'], name: '王者の強心覚醒水', colorHex: '#0d9488', effect: '心衰弱による失神・虚脱から蘇生させる霊薬', contraindicationId: 'epilepsy', contraindicationText: 'てんかん持ち' },
+      { id: 'rec_10', ingredients: ['med_14', 'med_20'], name: '氷紫の偏頭痛鎮め', colorHex: '#4338ca', effect: '灼熱の脳圧痛と激しい偏頭痛を鎮める特効薬', contraindicationId: 'numbness', contraindicationText: '神経麻痺' },
+      { id: 'rec_11', ingredients: ['med_06', 'med_18'], name: '灰褐の深部殺菌液', colorHex: '#92400e', effect: 'リンパの激しい腫れと悪性膿瘍を散らす秘薬', contraindicationId: 'kidney_weak', contraindicationText: '腎臓の衰弱' },
+      { id: 'rec_12', ingredients: ['med_01', 'med_03'], name: '深宵の気道弛緩剤', colorHex: '#312e81', effect: '喉の筋肉痙攣を伴う窒息性発作の特効薬', contraindicationId: 'weak_heart', contraindicationText: '心臓疾患' },
+      { id: 'rec_13', ingredients: ['med_02', 'med_04'], name: '銀露の創傷解熱水', colorHex: '#7dd3fc', effect: '創傷感染による敗血症性の高熱を鎮める霊薬', contraindicationId: 'metal_allergy', contraindicationText: '金属アレルギー' },
+      { id: 'rec_14', ingredients: ['med_02', 'med_05'], name: '蒼黄の熱疹鎮静液', colorHex: '#65a30d', effect: '高熱とともに全身に吹き出す猩紅熱様発疹の特効薬', contraindicationId: 'hypothermia', contraindicationText: '低体温症' },
+      { id: 'rec_15', ingredients: ['med_01', 'med_17'], name: '黒根の絶対鎮痛酒', colorHex: '#292524', effect: '神経切断に匹敵する悶絶級の激痛と痙攣を遮断する秘薬', contraindicationId: 'shallow_breath', contraindicationText: '呼吸抑制・肺炎' },
+      { id: 'rec_16', ingredients: ['med_04', 'med_18'], name: '白褐の化膿阻止チンキ', colorHex: '#b45309', effect: '深く化膿した壊疽創を徹底殺菌・浄化する霊薬', contraindicationId: 'metal_allergy', contraindicationText: '金属アレルギー' },
+      { id: 'rec_17', ingredients: ['med_06', 'med_07'], name: '鉛炭の重毒排出剤', colorHex: '#334155', effect: '腐敗潰瘍と腸内毒素の蓄積を同時に排出する秘薬', contraindicationId: 'kidney_weak', contraindicationText: '腎臓の衰弱' },
+      { id: 'rec_18', ingredients: ['med_08', 'med_12'], name: '紅緑の循環強心酒', colorHex: '#9f1239', effect: '大量出血による心拍微弱と虚脱を立て直す特効薬', contraindicationId: 'high_bp', contraindicationText: '高血圧・血栓症' },
+      { id: 'rec_19', ingredients: ['med_09', 'med_16'], name: '白緑の健胃芳香乳', colorHex: '#34d399', effect: '胃壁の荒れと慢性の消化不良を同時に癒やす霊薬', contraindicationId: 'alcohol_intolerance', contraindicationText: 'アルコール不耐症' },
+      { id: 'rec_20', ingredients: ['med_10', 'med_15'], name: '翠燐の骨髄活性液', colorHex: '#4d7c0f', effect: '極度の栄養失調による骨軟化と衰弱を蘇らせる秘薬', contraindicationId: 'liver_weak', contraindicationText: '肝臓疾患' },
+      { id: 'rec_21', ingredients: ['med_11', 'med_17'], name: '琥珀の安眠鎮痛滴', colorHex: '#78350f', effect: '激痛と不眠による精神錯乱を深い眠りへ導く特効薬', contraindicationId: 'shallow_breath', contraindicationText: '呼吸抑制・肺炎' },
+      { id: 'rec_22', ingredients: ['med_13', 'med_20'], name: '氷晶の脳炎覚醒液', colorHex: '#0284c7', effect: '高熱による昏睡状態から脳を冷やし覚醒させる特効薬', contraindicationId: 'epilepsy', contraindicationText: 'てんかん持ち' },
+      { id: 'rec_23', ingredients: ['med_14', 'med_17'], name: '紫黒の偏頭痛遮断液', colorHex: '#3b0764', effect: '嘔吐を伴う最重度の群発頭痛・脳圧痛を断ち切る秘薬', contraindicationId: 'poor_circulation', contraindicationText: '末梢血行障害' },
+      { id: 'rec_24', ingredients: ['med_15', 'med_19'], name: '白燐の骨格再建乳', colorHex: '#bef264', effect: '複雑骨折の癒合と脆くなった骨組織の強化を促す霊薬', contraindicationId: 'jaw_decay', contraindicationText: '虫歯・顎骨炎症' },
+      { id: 'rec_25', ingredients: ['med_02', 'med_20'], name: '双氷の極限解熱剤', colorHex: '#1d4ed8', effect: '通常の解熱薬が効かない致死性の高熱発作を急冷する秘薬', contraindicationId: 'hypothermia', contraindicationText: '低体温症' },
+      { id: 'rec_26', ingredients: ['med_03', 'med_17'], name: '夜霧の喘息鎮痛液', colorHex: '#581c87', effect: '胸痛を伴う激しい気管支喘息の発作を和らげる特効薬', contraindicationId: 'shallow_breath', contraindicationText: '呼吸抑制・肺炎' },
+      { id: 'rec_27', ingredients: ['med_05', 'med_18'], name: '黄褐の皮膚殺菌チンキ', colorHex: '#ca8a04', effect: '寄生虫の掻き壊しから化膿した皮膚病変の特効薬', contraindicationId: 'asthma_smoke', contraindicationText: '揮発ガス過敏' },
+      { id: 'rec_28', ingredients: ['med_07', 'med_16'], name: '黒翠の食中毒回復酒', colorHex: '#065f46', effect: '腐敗食中毒による下痢を止め冷えた胃腸を温める霊薬', contraindicationId: 'alcohol_intolerance', contraindicationText: 'アルコール不耐症' },
+      { id: 'rec_29', ingredients: ['med_08', 'med_10'], name: '紅翠の造血強壮水', colorHex: '#be123c', effect: '慢性的な貧血と極度の肉体衰弱を同時に回復させる秘薬', contraindicationId: 'liver_weak', contraindicationText: '肝臓疾患' },
+      { id: 'rec_30', ingredients: ['med_09', 'med_19'], name: '真珠の胃潰瘍保護乳', colorHex: '#e2e8f0', effect: '過剰な胃酸を中和し傷ついた胃粘膜を厚く保護する霊薬', contraindicationId: 'kidney_stone', contraindicationText: '尿路結石・胆石' }
     ];
 
     const HAZARD_RECIPES = [
-      {
-        ingredients: ['med_03', 'med_08'],
-        name: '紅紫の凝固劇薬',
-        reason: 'ベラドンナと竜血樹脂が反応し、血管内で血液を瞬時にゼリー状に凝固させる猛毒に変質した！'
-      },
-      {
-        ingredients: ['med_05', 'med_10'],
-        name: '黄緑の亜硫酸ガス',
-        reason: '硫黄とヒ素が激しく反応し、フラスコから猛毒の気体が噴き出して診療所に充満した！'
-      },
-      {
-        ingredients: ['med_06', 'med_15'],
-        name: '発火性アマルガム',
-        reason: '水銀と燐が接触して自然発火を起こし、調合台の上で小爆発が発生した！'
-      },
-      {
-        ingredients: ['med_17', 'med_20'],
-        name: '死の氷眠毒',
-        reason: '鴉片とトリカブトの相乗作用により、呼吸中枢と心臓を即座に凍結停止させる致死毒が生成された！'
-      },
-      {
-        ingredients: ['med_13', 'med_16'],
-        name: '揮発性爆燃液',
-        reason: '高濃度の樟脳と霊酒が引火し、激しい爆音とともにフラスコが砕け散った！'
-      },
-      {
-        ingredients: ['med_01', 'med_12'],
-        name: '心室停止の黒汁',
-        reason: 'マンドレイクとジギタリスの心臓毒が重なり、心筋を強制麻痺させる劇薬へと変貌した！'
-      },
-      {
-        ingredients: ['med_04', 'med_06'],
-        name: '腐食性銀水銀泥',
-        reason: '銀と水銀が異常なアマルガム反応を起こし、粘膜を溶かす強腐食性の泥状毒になった！'
-      },
-      {
-        ingredients: ['med_10', 'med_18'],
-        name: '紫煙のヨウ化ヒ素',
-        reason: 'ヒ素とヨウ素が反応して刺激性の紫煙を上げ、吸い込むと肺胞を焼く猛毒ガスが発生した！'
-      },
-      {
-        ingredients: ['med_14', 'med_15'],
-        name: '壊疽誘発の燐麦液',
-        reason: '麦角の血管収縮作用と燐の組織毒性が結合し、四肢の組織を急速に壊死させる劇薬になった！'
-      },
-      {
-        ingredients: ['med_07', 'med_13'],
-        name: '黒煙の窒息結晶',
-        reason: '黒曜石粉と樟脳が急激に昇華反応を起こし、調合台の上で黒煙を上げて破裂した！'
-      }
+      { ingredients: ['med_03', 'med_08'], name: '紅紫の凝固劇薬', reason: 'ベラドンナと竜血樹脂が反応し、血管内で血液を瞬時にゼリー状に凝固させる猛毒に変質した！' },
+      { ingredients: ['med_05', 'med_10'], name: '黄緑の亜硫酸ガス', reason: '硫黄とヒ素が激しく反応し、フラスコから猛毒の気体が噴き出して診療所に充満した！' },
+      { ingredients: ['med_06', 'med_15'], name: '発火性アマルガム', reason: '水銀と燐が接触して自然発火を起こし、調合台の上で小爆発が発生した！' },
+      { ingredients: ['med_17', 'med_20'], name: '死の氷眠毒', reason: '鴉片とトリカブトの相乗作用により、呼吸中枢と心臓を即座に凍結停止させる致死毒が生成された！' },
+      { ingredients: ['med_13', 'med_16'], name: '揮発性爆燃液', reason: '高濃度の樟脳と霊酒が引火し、激しい爆音とともにフラスコが砕け散った！' },
+      { ingredients: ['med_01', 'med_12'], name: '心室停止の黒汁', reason: 'マンドレイクとジギタリスの心臓毒が重なり、心筋を強制麻痺させる劇薬へと変貌した！' },
+      { ingredients: ['med_04', 'med_06'], name: '腐食性銀水銀泥', reason: '銀と水銀が異常なアマルガム反応を起こし、粘膜を溶かす強腐食性の泥状毒になった！' },
+      { ingredients: ['med_10', 'med_18'], name: '紫煙のヨウ化ヒ素', reason: 'ヒ素とヨウ素が反応して刺激性の紫煙を上げ、吸い込むと肺胞を焼く猛毒ガスが発生した！' },
+      { ingredients: ['med_14', 'med_15'], name: '壊疽誘発の燐麦液', reason: '麦角の血管収縮作用と燐の組織毒性が結合し、四肢の組織を急速に壊死させる劇薬になった！' },
+      { ingredients: ['med_07', 'med_13'], name: '黒煙の窒息結晶', reason: '黒曜石粉と樟脳が急激に昇華反応を起こし、調合台の上で黒煙を上げて破裂した！' }
     ];
 
-    // =========================================================================
-    // 3. 患者生成テンプレートデータ（肩書き14種 ＋ 外見パーツランダム生成）
-    // =========================================================================
-    const PATIENT_ROLES = [
-      '港湾の荷役人夫', '時計塔の機械技師', '歌劇場のソプラノ歌手', '夜警の巡査',
-      '古書店の店主', '紡績工場の女工', '解剖学の医学生', '貴族家の御者',
-      '温室の植物採集家', '鍛冶屋の徒弟', '炭鉱の採掘夫', '遠洋航海の船乗り',
-      '王立博物館の学芸員', '印刷所の植字工'
-    ];
-    const PATIENT_FIRST_NAMES = [
-      'トーマス', 'アーサー', 'クララ', 'エドワード', 'フィニアス', 'メアリー', 'ジュリアン',
-      'セバスチャン', 'エレノア', 'ガブリエル', 'ヴィクター', 'ベアトリス', 'ヘンリー', 'アデライン'
-    ];
-    const PATIENT_LAST_NAMES = [
-      'ベイル', 'ペンデルトン', 'ヴァレンタイン', 'クロウ', 'グッドマン', 'アシュクロフト', 'クロス',
-      'ホーク', 'グリーン', 'ストーン', 'ブラックウッド', 'モリアーティ', 'シンクレア', 'ロウ'
-    ];
-    const PATIENT_APPEARANCES = [
-      '煤けた作業着、節くれだった手', '真鍮の片眼鏡、油染みたベスト', '蒼白な肌、黒いレースのショール',
-      '深い眼窩、重厚な紺色の外套', '丸眼鏡、埃っぽいツイードの上着', '痩せ細った頬、灰色の頭巾',
-      '血走った目、薬品焼けした袖口', '立派な口髭、擦り切れたシルクハット', '土のついた手袋、深い緑のケープ',
-      '火傷の痕、分厚い革エプロン', '炭塵にまみれた顔、厚手のフランネル', '潮風に焼けた肌、防水の油布コート'
-    ];
+    const PATIENT_ROLES = ['港湾の荷役人夫', '時計塔の機械技師', '歌劇場のソプラノ歌手', '夜警の巡査', '古書店の店主', '紡績工場の女工', '解剖学の医学生', '貴族家の御者', '温室の植物採集家', '鍛冶屋の徒弟', '炭鉱の採掘夫', '遠洋航海の船乗り', '王立博物館の学芸員', '印刷所の植字工'];
+    const PATIENT_FIRST_NAMES = ['トーマス', 'アーサー', 'クララ', 'エドワード', 'フィニアス', 'メアリー', 'ジュリアン', 'セバスチャン', 'エレノア', 'ガブリエル', 'ヴィクター', 'ベアトリス', 'ヘンリー', 'アデライン'];
+    const PATIENT_LAST_NAMES = ['ベイル', 'ペンデルトン', 'ヴァレンタイン', 'クロウ', 'グッドマン', 'アシュクロフト', 'クロス', 'ホーク', 'グリーン', 'ストーン', 'ブラックウッド', 'モリアーティ', 'シンクレア', 'ロウ'];
+    const PATIENT_APPEARANCES = ['煤けた作業着、節くれだった手', '真鍮の片眼鏡、油染みたベスト', '蒼白な肌、黒いレースのショール', '深い眼窩、重厚な紺色の外套', '丸眼鏡、埃っぽいツイードの上着', '痩せ細った頬、灰色の頭巾', '血走った目、薬品焼けした袖口', '立派な口髭、擦り切れたシルクハット', '土のついた手袋、深い緑のケープ', '火傷の痕、分厚い革エプロン', '炭塵にまみれた顔、厚手のフランネル', '潮風に焼けた肌、防水の油布コート'];
     const SKIN_COLORS = ['#e5cfb3', '#d8bc9a', '#edd8be', '#c6a480'];
     const HAIR_COLORS = ['#1e1b18', '#3b2f2f', '#78716c', '#9a3412', '#d6d3d1', '#713f12'];
     const COAT_COLORS = ['#334155', '#451a03', '#581c87', '#1e3a8a', '#3f3f46', '#14532d', '#431407', '#18181b'];
     const HAT_STYLES = ['none', 'tophat', 'cap', 'hood', 'bonnet'];
 
-    // 各薬・調合薬に対応する症状セリフ（単体20種 ＋ 調合30種 ＝ 全50通り）
     const SYMPTOM_SCRIPTS = {
       'med_01': '「昨夜から手足が勝手にガクガクと痙攣して止まらないんです。神経が引きつって眠れません……」',
       'med_02': '「身体が燃えるように熱く、うなされて悪夢ばかり見ます。どうかこの高熱を下げてください……」',
@@ -1246,7 +529,6 @@
       'med_18': '「喉の奥が大きく腫れ上がり、唾を飲み込むのも辛いのです。化膿を殺菌してください」',
       'med_19': '「梯子から落ちて肋骨にひびが入ったようです。骨の治りを早める薬はありませんか？」',
       'med_20': '「顔面が真っ赤に腫れ上がり、焼けるような高熱と激しい炎症が暴走しています。急速に冷やしてください！」',
-      // 調合薬30種用セリフ
       'rec_01': '「高熱で意識が朦朧としているうえに、手足が激しく痙攣しています！ 熱と痙攣を同時に鎮めてください！」',
       'rec_02': '「皮膚全体に赤い発疹が広がり、一部は黒く腐敗し始めています。浄化と殺菌を同時に行わねば……」',
       'rec_03': '「燃えるような高熱に加えて、気管が塞がるような激しい喘鳴発作が起きています！ 息ができません！」',
@@ -1280,158 +562,69 @@
     };
 
     const CONTRAINDICATION_CLUES = {
-      'weak_heart': [
-        '「実は生まれつき心臓が弱く、少し走っただけでも不整脈が出るのです……」',
-        '「以前、強い神経鎮静剤を飲んだときに心臓が止まりかけたことがあります」'
-      ],
-      'hypothermia': [
-        '「昔から極度の冷え性で、真夏でも指先が氷のように冷たく低体温なのです」',
-        '「身体を強く冷やす薬を使うと、凍傷のように意識が遠のく体質でして……」'
-      ],
-      'glaucoma': [
-        '「最近、目の奥に強い圧迫感があり、視界がかすんで眼圧が高いと医者に言われました」',
-        '「瞳孔を開くような強い草の汁を使うと、目が見えなくなる恐れがあるのです」'
-      ],
-      'metal_allergy': [
-        '「銀の指輪や真鍮のバックルが肌に触れるだけで、真っ赤にただれる金属アレルギーなんです」',
-        '「過去に銀や金属成分を含む薬で激しい中毒症状を起こしたことがあります」'
-      ],
-      'asthma_smoke': [
-        '「刺激の強い匂いや揮発性のガスを吸い込むと、喉が焼けて咳が止まらなくなります」',
-        '「温泉の硫黄の煙を嗅いだだけで呼吸困難になったことがあるのです」'
-      ],
-      'kidney_weak': [
-        '「昔から腎臓が弱く、水銀や重い鉱物系の薬を飲むと全身がむくんでしまいます」',
-        '「尿の出が悪く、毒素を排出する力が弱いと言われ続けています」'
-      ],
-      'constipation': [
-        '「実はもう一週間も便通がなく、腸が詰まり気味でお腹が張っているのです……」',
-        '「腸の動きを完全に止めるような粉薬を飲むと、腸閉塞を起こす体質です」'
-      ],
-      'high_bp': [
-        '「普段から血圧が非常に高く、少し興奮しただけで鼻血が出るほど血の気が多いのです」',
-        '「血を固めすぎる薬を使うと、血管が詰まって倒れると警告されています」'
-      ],
-      'dairy_allergy': [
-        '「脂肪分の多い乳液や油っこいものを摂ると、胆石が痛んで吐いてしまいます」',
-        '「乳白色の濃厚な薬は昔から体質に合わず、胃が受け付けません」'
-      ],
-      'liver_weak': [
-        '「若い頃の深酒が祟って肝臓を悪くしており、白目が黄色いとよく言われます」',
-        '「毒を分解する肝臓が弱っているため、劇薬の希釈水は危険だと止められています」'
-      ],
-      'sun_sensitivity': [
-        '「生まれつき肌が極端に弱く、わずかな日光に当たっただけで水ぶくれができる光線過敏症です」',
-        '「太陽の光を浴びる作用のある薬草油は、皮膚を焼き尽くすので使えません」'
-      ],
-      'fast_pulse': [
-        '「今は心臓が早鐘のようにバクバクと速く打ちすぎていて、動悸が激しいのです」',
-        '「脈拍をさらに刺激する草の汁は、心臓が暴走してしまうので禁忌なのです」'
-      ],
-      'epilepsy': [
-        '「実は子供の頃からてんかんの持病があり、強い刺激臭や覚醒剤で発作が起きます」',
-        '「樟脳のような強い香りの気付け薬を嗅ぐと、痙攣発作を誘発してしまうのです」'
-      ],
-      'poor_circulation': [
-        '「手足の先の血の巡りが極端に悪く、冬場は指先が紫色になって感覚がなくなります」',
-        '「血管を強く収縮させる薬を使うと、指先が壊疽してしまうと言われました」'
-      ],
-      'jaw_decay': [
-        '「奥歯の虫歯がひどく、顎の骨まで炎症が広がって歯茎が腫れているのです」',
-        '「燐を含む薬は顎の骨を腐らせると聞いたので、絶対に避けなければなりません」'
-      ],
-      'alcohol_intolerance': [
-        '「体質的にアルコールを一滴も受け付けず、強い酒を飲むと胃潰瘍から吐血します」',
-        '「薬用酒であっても、酒精が入っていると激しい中毒を起こすのです」'
-      ],
-      'shallow_breath': [
-        '「肺炎を患ってから呼吸が浅く、眠ってしまうとそのまま息が止まりそうで怖いのです」',
-        '「眠気を誘う強い鎮痛剤は呼吸を止めてしまうため、使えない体質です」'
-      ],
-      'thyroid_hyper': [
-        '「異常なほど汗をかきやすく、常に手が小刻みに震える体質（甲状腺の異常）なのです」',
-        '「海藻やヨウ素を多く含む薬を摂ると、動悸と震えが悪化してしまいます」'
-      ],
-      'kidney_stone': [
-        '「以前に尿路結石で七転八倒したことがあり、石灰分が溜まりやすい体質なのです」',
-        '「石の粉やカルシウム分を多く含む白濁液は、結石が再発するので禁忌です」'
-      ],
-      'numbness': [
-        '「実は数日前から左半身の感覚が鈍く、神経が麻痺し始めているのです……」',
-        '「神経を冷やして感覚を奪う毒草の類を使うと、全身が動かなくなる恐れがあります」'
-      ]
+      'weak_heart': ['「実は生まれつき心臓が弱く、少し走っただけでも不整脈が出るのです……」', '「以前、強い神経鎮静剤を飲んだときに心臓が止まりかけたことがあります」'],
+      'hypothermia': ['「昔から極度の冷え性で、真夏でも指先が氷のように冷たく低体温なのです」', '「身体を強く冷やす薬を使うと、凍傷のように意識が遠のく体質でして……」'],
+      'glaucoma': ['「最近、目の奥に強い圧迫感があり、視界がかすんで眼圧が高いと医者に言われました」', '「瞳孔を開くような強い草の汁を使うと、目が見えなくなる恐れがあるのです」'],
+      'metal_allergy': ['「銀の指輪や真鍮のバックルが肌に触れるだけで、真っ赤にただれる金属アレルギーなんです」', '「過去に銀や金属成分を含む薬で激しい中毒症状を起こしたことがあります」'],
+      'asthma_smoke': ['「刺激の強い匂いや揮発性のガスを吸い込むと、喉が焼けて咳が止まらなくなります」', '「温泉の硫黄の煙を嗅いだだけで呼吸困難になったことがあるのです」'],
+      'kidney_weak': ['「昔から腎臓が弱く、水銀や重い鉱物系の薬を飲むと全身がむくんでしまいます」', '「尿の出が悪く、毒素を排出する力が弱いと言われ続けています」'],
+      'constipation': ['「実はもう一週間も便通がなく、腸が詰まり気味でお腹が張っているのです……」', '「腸の動きを完全に止めるような粉薬を飲むと、腸閉塞を起こす体質です」'],
+      'high_bp': ['「普段から血圧が非常に高く、少し興奮しただけで鼻血が出るほど血の気が多いのです」', '「血を固めすぎる薬を使うと、血管が詰まって倒れると警告されています」'],
+      'dairy_allergy': ['「脂肪分の多い乳液や油っこいものを摂ると、胆石が痛んで吐いてしまいます」', '「乳白色の濃厚な薬は昔から体質に合わず、胃が受け付けません」'],
+      'liver_weak': ['「若い頃の深酒が祟って肝臓を悪くしており、白目が黄色いとよく言われます」', '「毒を分解する肝臓が弱っているため、劇薬の希釈水は危険だと止められています」'],
+      'sun_sensitivity': ['「生まれつき肌が極端に弱く、わずかな日光に当たっただけで水ぶくれができる光線過敏症です」', '「太陽の光を浴びる作用のある薬草油は、皮膚を焼き尽くすので使えません」'],
+      'fast_pulse': ['「今は心臓が早鐘のようにバクバクと速く打ちすぎていて、動悸が激しいのです」', '「脈拍をさらに刺激する草の汁は、心臓が暴走してしまうので禁忌なのです」'],
+      'epilepsy': ['("実は子供の頃からてんかんの持病があり、強い刺激臭や覚醒剤で発作が起きます")', '「樟脳のような強い香りの気付け薬を嗅ぐと、痙攣発作を誘発してしまうのです」'],
+      'poor_circulation': ['「手足の先の血の巡りが極端に悪く、冬場は指先が紫色になって感覚がなくなります」', '("血管を強く収縮させる薬を使うと、指先が壊疽してしまうと言われました")'],
+      'jaw_decay': ['「奥歯の虫歯がひどく、顎の骨まで炎症が広がって歯茎が腫れているのです」', '「燐を含む薬は顎の骨を腐らせると聞いたので、絶対に避けなければなりません」'],
+      'alcohol_intolerance': ['「体質的にアルコールを一滴も受け付けず、強い酒を飲むと胃潰瘍から吐血します」', '「薬用酒であっても、酒精が入っていると激しい中毒を起こすのです」'],
+      'shallow_breath': ['「肺炎を患ってから呼吸が浅く、眠ってしまうとそのまま息が止まりそうで怖いのです」', '「眠기를誘う強い鎮痛剤は呼吸を止めてしまうため、使えない体質です」'],
+      'thyroid_hyper': ['「異常なほど汗をかきやすく、常に手が小刻みに震える体質（甲状腺の異常）なのです」', '「海藻やヨウ素を多く含む薬を摂ると、動悸と震えが悪化してしまいます」'],
+      'kidney_stone': ['「以前に尿路結石で七転八倒したことがあり、石灰分が溜まりやすい体質なのです」', '「石の粉やカルシウム分を多く含む白濁液は、結石が再発するので禁忌です」'],
+      'numbness': ['「実は数日前から左半身の感覚が鈍く、神経が麻痺し始めているのです……」', '「神経を冷やして感覚を奪う毒草の類を使うと、全身が動かなくなる恐れがあります」']
     };
 
-    // =========================================================================
-    // 4. ゲーム状態管理
-    // =========================================================================
     let state = {
       day: 1,
-      patientIndexInDay: 1, // 1..3
+      patientIndexInDay: 1,
       patientsPerDay: 3,
       gold: 40,
       reputation: 70,
       curedCount: 0,
       unlockedMedIds: ['med_01', 'med_02', 'med_03', 'med_04', 'med_05'],
-      shelfBottles: [], // { slotNum, medId, userLabel }
+      shelfBottles: [],
       selectedBottleIndex: null,
-      alchemySlots: [null, null], // 格納するのは { type: 'base', bottleIndex, medId, label }
-      brewedFlask: null, // { type: 'brewed', recipeId, name, colorHex, effect, contraindicationId } または { type: 'hazard', name, reason }
-      prescribeItem: null, // { type: 'base'|'brewed'|'hazard', ... }
+      alchemySlots: [null, null],
+      brewedFlask: null,
+      prescribeItem: null,
       currentPatient: null,
       interrogationsLeft: 2,
       maxInterrogations: 2,
       revealedClues: [],
-      records: [], // 診察履歴
+      records: [],
       activeTab: 'guide',
       pickerTargetIndex: null
     };
 
-    // =========================================================================
-    // 5. 初期化＆シャッフルロジック
-    // =========================================================================
     function initGame(forceNew = false) {
       if (!forceNew && loadSavedGameState()) {
-        // セーブデータから途中復帰
         switchGrimoireTab(state.activeTab || 'guide');
         renderAll();
-        if (state.reputation <= 0) {
-          triggerGameOver();
-        }
+        if (state.reputation <= 0) triggerGameOver();
         return;
       }
-
       clearSavedGameState();
       state = {
-        day: 1,
-        patientIndexInDay: 1,
-        patientsPerDay: 3,
-        gold: 40,
-        reputation: 70,
-        curedCount: 0,
+        day: 1, patientIndexInDay: 1, patientsPerDay: 3, gold: 40, reputation: 70, curedCount: 0,
         unlockedMedIds: ['med_01', 'med_02', 'med_03', 'med_04', 'med_05'],
-        shelfBottles: [],
-        selectedBottleIndex: null,
-        alchemySlots: [null, null],
-        brewedFlask: null,
-        prescribeItem: null,
-        currentPatient: null,
-        interrogationsLeft: 2,
-        maxInterrogations: 2,
-        revealedClues: [],
-        records: [],
-        activeTab: 'guide',
-        pickerTargetIndex: null
+        shelfBottles: [], selectedBottleIndex: null, alchemySlots: [null, null], brewedFlask: null,
+        prescribeItem: null, currentPatient: null, interrogationsLeft: 2, maxInterrogations: 2,
+        revealedClues: [], records: [], activeTab: 'guide', pickerTargetIndex: null
       };
 
-      // 初期5種をシャッフルして棚に配置
       const shuffled = [...state.unlockedMedIds].sort(() => Math.random() - 0.5);
       shuffled.forEach((medId, idx) => {
-        state.shelfBottles.push({
-          slotNum: idx + 1,
-          medId: medId,
-          userLabel: ''
-        });
+        state.shelfBottles.push({ slotNum: idx + 1, medId: medId, userLabel: '' });
       });
 
       generateNextPatient();
@@ -1444,14 +637,8 @@
       initGame(true);
     }
 
-    function openResetModal() {
-      document.getElementById('reset-confirm-modal').classList.remove('hidden');
-    }
-
-    function closeResetModal() {
-      document.getElementById('reset-confirm-modal').classList.add('hidden');
-    }
-
+    function openResetModal() { document.getElementById('reset-confirm-modal').classList.remove('hidden'); }
+    function closeResetModal() { document.getElementById('reset-confirm-modal').classList.add('hidden'); }
     function confirmFullReset() {
       closeResetModal();
       document.getElementById('result-modal').classList.add('hidden');
@@ -1460,27 +647,15 @@
       initGame(true);
     }
 
-    // =========================================================================
-    // 6. 完全ソルバブルな患者自動生成ロジック
-    // =========================================================================
     function generateNextPatient() {
       const unlockedSet = new Set(state.unlockedMedIds);
-
-      // 1) 現在保有している単体生薬から選べる候補リスト
       const availableSingleMeds = MEDICINES.filter(m => unlockedSet.has(m.id));
+      const availableRecipes = VALID_RECIPES.filter(r => unlockedSet.has(r.ingredients[0]) && unlockedSet.has(r.ingredients[1]));
 
-      // 2) 両方の素材を保有している有効な調合レシピ候補リスト
-      const availableRecipes = VALID_RECIPES.filter(r =>
-        unlockedSet.has(r.ingredients[0]) && unlockedSet.has(r.ingredients[1])
-      );
-
-      // 調合症例を出す確率（手持ちで作れるレシピがあり、かつ1人目以外または2日目以降）
       let useRecipe = false;
       if (availableRecipes.length > 0) {
         const recipeChance = state.day === 1 ? (state.patientIndexInDay === 3 ? 0.6 : 0.25) : 0.55;
-        if (Math.random() < recipeChance) {
-          useRecipe = true;
-        }
+        if (Math.random() < recipeChance) useRecipe = true;
       }
 
       let targetSolution = null;
@@ -1489,65 +664,40 @@
 
       if (useRecipe) {
         const chosenRecipe = availableRecipes[Math.floor(Math.random() * availableRecipes.length)];
-        targetSolution = {
-          kind: 'recipe',
-          id: chosenRecipe.id,
-          name: chosenRecipe.name,
-          contraindicationId: chosenRecipe.contraindicationId
-        };
+        targetSolution = { kind: 'recipe', id: chosenRecipe.id, name: chosenRecipe.name, contraindicationId: chosenRecipe.contraindicationId };
         symptomText = SYMPTOM_SCRIPTS[chosenRecipe.id];
         caseBadge = '複合症例（調合が必要）';
       } else {
         const chosenMed = availableSingleMeds[Math.floor(Math.random() * availableSingleMeds.length)];
-        targetSolution = {
-          kind: 'single',
-          id: chosenMed.id,
-          name: chosenMed.name,
-          contraindicationId: chosenMed.contraindicationId
-        };
+        targetSolution = { kind: 'single', id: chosenMed.id, name: chosenMed.name, contraindicationId: chosenMed.contraindicationId };
         symptomText = SYMPTOM_SCRIPTS[chosenMed.id];
         caseBadge = '単体症例';
       }
 
-      // 患者の秘密（禁忌）を生成（正解の薬の禁忌には絶対に被らないものを設定）
       let secretContraId = null;
       let secretClueText = '「特に持病やアレルギーはありません。薬で具合が悪くなったこともないです」';
 
       if (Math.random() < 0.78) {
-        const possibleContraIds = Object.keys(CONTRAINDICATION_CLUES).filter(
-          cId => cId !== targetSolution.contraindicationId
-        );
+        const possibleContraIds = Object.keys(CONTRAINDICATION_CLUES).filter(cId => cId !== targetSolution.contraindicationId);
         secretContraId = possibleContraIds[Math.floor(Math.random() * possibleContraIds.length)];
         const cluesArr = CONTRAINDICATION_CLUES[secretContraId];
         secretClueText = cluesArr[Math.floor(Math.random() * cluesArr.length)];
       }
 
       const secondClues = [
-        secretContraId
-          ? '【詳細問診】やはり特定の成分に対する強い拒絶反応（禁忌）が見られます。医学書の禁忌欄を慎重に確認してください。'
-          : '【詳細問診】脈拍・瞳孔ともに安定しており、特定の成分に対する禁忌はなさそうです。',
-        targetSolution.kind === 'recipe'
-          ? '【詳細問診】単一の生薬だけでは片方の症状しか抑えきれません。2種類の薬効を合わせた調合薬が必要です。'
-          : '【詳細問診】症状は単純明快です。適合する効能を持つ単一の生薬を正確に選べば完治するでしょう。'
+        secretContraId ? '【詳細問診】やはり特定の成分に対する強い拒絶反応（禁忌）が見られます。医学書の禁忌欄を慎重に確認してください。' : '【詳細問診】脈拍・瞳孔ともに安定しており、特定の成分に対する禁忌はなさそうです。',
+        targetSolution.kind === 'recipe' ? '【詳細問診】単一の生薬だけでは片方の症状しか抑えきれません。2種類の薬効を合わせた調合薬が必要です。' : '【詳細問診】症状は単純明快です。適合する効能を持つ単一の生薬を正確に選べば完治するでしょう。'
       ];
 
-      const role = PATIENT_ROLES[Math.floor(Math.random() * PATIENT_ROLES.length)];
-      const firstName = PATIENT_FIRST_NAMES[Math.floor(Math.random() * PATIENT_FIRST_NAMES.length)];
-      const lastName = PATIENT_LAST_NAMES[Math.floor(Math.random() * PATIENT_LAST_NAMES.length)];
-      const appearance = PATIENT_APPEARANCES[Math.floor(Math.random() * PATIENT_APPEARANCES.length)];
-
       state.currentPatient = {
-        role,
-        name: `${firstName}・${lastName}`,
-        appearance,
+        role: PATIENT_ROLES[Math.floor(Math.random() * PATIENT_ROLES.length)],
+        name: `${PATIENT_FIRST_NAMES[Math.floor(Math.random() * PATIENT_FIRST_NAMES.length)]}・${PATIENT_LAST_NAMES[Math.floor(Math.random() * PATIENT_LAST_NAMES.length)]}`,
+        appearance: PATIENT_APPEARANCES[Math.floor(Math.random() * PATIENT_APPEARANCES.length)],
         skin: SKIN_COLORS[Math.floor(Math.random() * SKIN_COLORS.length)],
         hair: HAIR_COLORS[Math.floor(Math.random() * HAIR_COLORS.length)],
         coat: COAT_COLORS[Math.floor(Math.random() * COAT_COLORS.length)],
         hat: HAT_STYLES[Math.floor(Math.random() * HAT_STYLES.length)],
-        caseBadge,
-        symptomText,
-        solution: targetSolution,
-        secretContraId,
+        caseBadge, symptomText, solution: targetSolution, secretContraId,
         clues: [secretClueText, secondClues[Math.floor(Math.random() * secondClues.length)]]
       };
 
@@ -1556,80 +706,36 @@
       state.prescribeItem = null;
     }
 
-    // =========================================================================
-    // 7. ボトルSVG生成（色と形状を視覚化）
-    // =========================================================================
     function getBottleSVG(med, sizeClass = 'w-8 h-9') {
       const c = med.colorHex;
       const shape = med.bottleShape;
       if (shape.includes('フラスコ') || shape.includes('三角') || shape.includes('レトルト')) {
-        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none">
-          <rect x="14" y="2" width="8" height="4" rx="1" fill="#8c6239"/>
-          <path d="M15 6h6v7l9 18a4 4 0 0 1-3.6 6H9.6A4 4 0 0 1 6 31l9-18V6z" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/>
-          <path d="M10.5 23h15l4.2 8.2A2.5 2.5 0 0 1 27.4 35H8.6a2.5 2.5 0 0 1-2.3-3.8L10.5 23z" fill="${c}"/>
-        </svg>`;
+        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none"><rect x="14" y="2" width="8" height="4" rx="1" fill="#8c6239"/><path d="M15 6h6v7l9 18a4 4 0 0 1-3.6 6H9.6A4 4 0 0 1 6 31l9-18V6z" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/><path d="M10.5 23h15l4.2 8.2A2.5 2.5 0 0 1 27.4 35H8.6a2.5 2.5 0 0 1-2.3-3.8L10.5 23z" fill="${c}"/></svg>`;
       } else if (shape.includes('四角') || shape.includes('六角') || shape.includes('八角') || shape.includes('菱形')) {
-        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none">
-          <rect x="13" y="2" width="10" height="4" rx="1" fill="#8c6239"/>
-          <rect x="14" y="6" width="8" height="5" fill="#cbd5e1" fill-opacity="0.3" stroke="#cbd5e1" stroke-width="1.4"/>
-          <polygon points="10,11 26,11 30,18 30,34 26,38 10,38 6,34 6,18" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/>
-          <polygon points="8,21 28,21 28,33 25,36 11,36 8,33" fill="${c}"/>
-        </svg>`;
+        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none"><rect x="13" y="2" width="10" height="4" rx="1" fill="#8c6239"/><rect x="14" y="6" width="8" height="5" fill="#cbd5e1" fill-opacity="0.3" stroke="#cbd5e1" stroke-width="1.4"/><polygon points="10,11 26,11 30,18 30,34 26,38 10,38 6,34 6,18" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/><polygon points="8,21 28,21 28,33 25,36 11,36 8,33" fill="${c}"/></svg>`;
       } else {
-        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none">
-          <rect x="13" y="2" width="10" height="4" rx="1" fill="#8c6239"/>
-          <rect x="14" y="6" width="8" height="5" fill="#cbd5e1" fill-opacity="0.3" stroke="#cbd5e1" stroke-width="1.4"/>
-          <rect x="7" y="11" width="22" height="27" rx="7" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/>
-          <path d="M9 21h18v10a5 5 0 0 1-5 5h-8a5 5 0 0 1-5-5V21z" fill="${c}"/>
-        </svg>`;
+        return `<svg class="${sizeClass}" viewBox="0 0 36 42" fill="none"><rect x="13" y="2" width="10" height="4" rx="1" fill="#8c6239"/><rect x="14" y="6" width="8" height="5" fill="#cbd5e1" fill-opacity="0.3" stroke="#cbd5e1" stroke-width="1.4"/><rect x="7" y="11" width="22" height="27" rx="7" fill="#1e293b" fill-opacity="0.45" stroke="#cbd5e1" stroke-width="1.6"/><path d="M9 21h18v10a5 5 0 0 1-5 5h-8a5 5 0 0 1-5-5V21z" fill="${c}"/></svg>`;
       }
     }
 
     function getFlaskSVG(colorHex, isHazard = false) {
-      return `<svg class="w-7 h-7 shrink-0" viewBox="0 0 36 36" fill="none">
-        <circle cx="18" cy="21" r="11" fill="${colorHex}" stroke="${isHazard ? '#ef4444' : '#f59e0b'}" stroke-width="2"/>
-        <rect x="15" y="4" width="6" height="7" fill="#cbd5e1" fill-opacity="0.4" stroke="#f59e0b" stroke-width="1.5"/>
-        <rect x="14" y="2" width="8" height="3" rx="1" fill="#92400e"/>
-      </svg>`;
+      return `<svg class="w-7 h-7 shrink-0" viewBox="0 0 36 36" fill="none"><circle cx="18" cy="21" r="11" fill="${colorHex}" stroke="${isHazard ? '#ef4444' : '#f59e0b'}" stroke-width="2"/><rect x="15" y="4" width="6" height="7" fill="#cbd5e1" fill-opacity="0.4" stroke="#f59e0b" stroke-width="1.5"/><rect x="14" y="2" width="8" height="3" rx="1" fill="#92400e"/></svg>`;
     }
 
     function getPatientSVG(p) {
       let hatSVG = '';
       if (p.hat === 'tophat') {
-        hatSVG = `<rect x="26" y="7" width="28" height="14" rx="2" fill="#18181b" stroke="#52525b" stroke-width="1"/>
-                  <rect x="20" y="20" width="40" height="3" rx="1.5" fill="#18181b"/>`;
+        hatSVG = `<rect x="26" y="7" width="28" height="14" rx="2" fill="#18181b" stroke="#52525b" stroke-width="1"/><rect x="20" y="20" width="40" height="3" rx="1.5" fill="#18181b"/>`;
       } else if (p.hat === 'cap') {
-        hatSVG = `<path d="M24 25 C24 14, 56 14, 56 25 Z" fill="#3f3f46"/>
-                  <path d="M24 25 L60 27 L54 23 Z" fill="#27272a"/>`;
+        hatSVG = `<path d="M24 25 C24 14, 56 14, 56 25 Z" fill="#3f3f46"/><path d="M24 25 L60 27 L54 23 Z" fill="#27272a"/>`;
       } else if (p.hat === 'hood') {
         hatSVG = `<path d="M21 44 C19 13, 61 13, 59 44 C56 22, 24 22, 21 44 Z" fill="${p.coat}" stroke="#785c32" stroke-width="1"/>`;
       } else if (p.hat === 'bonnet') {
         hatSVG = `<path d="M22 34 C20 12, 60 12, 58 34 C54 19, 26 19, 22 34 Z" fill="#44403c"/>`;
       }
-
-      return `<svg class="w-full h-full" viewBox="0 0 80 80" fill="none">
-        <rect width="80" height="80" fill="#1b120e"/>
-        <!-- 肩・コート -->
-        <path d="M12 80 C14 58, 66 58, 68 80 Z" fill="${p.coat}" stroke="#785c32" stroke-width="1.5"/>
-        <path d="M32 58 L40 72 L48 58" fill="#e7dcc8"/>
-        <!-- 首と顔 -->
-        <rect x="35" y="46" width="10" height="12" rx="3" fill="${p.skin}"/>
-        <ellipse cx="40" cy="34" rx="14" ry="17" fill="${p.skin}" stroke="#8c6d46" stroke-width="1.2"/>
-        <!-- 髪シルエット -->
-        <path d="M25 31 C25 16, 55 16, 55 31 C52 23, 28 23, 25 31 Z" fill="${p.hair}"/>
-        ${hatSVG}
-        <!-- 表情（苦悶の眉と目） -->
-        <path d="M31 29 L37 31" stroke="#291d16" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M49 29 L43 31" stroke="#291d16" stroke-width="1.8" stroke-linecap="round"/>
-        <circle cx="34" cy="34" r="1.8" fill="#1c130d"/>
-        <circle cx="46" cy="34" r="1.8" fill="#1c130d"/>
-        <path d="M35 43 Q40 40 45 43" stroke="#5c2b2b" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-      </svg>`;
+      return `<svg class="w-full h-full" viewBox="0 0 80 80" fill="none"><rect width="80" height="80" fill="#1b120e"/><path d="M12 80 C14 58, 66 58, 68 80 Z" fill="${p.coat}" stroke="#785c32" stroke-width="1.5"/><path d="M32 58 L40 72 L48 58" fill="#e7dcc8"/><rect x="35" y="46" width="10" height="12" rx="3" fill="${p.skin}"/><ellipse cx="40" cy="34" rx="14" ry="17" fill="${p.skin}" stroke="#8c6d46" stroke-width="1.2"/><path d="M25 31 C25 16, 55 16, 55 31 C52 23, 28 23, 25 31 Z" fill="${p.hair}"/>${hatSVG}<path d="M31 29 L37 31" stroke="#291d16" stroke-width="1.8" stroke-linecap="round"/><path d="M49 29 L43 31" stroke="#291d16" stroke-width="1.8" stroke-linecap="round"/><circle cx="34" cy="34" r="1.8" fill="#1c130d"/><circle cx="46" cy="34" r="1.8" fill="#1c130d"/><path d="M35 43 Q40 40 45 43" stroke="#5c2b2b" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>`;
     }
 
-    // =========================================================================
-    // 8. UIレンダリング全般（描画ごとに自動セーブを実行）
-    // =========================================================================
     function renderAll() {
       renderHeaderStats();
       renderShelf();
@@ -1654,7 +760,6 @@
     function renderShelf() {
       const shelfEl = document.getElementById('medicine-shelf');
       shelfEl.innerHTML = '';
-
       state.shelfBottles.forEach((bottle, index) => {
         const med = MEDICINES.find(m => m.id === bottle.medId);
         const isSelected = state.selectedBottleIndex === index;
@@ -1662,44 +767,16 @@
 
         const card = document.createElement('div');
         card.className = `draggable-item rounded-lg bg-[#16100c] border ${isSelected ? 'bottle-selected' : 'border-[#594222] hover:border-[#a88246]'} p-1.5 flex flex-col items-center justify-between relative`;
-        card.dataset.dragType = 'bottle';
-        card.dataset.bottleIndex = index;
-
         card.innerHTML = `
-          <div class="w-full flex items-center justify-between text-[9px] font-cinzel text-[#a68a5c] font-bold">
-            <span>#${bottle.slotNum}</span>
-            <span class="w-2 h-2 rounded-full" style="background:${med.colorHex}"></span>
-          </div>
-          <div class="my-0.5 pointer-events-none">
-            ${getBottleSVG(med, 'w-7 h-8 sm:w-8 sm:h-9')}
-          </div>
-          <button type="button"
-            onclick="event.stopPropagation(); openLabelPicker(${index})"
-            class="w-full px-1 py-1 rounded text-[10px] sm:text-[11px] font-extrabold truncate text-center transition ${
-              hasLabel
-                ? 'bg-[#efe5cf] text-[#1c130d] border border-[#8c6932] shadow-xs'
-                : 'bg-[#261c15] text-[#9e8663] border border-dashed border-[#664d27] hover:text-amber-300'
-            }"
-            title="タップしてラベルを貼る">
-            ${hasLabel ? escapeHTML(bottle.userLabel) : '＋ラベル'}
-          </button>
+          <div class="w-full flex items-center justify-between text-[9px] font-cinzel text-[#a68a5c] font-bold"><span>#${bottle.slotNum}</span><span class="w-2 h-2 rounded-full" style="background:${med.colorHex}"></span></div>
+          <div class="my-0.5 pointer-events-none">${getBottleSVG(med, 'w-7 h-8 sm:w-8 sm:h-9')}</div>
+          <button type="button" onclick="event.stopPropagation(); openLabelPicker(${index})" class="w-full px-1 py-1 rounded text-[10px] sm:text-[11px] font-extrabold truncate text-center transition ${hasLabel ? 'bg-[#efe5cf] text-[#1c130d] border border-[#8c6932] shadow-xs' : 'bg-[#261c15] text-[#9e8663] border border-dashed border-[#664d27] hover:text-amber-300'}" title="タップしてラベルを貼る">${hasLabel ? escapeHTML(bottle.userLabel) : '＋ラベル'}</button>
         `;
 
-        // ドラッグ＆タップイベント登録
         attachPointerDrag(card, {
-          type: 'bottle',
-          bottleIndex: index,
-          medId: med.id,
-          label: hasLabel ? bottle.userLabel : `無銘の瓶 #${bottle.slotNum}`,
-          iconHTML: getBottleSVG(med, 'w-6 h-6'),
-          onTap: () => {
-            state.selectedBottleIndex = index;
-            renderShelf();
-            renderInspectWindow();
-            saveGameState();
-          }
+          type: 'bottle', bottleIndex: index, medId: med.id, label: hasLabel ? bottle.userLabel : `無銘の瓶 #${bottle.slotNum}`, iconHTML: getBottleSVG(med, 'w-6 h-6'),
+          onTap: () => { state.selectedBottleIndex = index; renderShelf(); renderInspectWindow(); saveGameState(); }
         });
-
         shelfEl.appendChild(card);
       });
     }
@@ -1707,18 +784,14 @@
     function renderInspectWindow() {
       const idEl = document.getElementById('inspect-bottle-id');
       const detailsEl = document.getElementById('inspect-details');
-
       if (state.selectedBottleIndex === null || !state.shelfBottles[state.selectedBottleIndex]) {
         idEl.textContent = 'NO SELECTION';
         detailsEl.innerHTML = `<p class="text-[#96805f] py-3 text-center text-[11px]">棚の瓶をタップすると<br>5つの観察特徴を表示します</p>`;
         return;
       }
-
       const bottle = state.shelfBottles[state.selectedBottleIndex];
       const med = MEDICINES.find(m => m.id === bottle.medId);
       idEl.textContent = `BOTTLE #${bottle.slotNum}`;
-
-      // 純粋に5つの観察特徴のみ表示（答えのヒントや自動照合表示は一切出さない）
       detailsEl.innerHTML = `
         <div class="flex items-start gap-1"><span class="text-amber-400 shrink-0">色調:</span><span>${med.liquidColor}</span></div>
         <div class="flex items-start gap-1"><span class="text-amber-400 shrink-0">瓶形:</span><span>${med.bottleShape}</span></div>
@@ -1740,17 +813,13 @@
           const med = MEDICINES.find(m => m.id === item.medId);
           slotEl.classList.remove('border-dashed', 'border-[#7d6033]', 'bg-[#110c09]');
           slotEl.classList.add('border-solid', 'border-amber-500', 'bg-[#211710]');
-          slotEl.innerHTML = `
-            ${getBottleSVG(med, 'w-5 h-6')}
-            <span class="text-[10px] font-extrabold text-amber-200 truncate w-full px-0.5">${escapeHTML(item.label)}</span>
-          `;
+          slotEl.innerHTML = `${getBottleSVG(med, 'w-5 h-6')}<span class="text-[10px] font-extrabold text-amber-200 truncate w-full px-0.5">${escapeHTML(item.label)}</span>`;
         }
       }
 
       const btnBrew = document.getElementById('btn-brew');
       btnBrew.disabled = !(state.alchemySlots[0] && state.alchemySlots[1]);
 
-      // 調合完了フラスコがある場合は調合ボタンの下に表示
       let flaskContainer = document.getElementById('brewed-flask-banner');
       if (!flaskContainer) {
         flaskContainer = document.createElement('div');
@@ -1766,21 +835,14 @@
           <div id="brewed-flask-draggable" class="draggable-item p-1.5 rounded-lg ${isHaz ? 'bg-red-950/80 border border-red-500' : 'bg-[#291d12] border border-amber-400'} flex items-center justify-between gap-1.5 shadow-md">
             <div class="flex items-center gap-1.5 min-w-0 pointer-events-none">
               ${getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz)}
-              <div class="min-w-0">
-                <div class="text-[9px] font-bold ${isHaz ? 'text-red-300' : 'text-amber-300'}">${isHaz ? '⚠ 危険変質' : '✨ 完成フラスコ（セット可）'}</div>
-                <div class="text-[11px] font-black text-white truncate">${escapeHTML(f.name)}</div>
-              </div>
+              <div class="min-w-0"><div class="text-[9px] font-bold ${isHaz ? 'text-red-300' : 'text-amber-300'}">${isHaz ? '⚠ 危険変質' : '✨ 完成フラスコ（セット可）'}</div><div class="text-[11px] font-black text-white truncate">${escapeHTML(f.name)}</div></div>
             </div>
             <button type="button" onclick="event.stopPropagation(); setPrescribeItem(state.brewedFlask)" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black text-[10px] font-black shrink-0">セット</button>
           </div>
         `;
-
         const dragEl = document.getElementById('brewed-flask-draggable');
         attachPointerDrag(dragEl, {
-          type: 'brewed',
-          flaskData: f,
-          label: f.name,
-          iconHTML: getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz),
+          type: 'brewed', flaskData: f, label: f.name, iconHTML: getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz),
           onTap: () => setPrescribeItem(f)
         });
       } else {
@@ -1792,7 +854,6 @@
     function renderPatientArea() {
       const p = state.currentPatient;
       if (!p) return;
-
       document.getElementById('patient-avatar').innerHTML = getPatientSVG(p);
       document.getElementById('patient-role-badge').textContent = p.role;
       document.getElementById('patient-case-type').textContent = p.caseBadge;
@@ -1801,16 +862,11 @@
       document.getElementById('patient-dialogue').textContent = p.symptomText;
 
       const btnInt = document.getElementById('btn-interrogate');
-      const countBadge = document.getElementById('interrogate-count');
-      countBadge.textContent = `残${state.interrogationsLeft}`;
+      document.getElementById('interrogate-count').textContent = `残${state.interrogationsLeft}`;
       btnInt.disabled = state.interrogationsLeft <= 0 || state.revealedClues.length >= p.clues.length;
 
-      const notesEl = document.getElementById('interrogation-notes');
-      notesEl.innerHTML = state.revealedClues.map((clue, i) => `
-        <div class="p-2 rounded-lg bg-[#261414] border border-[#8f3838] text-xs text-[#ffdcdc] font-bold animate-fade-in">
-          <span class="text-[10px] text-amber-300 font-extrabold block mb-0.5">🩺 問診記録 #${i + 1}</span>
-          ${escapeHTML(clue)}
-        </div>
+      document.getElementById('interrogation-notes').innerHTML = state.revealedClues.map((clue, i) => `
+        <div class="p-2 rounded-lg bg-[#261414] border border-[#8f3838] text-xs text-[#ffdcdc] font-bold animate-fade-in"><span class="text-[10px] text-amber-300 font-extrabold block mb-0.5">🩺 問診記録 #${i + 1}</span>${escapeHTML(clue)}</div>
       `).join('');
     }
 
@@ -1825,28 +881,13 @@
         deliverBtn.disabled = true;
       } else {
         const item = state.prescribeItem;
-        let icon = '';
-        if (item.type === 'base') {
-          const med = MEDICINES.find(m => m.id === item.medId);
-          icon = getBottleSVG(med, 'w-6 h-7');
-        } else {
-          icon = getFlaskSVG(item.type === 'hazard' ? '#dc2626' : item.colorHex, item.type === 'hazard');
-        }
-        slotContent.innerHTML = `
-          ${icon}
-          <div class="min-w-0">
-            <span class="text-[10px] text-amber-300 font-bold block">処方セット中</span>
-            <span class="text-xs sm:text-sm font-black text-white truncate block">${escapeHTML(item.label || item.name)}</span>
-          </div>
-        `;
+        let icon = item.type === 'base' ? getBottleSVG(MEDICINES.find(m => m.id === item.medId), 'w-6 h-7') : getFlaskSVG(item.type === 'hazard' ? '#dc2626' : item.colorHex, item.type === 'hazard');
+        slotContent.innerHTML = `${icon}<div class="min-w-0"><span class="text-[10px] text-amber-300 font-bold block">処方セット中</span><span class="text-xs sm:text-sm font-black text-white truncate block">${escapeHTML(item.label || item.name)}</span></div>`;
         clearBtn.classList.remove('hidden');
         deliverBtn.disabled = false;
       }
     }
 
-    // =========================================================================
-    // 9. クイックラベルピッカー（ワンタップ命名＋自由記述）
-    // =========================================================================
     function openLabelPicker(bottleIndex) {
       state.pickerTargetIndex = bottleIndex;
       state.selectedBottleIndex = bottleIndex;
@@ -1858,20 +899,9 @@
       document.getElementById('picker-custom-input').value = bottle.userLabel || '';
 
       const unlockedMeds = MEDICINES.filter(m => state.unlockedMedIds.includes(m.id));
-      const candidatesEl = document.getElementById('picker-candidates');
-      candidatesEl.innerHTML = unlockedMeds.map(med => {
+      document.getElementById('picker-candidates').innerHTML = unlockedMeds.map(med => {
         const isCurrent = bottle.userLabel === med.name;
-        return `
-          <button type="button" onclick="selectCandidateLabel('${med.name.replace(/'/g, "\\'")}')"
-            class="px-3 py-2 rounded-lg text-left text-xs font-extrabold border transition flex items-center justify-between ${
-              isCurrent
-                ? 'bg-amber-500/25 border-amber-400 text-amber-200'
-                : 'bg-[#1a130e] border-[#614925] text-[#f2e6cf] hover:border-amber-400 hover:bg-[#291e16]'
-            }">
-            <span class="truncate">${escapeHTML(med.name)}</span>
-            <span class="text-[10px] text-amber-400 shrink-0 ml-1">貼付</span>
-          </button>
-        `;
+        return `<button type="button" onclick="selectCandidateLabel('${med.name.replace(/'/g, "\\'")}')" class="px-3 py-2 rounded-lg text-left text-xs font-extrabold border transition flex items-center justify-between ${isCurrent ? 'bg-amber-500/25 border-amber-400 text-amber-200' : 'bg-[#1a130e] border-[#614925] text-[#f2e6cf] hover:border-amber-400 hover:bg-[#291e16]'}"><span class="truncate">${escapeHTML(med.name)}</span><span class="text-[10px] text-amber-400 shrink-0 ml-1">貼付</span></button>`;
       }).join('');
 
       document.getElementById('label-picker-popover').classList.remove('hidden');
@@ -1890,8 +920,7 @@
 
     function applyCustomLabel() {
       if (state.pickerTargetIndex === null) return;
-      const val = document.getElementById('picker-custom-input').value.trim();
-      state.shelfBottles[state.pickerTargetIndex].userLabel = val;
+      state.shelfBottles[state.pickerTargetIndex].userLabel = document.getElementById('picker-custom-input').value.trim();
       syncLabelsToSlots();
       forceCloseLabelPicker();
       renderShelf();
@@ -1924,26 +953,15 @@
       }
     }
 
-    function closeLabelPicker(e) {
-      if (e.target.id === 'label-picker-popover') {
-        forceCloseLabelPicker();
-      }
-    }
+    function closeLabelPicker(e) { if (e.target.id === 'label-picker-popover') forceCloseLabelPicker(); }
+    function forceCloseLabelPicker() { document.getElementById('label-picker-popover').classList.add('hidden'); state.pickerTargetIndex = null; }
 
-    function forceCloseLabelPicker() {
-      document.getElementById('label-picker-popover').classList.add('hidden');
-      state.pickerTargetIndex = null;
-    }
-
-    // =========================================================================
-    // 10. Pointer Events API ドラッグ＆ドロップ（スマホ縦スクロール両立対応）
-    // =========================================================================
+    /* iframe埋め込み環境に特化した頑強な Pointer Events ドラッグ＆ドロップ実装 */
     function attachPointerDrag(element, config) {
-      let startX = 0;
-      let startY = 0;
+      let startX = 0, startY = 0;
       let isDragging = false;
       let canceledByScroll = false;
-      const DRAG_THRESHOLD = 10;
+      const DRAG_THRESHOLD = 8;
 
       element.addEventListener('pointerdown', (e) => {
         if (e.target.closest('button')) return;
@@ -1952,10 +970,9 @@
         isDragging = false;
         canceledByScroll = false;
 
-        // PC（マウス）は即座にポインターキャプチャ、スマホ（タッチ）は縦スクロール優先のため横移動判定後に開始
         const isTouch = e.pointerType === 'touch';
         if (!isTouch) {
-          element.setPointerCapture(e.pointerId);
+          try { element.setPointerCapture(e.pointerId); } catch (_) {}
         }
 
         const ghost = document.getElementById('drag-ghost');
@@ -1967,9 +984,8 @@
           const dx = moveEvent.clientX - startX;
           const dy = moveEvent.clientY - startY;
 
-          // スマホ幅（1024px未満）のタッチ操作時、縦方向への指移動が大きい場合はページスクロールを優先
           if (isTouch && window.innerWidth < 1024 && !isDragging) {
-            if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+            if (Math.abs(dy) > DRAG_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
               canceledByScroll = true;
               return;
             }
@@ -1994,9 +1010,7 @@
         };
 
         const onPointerUp = (upEvent) => {
-          try {
-            element.releasePointerCapture(e.pointerId);
-          } catch (_) {}
+          try { element.releasePointerCapture(e.pointerId); } catch (_) {}
           element.removeEventListener('pointermove', onPointerMove);
           element.removeEventListener('pointerup', onPointerUp);
           element.removeEventListener('pointercancel', onPointerUp);
@@ -2009,9 +1023,7 @@
             if (config.onTap) config.onTap();
           } else if (isDragging) {
             const dropTarget = getDropTargetAt(upEvent.clientX, upEvent.clientY);
-            if (dropTarget) {
-              handleDropAction(dropTarget, config);
-            }
+            if (dropTarget) handleDropAction(dropTarget, config);
           }
         };
 
@@ -2047,30 +1059,19 @@
       if (target === 'alchemy-0' || target === 'alchemy-1') {
         if (config.type !== 'bottle') return;
         const slotIdx = target === 'alchemy-0' ? 0 : 1;
-        state.alchemySlots[slotIdx] = {
-          type: 'base',
-          bottleIndex: config.bottleIndex,
-          medId: config.medId,
-          label: config.label
-        };
+        state.alchemySlots[slotIdx] = { type: 'base', bottleIndex: config.bottleIndex, medId: config.medId, label: config.label };
         state.brewedFlask = null;
         renderAlchemyStation();
         saveGameState();
       } else if (target === 'prescribe') {
         if (config.type === 'bottle') {
-          setPrescribeItem({
-            type: 'base',
-            bottleIndex: config.bottleIndex,
-            medId: config.medId,
-            label: config.label
-          });
+          setPrescribeItem({ type: 'base', bottleIndex: config.bottleIndex, medId: config.medId, label: config.label });
         } else if (config.type === 'brewed') {
           setPrescribeItem(config.flaskData);
         }
       }
     }
 
-    // タップ操作でのスロット補助（スマホでスクロール位置を跨いでセットする際にも便利）
     function handleSlotClick(slotIdx) {
       if (state.alchemySlots[slotIdx]) {
         state.alchemySlots[slotIdx] = null;
@@ -2079,12 +1080,7 @@
         saveGameState();
       } else if (state.selectedBottleIndex !== null) {
         const b = state.shelfBottles[state.selectedBottleIndex];
-        state.alchemySlots[slotIdx] = {
-          type: 'base',
-          bottleIndex: state.selectedBottleIndex,
-          medId: b.medId,
-          label: b.userLabel || `無銘の瓶 #${b.slotNum}`
-        };
+        state.alchemySlots[slotIdx] = { type: 'base', bottleIndex: state.selectedBottleIndex, medId: b.medId, label: b.userLabel || `無銘の瓶 #${b.slotNum}` };
         state.brewedFlask = null;
         renderAlchemyStation();
         saveGameState();
@@ -2094,98 +1090,44 @@
     function handlePrescribeSlotClick() {
       if (!state.prescribeItem && state.selectedBottleIndex !== null) {
         const b = state.shelfBottles[state.selectedBottleIndex];
-        setPrescribeItem({
-          type: 'base',
-          bottleIndex: state.selectedBottleIndex,
-          medId: b.medId,
-          label: b.userLabel || `無銘の瓶 #${b.slotNum}`
-        });
+        setPrescribeItem({ type: 'base', bottleIndex: state.selectedBottleIndex, medId: b.medId, label: b.userLabel || `無銘の瓶 #${b.slotNum}` });
       }
     }
 
-    function clearAlchemySlots() {
-      state.alchemySlots = [null, null];
-      state.brewedFlask = null;
-      renderAlchemyStation();
-      saveGameState();
-    }
+    function clearAlchemySlots() { state.alchemySlots = [null, null]; state.brewedFlask = null; renderAlchemyStation(); saveGameState(); }
+    function setPrescribeItem(item) { state.prescribeItem = item; renderPrescribeSlot(); saveGameState(); }
+    function clearPrescribeSlot() { state.prescribeItem = null; renderPrescribeSlot(); saveGameState(); }
 
-    function setPrescribeItem(item) {
-      state.prescribeItem = item;
-      renderPrescribeSlot();
-      saveGameState();
-    }
-
-    function clearPrescribeSlot() {
-      state.prescribeItem = null;
-      renderPrescribeSlot();
-      saveGameState();
-    }
-
-    // =========================================================================
-    // 11. 調合・問診・処方判定ロジック
-    // =========================================================================
     function brewMixture() {
       const s0 = state.alchemySlots[0];
       const s1 = state.alchemySlots[1];
       if (!s0 || !s1) return;
 
       if (s0.medId === s1.medId) {
-        state.brewedFlask = {
-          type: 'hazard',
-          name: '変質した同種濃縮液',
-          reason: '同じ生薬同士を無理に煮詰めたため、有効成分が破壊され濁った失敗液になった。'
-        };
+        state.brewedFlask = { type: 'hazard', name: '変質した同種濃縮液', reason: '同じ生薬同士を無理に煮詰めたため、有効成分が破壊され濁った失敗液になった。' };
         renderAlchemyStation();
         saveGameState();
         return;
       }
 
       const pair = [s0.medId, s1.medId].sort();
-
-      // 1) 危険レシピ判定
-      const hazard = HAZARD_RECIPES.find(h => {
-        const hp = [...h.ingredients].sort();
-        return hp[0] === pair[0] && hp[1] === pair[1];
-      });
+      const hazard = HAZARD_RECIPES.find(h => { const hp = [...h.ingredients].sort(); return hp[0] === pair[0] && hp[1] === pair[1]; });
 
       if (hazard) {
-        state.brewedFlask = {
-          type: 'hazard',
-          name: hazard.name,
-          reason: hazard.reason
-        };
+        state.brewedFlask = { type: 'hazard', name: hazard.name, reason: hazard.reason };
         state.reputation = Math.max(0, state.reputation - 5);
         renderHeaderStats();
         renderAlchemyStation();
         saveGameState();
-        if (state.reputation <= 0) {
-          triggerGameOver();
-        }
+        if (state.reputation <= 0) triggerGameOver();
         return;
       }
 
-      // 2) 有効レシピ判定
-      const valid = VALID_RECIPES.find(r => {
-        const rp = [...r.ingredients].sort();
-        return rp[0] === pair[0] && rp[1] === pair[1];
-      });
-
+      const valid = VALID_RECIPES.find(r => { const rp = [...r.ingredients].sort(); return rp[0] === pair[0] && rp[1] === pair[1]; });
       if (valid) {
-        state.brewedFlask = {
-          type: 'brewed',
-          recipeId: valid.id,
-          name: valid.name,
-          colorHex: valid.colorHex,
-          effect: valid.effect,
-          contraindicationId: valid.contraindicationId
-        };
+        state.brewedFlask = { type: 'brewed', recipeId: valid.id, name: valid.name, colorHex: valid.colorHex, effect: valid.effect, contraindicationId: valid.contraindicationId };
       } else {
-        state.brewedFlask = {
-          type: 'hazard',
-          name: '効能を失った灰色の泥水',
-          reason: '互いの薬効が打ち消し合い、何の治療効果も持たない濁り水になってしまった。'
-        };
+        state.brewedFlask = { type: 'hazard', name: '効能を失った灰色の泥水', reason: '互いの薬効が打ち消し合い、何の治療効果も持たない濁り水になってしまった。' };
       }
 
       renderAlchemyStation();
@@ -2195,7 +1137,6 @@
     function interrogatePatient() {
       const p = state.currentPatient;
       if (!p || state.interrogationsLeft <= 0) return;
-
       const nextClueIndex = state.revealedClues.length;
       if (nextClueIndex < p.clues.length) {
         state.revealedClues.push(p.clues[nextClueIndex]);
@@ -2210,26 +1151,19 @@
       const p = state.currentPatient;
       if (!item || !p) return;
 
-      let outcome = 'fail';
-      let actualMedicineName = '';
-      let detailMessage = '';
-      let goldDelta = 0;
-      let repDelta = 0;
+      let outcome = 'fail', actualMedicineName = '', detailMessage = '', goldDelta = 0, repDelta = 0;
 
       if (item.type === 'hazard') {
         outcome = 'hazard';
         actualMedicineName = item.name;
         detailMessage = `処方した「${item.name}」は患者に深刻な薬害をもたらした！\n【原因】${item.reason}`;
-        goldDelta = 0;
         repDelta = -25;
       } else if (item.type === 'base') {
         const med = MEDICINES.find(m => m.id === item.medId);
         actualMedicineName = med.name;
-
         if (p.secretContraId && med.contraindicationId === p.secretContraId) {
           outcome = 'contra';
           detailMessage = `渡した瓶の正体は『${med.name}』だった！\n患者の隠された体質【${med.contraindicationText}】に触れ、激しい副作用が発生してしまった！`;
-          goldDelta = 0;
           repDelta = -22;
         } else if (p.solution.kind === 'single' && p.solution.id === med.id) {
           outcome = 'success';
@@ -2239,16 +1173,13 @@
         } else {
           outcome = 'wrong';
           detailMessage = `渡した瓶の正体は『${med.name}』（効能：${med.effect}）だった。\n患者の症状には適合せず、治療は失敗に終わった……。`;
-          goldDelta = 0;
           repDelta = -14;
         }
       } else if (item.type === 'brewed') {
         actualMedicineName = item.name;
-
         if (p.secretContraId && item.contraindicationId === p.secretContraId) {
           outcome = 'contra';
           detailMessage = `調合薬『${item.name}』は患者の隠された禁忌に触れ、激しい拒絶反応を引き起こした！`;
-          goldDelta = 0;
           repDelta = -22;
         } else if (p.solution.kind === 'recipe' && p.solution.id === item.recipeId) {
           outcome = 'success';
@@ -2258,7 +1189,6 @@
         } else {
           outcome = 'wrong';
           detailMessage = `調合薬『${item.name}』（効能：${item.effect}）は、この患者の症状には合わなかった……。`;
-          goldDelta = 0;
           repDelta = -14;
         }
       }
@@ -2267,15 +1197,7 @@
       state.reputation = Math.max(0, Math.min(100, state.reputation + repDelta));
       if (outcome === 'success') state.curedCount++;
 
-      state.records.unshift({
-        day: state.day,
-        patientName: p.name,
-        role: p.role,
-        given: actualMedicineName,
-        expected: p.solution.name,
-        success: outcome === 'success'
-      });
-
+      state.records.unshift({ day: state.day, patientName: p.name, role: p.role, given: actualMedicineName, expected: p.solution.name, success: outcome === 'success' });
       state.alchemySlots = [null, null];
       state.brewedFlask = null;
       state.prescribeItem = null;
@@ -2289,43 +1211,25 @@
       const badgeEl = document.getElementById('result-badge');
       const titleEl = document.getElementById('result-title');
       const descEl = document.getElementById('result-desc');
-      const rewardsEl = document.getElementById('result-rewards');
 
       if (outcome === 'success') {
         badgeEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2 bg-emerald-950 border border-emerald-500 text-emerald-300';
         badgeEl.textContent = 'TREATMENT SUCCESS // 治療成功';
         titleEl.textContent = '患者は感謝して帰っていった';
-      } else if (outcome === 'contra') {
-        badgeEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2 bg-red-950 border border-red-500 text-red-300';
-        badgeEl.textContent = 'CONTRAINDICATION // 禁忌抵触';
-        titleEl.textContent = '深刻な副作用が発生！';
-      } else if (outcome === 'hazard') {
-        badgeEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2 bg-red-950 border border-red-500 text-red-300';
-        badgeEl.textContent = 'TOXIC HAZARD // 劇薬事故';
-        titleEl.textContent = '危険な調合薬を投与してしまった！';
       } else {
-        badgeEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2 bg-amber-950 border border-amber-500 text-amber-300';
-        badgeEl.textContent = 'MISDIAGNOSIS // 処方不適合';
-        titleEl.textContent = '症状が改善しなかった……';
+        badgeEl.className = 'inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2 bg-red-950 border border-red-500 text-red-300';
+        badgeEl.textContent = 'TREATMENT FAILED // 治療失敗・誤診';
+        titleEl.textContent = '治療に失敗しました';
       }
 
       descEl.textContent = detailMessage;
-      rewardsEl.innerHTML = `
-        <span class="${goldDelta > 0 ? 'text-amber-300' : 'text-[#8c7858]'}">報酬: +${goldDelta} S</span>
-        <span class="${repDelta > 0 ? 'text-emerald-400' : 'text-red-400'}">評判: ${repDelta > 0 ? '+' : ''}${repDelta}</span>
-      `;
-
+      document.getElementById('result-rewards').innerHTML = `<span class="${goldDelta > 0 ? 'text-amber-300' : 'text-[#8c7858]'}">報酬: +${goldDelta} S</span><span class="${repDelta > 0 ? 'text-emerald-400' : 'text-red-400'}">評判: ${repDelta > 0 ? '+' : ''}${repDelta}</span>`;
       document.getElementById('result-modal').classList.remove('hidden');
     }
 
     function proceedNextStep() {
       document.getElementById('result-modal').classList.add('hidden');
-
-      if (state.reputation <= 0) {
-        triggerGameOver();
-        return;
-      }
-
+      if (state.reputation <= 0) { triggerGameOver(); return; }
       if (state.patientIndexInDay < state.patientsPerDay) {
         state.patientIndexInDay++;
         generateNextPatient();
@@ -2335,66 +1239,24 @@
       }
     }
 
-    // =========================================================================
-    // 12. 夜の仕入れ市場（ローグライト成長）＆ ゲームオーバー
-    // =========================================================================
     function openNightMarket() {
       document.getElementById('market-gold').textContent = state.gold;
       const itemsEl = document.getElementById('market-items');
-
       const lockedMeds = MEDICINES.filter(m => !state.unlockedMedIds.includes(m.id));
       const nextHerbCost = 30 + (state.unlockedMedIds.length - 5) * 6;
       const repCost = 20;
       const stethoCost = 55 + (state.maxInterrogations - 2) * 45;
 
       let html = '';
-
       if (lockedMeds.length > 0) {
-        html += `
-          <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
-            <div>
-              <div class="text-xs font-extrabold text-amber-300">🧪 新たな無銘生薬の仕入れ（残り ${lockedMeds.length} 種）</div>
-              <p class="text-[11px] text-[#cbb898] mt-0.5">薬棚に新しい未鑑定の薬瓶を1本追加し、扱える症例を広げます。</p>
-            </div>
-            <button onclick="buyNewHerb(${nextHerbCost})" ${state.gold < nextHerbCost ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">
-              ${nextHerbCost} S
-            </button>
-          </div>
-        `;
+        html += `<div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3"><div><div class="text-xs font-extrabold text-amber-300">🧪 新たな無銘生薬の仕入れ（残り ${lockedMeds.length} 種）</div><p class="text-[11px] text-[#cbb898] mt-0.5">薬棚に新しい未鑑定の薬瓶を1本追加し、扱える症例を広げます。</p></div><button onclick="buyNewHerb(${nextHerbCost})" ${state.gold < nextHerbCost ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">${nextHerbCost} S</button></div>`;
       } else {
-        html += `
-          <div class="p-3 rounded-lg bg-[#16100c] border border-emerald-700/60 text-xs text-emerald-300 font-bold">
-            ✦ 全20種類の生薬が薬棚に揃っています！
-          </div>
-        `;
+        html += `<div class="p-3 rounded-lg bg-[#16100c] border border-emerald-700/60 text-xs text-emerald-300 font-bold">✦ 全20種類の生薬が薬棚に揃っています！</div>`;
       }
-
-      html += `
-        <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
-          <div>
-            <div class="text-xs font-extrabold text-amber-300">🍷 慈善治療と寄付（評判 +15 回復）</div>
-            <p class="text-[11px] text-[#cbb898] mt-0.5">貧民街への施しを行い、診療所の評判を回復します（現在: ${state.reputation}/100）。</p>
-          </div>
-          <button onclick="buyReputation(${repCost})" ${state.gold < repCost || state.reputation >= 100 ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">
-            ${repCost} S
-          </button>
-        </div>
-      `;
-
+      html += `<div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3"><div><div class="text-xs font-extrabold text-amber-300">🍷 慈善治療と寄付（評判 +15 回復）</div><p class="text-[11px] text-[#cbb898] mt-0.5">貧民街への施しを行い、診療所の評判を回復します（現在: ${state.reputation}/100）。</p></div><button onclick="buyReputation(${repCost})" ${state.gold < repCost || state.reputation >= 100 ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">${repCost} S</button></div>`;
       if (state.maxInterrogations < 4) {
-        html += `
-          <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
-            <div>
-              <div class="text-xs font-extrabold text-amber-300">🩺 象牙の聴診器（最大問診回数 +1）</div>
-              <p class="text-[11px] text-[#cbb898] mt-0.5">1人の患者に対する問診回数を増やします（現在: 最大 ${state.maxInterrogations} 回）。</p>
-            </div>
-            <button onclick="buyStethoscope(${stethoCost})" ${state.gold < stethoCost ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">
-              ${stethoCost} S
-            </button>
-          </div>
-        `;
+        html += `<div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3"><div><div class="text-xs font-extrabold text-amber-300">🩺 象牙の聴診器（最大問診回数 +1）</div><p class="text-[11px] text-[#cbb898] mt-0.5">1人の患者に対する問診回数を増やします（現在: 最大 ${state.maxInterrogations} 回）。</p></div><button onclick="buyStethoscope(${stethoCost})" ${state.gold < stethoCost ? 'disabled' : ''} class="px-3 py-2 rounded-lg btn-gothic text-xs shrink-0">${stethoCost} S</button></div>`;
       }
-
       itemsEl.innerHTML = html;
       document.getElementById('market-modal').classList.remove('hidden');
     }
@@ -2403,23 +1265,13 @@
       if (state.gold < cost) return;
       const lockedMeds = MEDICINES.filter(m => !state.unlockedMedIds.includes(m.id));
       if (lockedMeds.length === 0) return;
-
       state.gold -= cost;
       const newMed = lockedMeds[Math.floor(Math.random() * lockedMeds.length)];
       state.unlockedMedIds.push(newMed.id);
-
-      const newBottle = {
-        slotNum: state.shelfBottles.length + 1,
-        medId: newMed.id,
-        userLabel: ''
-      };
-      const insertPos = Math.floor(Math.random() * (state.shelfBottles.length + 1));
-      state.shelfBottles.splice(insertPos, 0, newBottle);
-
+      state.shelfBottles.push({ slotNum: state.shelfBottles.length + 1, medId: newMed.id, userLabel: '' });
       state.selectedBottleIndex = null;
       state.alchemySlots = [null, null];
       state.prescribeItem = null;
-
       renderHeaderStats();
       renderShelf();
       renderInspectWindow();
@@ -2465,9 +1317,6 @@
       document.getElementById('gameover-modal').classList.remove('hidden');
     }
 
-    // =========================================================================
-    // 13. 古い医学書（右ペイン＆スマホドロワー）の描画
-    // =========================================================================
     function switchGrimoireTab(tabName) {
       state.activeTab = tabName;
       document.querySelectorAll('.grimoire-tab').forEach(btn => {
@@ -2485,13 +1334,8 @@
 
     function toggleMobileGrimoire(open) {
       const pane = document.getElementById('grimoire-pane');
-      if (open) {
-        pane.classList.remove('hidden');
-        pane.classList.add('flex');
-      } else {
-        pane.classList.add('hidden');
-        pane.classList.remove('flex');
-      }
+      if (open) { pane.classList.remove('hidden'); pane.classList.add('flex'); }
+      else { pane.classList.add('hidden'); pane.classList.remove('flex'); }
     }
 
     function renderGrimoire() {
@@ -2501,170 +1345,52 @@
       if (tab === 'guide') {
         container.innerHTML = `
           <div class="space-y-3 leading-relaxed">
-            <div class="border-b-2 border-[#8c6932] pb-1.5">
-              <span class="font-cinzel text-[11px] font-black tracking-widest text-[#7a1c1c]">PRACTITIONER'S MANUAL</span>
-              <h3 class="text-lg font-black text-[#1c130d]">診療と鑑定の手引き</h3>
-            </div>
-
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
-              <h4 class="font-black text-sm text-[#6b141a] mb-1">1. 無銘の薬瓶の鑑定とラベル貼り</h4>
-              <p class="text-xs font-bold text-[#261a12]">
-                薬棚の瓶には名前が書かれていません。瓶をタップして<span class="underline">鑑識レンズ</span>で「色調・瓶形・芳香・沈殿・振音」を確認し、<span class="underline">生薬図鑑タブ</span>と照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。
-              </p>
-            </div>
-
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
-              <h4 class="font-black text-sm text-[#6b141a] mb-1">2. 問診で「隠された禁忌」を暴く</h4>
-              <p class="text-xs font-bold text-[#261a12]">
-                患者は最初の訴えだけでは持病を隠しています。<span class="underline">「🩺 問診する」</span>を押して体質や禁忌を聞き出してください。症状に効く薬であっても、患者の禁忌に触れる薬を渡すと深刻な副作用で失敗します。
-              </p>
-            </div>
-
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
-              <h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法</h4>
-              <p class="text-xs font-bold text-[#261a12]">
-                複合症状の患者には<span class="underline">調合秘伝タブ</span>のレシピが必要です。薬瓶を<span class="underline">調合台（素材A・B）</span>へドラッグ（または瓶を選択してスロットをタップ）して「調合する」を押し、完成したフラスコを処方トレイへセットして治療します。
-              </p>
-            </div>
-
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
-              <h4 class="font-black text-sm text-[#6b141a] mb-1">4. 夜の仕入れ市（全20種の解放）</h4>
-              <p class="text-xs font-bold text-[#261a12]">
-                1日3人の診察を終えると夜の仕入れ市が開きます。報酬のシリング（S）を使って新たな生薬を仕入れ、全20種類の制覇を目指しましょう。
-              </p>
-            </div>
+            <div class="border-b-2 border-[#8c6932] pb-1.5"><span class="font-cinzel text-[11px] font-black tracking-widest text-[#7a1c1c]">PRACTITIONER'S MANUAL</span><h3 class="text-lg font-black text-[#1c130d]">診療と鑑定の手引き</h3></div>
+            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">1. 無銘の薬瓶の鑑定とラベル貼り</h4><p class="text-xs font-bold text-[#261a12]">薬棚の瓶には名前が書かれていません。瓶をタップして鑑識レンズで「色調・瓶形・芳香・沈殿・振音」を確認し、生薬図鑑タブと照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。</p></div>
+            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">2. 問診で「隠された禁忌」を暴く</h4><p class="text-xs font-bold text-[#261a12]">患者は最初の訴えだけでは持病を隠しています。「🩺 問診する」を押して体質や禁忌を聞き出してください。症状に効く薬であっても、患者の禁忌に触れる薬を渡すと深刻な副作用で失敗します。</p></div>
+            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法</h4><p class="text-xs font-bold text-[#261a12]">複合症状の患者には調合秘伝タブのレシピが必要です。薬瓶を調合台（素材A・B）へドラッグ（または瓶を選択してスロットをタップ）して「調合する」を押し、完成したフラスコを処方トレイへセットして治療します。</p></div>
           </div>
         `;
       } else if (tab === 'herbs') {
         const unlockedSet = new Set(state.unlockedMedIds);
-        const sortedMeds = [...MEDICINES].sort((a, b) => {
-          const aHas = unlockedSet.has(a.id) ? 0 : 1;
-          const bHas = unlockedSet.has(b.id) ? 0 : 1;
-          return aHas - bHas;
-        });
-
+        const sortedMeds = [...MEDICINES].sort((a, b) => (unlockedSet.has(a.id) ? 0 : 1) - (unlockedSet.has(b.id) ? 0 : 1));
         container.innerHTML = `
-          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between">
-            <h3 class="text-base font-black text-[#1c130d]">基本生薬図鑑（全20種）</h3>
-            <span class="text-[11px] font-extrabold text-[#6b141a]">保有中を優先表示</span>
-          </div>
+          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between"><h3 class="text-base font-black text-[#1c130d]">基本生薬図鑑（全20種）</h3><span class="text-[11px] font-extrabold text-[#6b141a]">保有中を優先表示</span></div>
           <div class="space-y-2.5">
             ${sortedMeds.map(med => {
               const isOwned = unlockedSet.has(med.id);
-              return `
-                <article class="p-2.5 rounded-lg border ${isOwned ? 'bg-[#f5ecd8] border-[#8c6932] shadow-xs' : 'bg-[#dfd0b2]/70 border-[#b39c74] opacity-80'}">
-                  <div class="flex items-center justify-between gap-2 mb-1">
-                    <div class="flex items-center gap-1.5">
-                      <span class="w-3 h-3 rounded-full border border-black/30 shrink-0" style="background:${med.colorHex}"></span>
-                      <h4 class="text-sm font-black text-[#1c130d]">${med.name}</h4>
-                    </div>
-                    <span class="text-[10px] font-black px-1.5 py-0.5 rounded ${isOwned ? 'bg-[#1f4d36] text-white' : 'bg-[#6e5d44] text-white'}">
-                      ${isOwned ? '棚に保有中' : '未仕入れ'}
-                    </span>
-                  </div>
-                  <div class="text-[11px] font-bold text-[#3d2b1d] bg-[#e8dcc2] p-1.5 rounded border border-[#c2ab82] mb-1.5 space-y-0.5">
-                    <div><span class="text-[#6b141a] font-extrabold">色・瓶:</span> ${med.liquidColor} ／ ${med.bottleShape}</div>
-                    <div><span class="text-[#6b141a] font-extrabold">香・沈:</span> ${med.smell} ／ ${med.sediment}</div>
-                    <div><span class="text-[#6b141a] font-extrabold">振音:</span> ${med.sound}</div>
-                  </div>
-                  <div class="text-xs font-extrabold text-[#14532d]">✦ 効能: ${med.effect}</div>
-                  <div class="text-[11px] font-extrabold text-[#881337] mt-0.5">⚠ 禁忌: ${med.contraindicationText}</div>
-                </article>
-              `;
+              return `<article class="p-2.5 rounded-lg border ${isOwned ? 'bg-[#f5ecd8] border-[#8c6932] shadow-xs' : 'bg-[#dfd0b2]/70 border-[#b39c74] opacity-80'}"><div class="flex items-center justify-between gap-2 mb-1"><div class="flex items-center gap-1.5"><span class="w-3 h-3 rounded-full border border-black/30 shrink-0" style="background:${med.colorHex}"></span><h4 class="text-sm font-black text-[#1c130d]">${med.name}</h4></div><span class="text-[10px] font-black px-1.5 py-0.5 rounded ${isOwned ? 'bg-[#1f4d36] text-white' : 'bg-[#6e5d44] text-white'}">${isOwned ? '棚に保有中' : '未仕入れ'}</span></div><div class="text-[11px] font-bold text-[#3d2b1d] bg-[#e8dcc2] p-1.5 rounded border border-[#c2ab82] mb-1.5 space-y-0.5"><div><span class="text-[#6b141a] font-extrabold">色・瓶:</span> ${med.liquidColor} ／ ${med.bottleShape}</div><div><span class="text-[#6b141a] font-extrabold">香・沈:</span> ${med.smell} ／ ${med.sediment}</div><div><span class="text-[#6b141a] font-extrabold">振音:</span> ${med.sound}</div></div><div class="text-xs font-extrabold text-[#14532d]">✦ 効能: ${med.effect}</div><div class="text-[11px] font-extrabold text-[#881337] mt-0.5">⚠ 禁忌: ${med.contraindicationText}</div></article>`;
             }).join('')}
           </div>
         `;
       } else if (tab === 'recipes') {
         const unlockedSet = new Set(state.unlockedMedIds);
         container.innerHTML = `
-          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between">
-            <h3 class="text-base font-black text-[#1c130d]">調合秘伝帳（全40組）</h3>
-            <span class="text-[11px] font-extrabold text-[#6b141a]">有効30種 / 禁忌10種</span>
-          </div>
-
+          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between"><h3 class="text-base font-black text-[#1c130d]">調合秘伝帳（全40組）</h3><span class="text-[11px] font-extrabold text-[#6b141a]">有効30種 / 禁忌10種</span></div>
           <h4 class="text-xs font-black text-[#14532d] tracking-wider uppercase pt-1">✦ 有効な特効薬レシピ（30種）</h4>
           <div class="space-y-2">
-            ${[...VALID_RECIPES].sort((a, b) => {
-              const aCan = unlockedSet.has(a.ingredients[0]) && unlockedSet.has(a.ingredients[1]) ? 0 : 1;
-              const bCan = unlockedSet.has(b.ingredients[0]) && unlockedSet.has(b.ingredients[1]) ? 0 : 1;
-              return aCan - bCan;
-            }).map(rec => {
+            ${[...VALID_RECIPES].sort((a, b) => (unlockedSet.has(a.ingredients[0]) && unlockedSet.has(a.ingredients[1]) ? 0 : 1) - (unlockedSet.has(b.ingredients[0]) && unlockedSet.has(b.ingredients[1]) ? 0 : 1)).map(rec => {
               const m1 = MEDICINES.find(m => m.id === rec.ingredients[0]);
               const m2 = MEDICINES.find(m => m.id === rec.ingredients[1]);
               const canMake = unlockedSet.has(m1.id) && unlockedSet.has(m2.id);
-              return `
-                <div class="p-2.5 rounded-lg border ${canMake ? 'bg-[#f5ecd8] border-[#8c6932]' : 'bg-[#dfd0b2]/70 border-[#b39c74] opacity-80'}">
-                  <div class="flex items-center justify-between mb-1">
-                    <span class="text-sm font-black text-[#1c130d]">${rec.name}</span>
-                    <span class="text-[10px] font-black px-1.5 py-0.5 rounded ${canMake ? 'bg-[#1f4d36] text-white' : 'bg-[#6e5d44] text-white'}">
-                      ${canMake ? '✨ 調合可能' : '素材未揃い'}
-                    </span>
-                  </div>
-                  <div class="text-xs font-extrabold text-[#4a2e16] mb-1">
-                    【素材】${m1.name} ＋ ${m2.name}
-                  </div>
-                  <div class="text-xs font-bold text-[#14532d]">✦ 効能: ${rec.effect}</div>
-                  <div class="text-[11px] font-extrabold text-[#881337]">⚠ 禁忌: ${rec.contraindicationText}</div>
-                </div>
-              `;
-            }).join('')}
-          </div>
-
-          <h4 class="text-xs font-black text-[#881337] tracking-wider uppercase pt-2">☠ 危険な失敗・劇薬反応（10種・調合厳禁）</h4>
-          <div class="space-y-2">
-            ${HAZARD_RECIPES.map(haz => {
-              const m1 = MEDICINES.find(m => m.id === haz.ingredients[0]);
-              const m2 = MEDICINES.find(m => m.id === haz.ingredients[1]);
-              return `
-                <div class="p-2.5 rounded-lg bg-[#f2d8d8] border border-[#a84444]">
-                  <div class="text-xs font-black text-[#7f1d1d]">⚠ ${haz.name}（${m1.name} × ${m2.name}）</div>
-                  <p class="text-[11px] font-bold text-[#450a0a] mt-0.5">${haz.reason}</p>
-                </div>
-              `;
+              return `<div class="p-2.5 rounded-lg border ${canMake ? 'bg-[#f5ecd8] border-[#8c6932]' : 'bg-[#dfd0b2]/70 border-[#b39c74] opacity-80'}"><div class="flex items-center justify-between mb-1"><span class="text-sm font-black text-[#1c130d]">${rec.name}</span><span class="text-[10px] font-black px-1.5 py-0.5 rounded ${canMake ? 'bg-[#1f4d36] text-white' : 'bg-[#6e5d44] text-white'}">${canMake ? '✨ 調合可能' : '素材未揃い'}</span></div><div class="text-xs font-extrabold text-[#4a2e16] mb-1">【素材】${m1.name} ＋ ${m2.name}</div><div class="text-xs font-bold text-[#14532d]">✦ 効能: ${rec.effect}</div><div class="text-[11px] font-extrabold text-[#881337]">⚠ 禁忌: ${rec.contraindicationText}</div></div>`;
             }).join('')}
           </div>
         `;
       } else if (tab === 'records') {
         container.innerHTML = `
-          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between">
-            <h3 class="text-base font-black text-[#1c130d]">診察カルテ履歴</h3>
-            <span class="text-xs font-extrabold text-[#4a3728]">成功: ${state.curedCount}件</span>
-          </div>
-          ${state.records.length === 0
-            ? `<p class="text-xs font-bold text-[#5c4632] py-6 text-center">まだ診察の記録はありません。</p>`
-            : `<div class="space-y-2">
-                ${state.records.map(r => `
-                  <div class="p-2.5 rounded-lg border ${r.success ? 'bg-[#e6f0e6] border-[#4b7a53]' : 'bg-[#f2dede] border-[#a34848]'}">
-                    <div class="flex items-center justify-between text-xs font-black">
-                      <span>${r.day}日目 - ${escapeHTML(r.patientName)}</span>
-                      <span class="${r.success ? 'text-[#14532d]' : 'text-[#881337]'}">${r.success ? '● 完治' : '✕ 失敗'}</span>
-                    </div>
-                    <div class="text-[11px] font-bold text-[#2b1f16] mt-1">
-                      処方薬: ${escapeHTML(r.given)} ／ 適正薬: ${escapeHTML(r.expected)}
-                    </div>
-                  </div>
-                `).join('')}
-              </div>`
-          }
+          <div class="border-b-2 border-[#8c6932] pb-1.5 flex items-center justify-between"><h3 class="text-base font-black text-[#1c130d]">診察カルテ履歴</h3><span class="text-xs font-extrabold text-[#4a3728]">成功: ${state.curedCount}件</span></div>
+          ${state.records.length === 0 ? `<p class="text-xs font-bold text-[#5c4632] py-6 text-center">まだ診察の記録はありません。</p>` : `<div class="space-y-2">${state.records.map(r => `<div class="p-2.5 rounded-lg border ${r.success ? 'bg-[#e6f0e6] border-[#4b7a53]' : 'bg-[#f2dede] border-[#a34848]'}"><div class="flex items-center justify-between text-xs font-black"><span>${r.day}日目 - ${escapeHTML(r.patientName)}</span><span class="${r.success ? 'text-[#14532d]' : 'text-[#881337]'}">${r.success ? '● 完治' : '✕ 失敗'}</span></div><div class="text-[11px] font-bold text-[#2b1f16] mt-1">処方薬: ${escapeHTML(r.given)} ／ 適正薬: ${escapeHTML(r.expected)}</div></div>`).join('')}</div>`}
         `;
       }
     }
 
     function escapeHTML(str) {
       if (!str) return '';
-      return str.replace(/[&<>"']/g, m => ({
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      }[m]));
+      return str.replace(/[&<>"']/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m]));
     }
 
-    // ゲーム開始（セーブデータがあれば途中から復元）
-    window.addEventListener('DOMContentLoaded', () => {
-      initGame(false);
-    });
+    window.addEventListener('DOMContentLoaded', () => { initGame(false); });
   </script>
 </body>
 </html>
