@@ -29,10 +29,9 @@
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* スマホの下スワイプ更新（Pull-to-Refresh）およびオーバースクロールを防止 */
+    /* スマホの下スワイプ更新（Pull-to-Refresh）を防止しつつ縦スクロールは許可 */
     html, body {
-      overscroll-behavior: none;
-      overscroll-behavior-y: none;
+      overscroll-behavior-y: contain;
     }
 
     body {
@@ -42,10 +41,20 @@
       color: #f3ead8;
       font-family: 'Noto Serif JP', 'Shippori Mincho', serif;
       font-weight: 600;
-      overflow: hidden;
-      height: 100dvh;
-      width: 100vw;
+      min-height: 100dvh;
+      width: 100%;
+      overflow-x: hidden;
+      overflow-y: auto;
       user-select: none;
+    }
+
+    /* PC画面（1024px以上）のみ1画面固定レイアウトにする */
+    @media (min-width: 1024px) {
+      body {
+        overflow: hidden;
+        height: 100dvh;
+        width: 100vw;
+      }
     }
 
     .font-cinzel {
@@ -94,17 +103,22 @@
       box-shadow: inset 0 0 30px rgba(84, 58, 28, 0.35);
     }
 
-    /* ドラッグ＆ドロップ用スタイル */
+    /* ドラッグ＆ドロップ用スタイル（スマホの縦スクロールを阻害しないようpan-yを許可） */
     .draggable-item {
-      touch-action: none;
+      touch-action: pan-y;
       cursor: grab;
       transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    @media (min-width: 1024px) {
+      .draggable-item {
+        touch-action: none;
+      }
     }
     .draggable-item:active {
       cursor: grabbing;
     }
 
-    /* ドラッグ中の誤スクロール・ブラウザジェスチャー完全遮断 */
+    /* ドラッグ実行中のみブラウザのスクロール・ジェスチャーを完全遮断 */
     body.is-dragging-active,
     body.is-dragging-active * {
       touch-action: none !important;
@@ -186,7 +200,7 @@
     }
   </style>
 </head>
-<body class="flex flex-col h-[100dvh] w-screen overflow-hidden select-none">
+<body class="flex flex-col min-h-[100dvh] lg:h-[100dvh] w-full lg:w-screen overflow-y-auto lg:overflow-hidden select-none">
 
   <!-- ドラッグ中のゴースト要素 -->
   <div id="drag-ghost" class="px-3 py-2 rounded-lg bg-[#241913] border-2 border-amber-400 text-amber-100 flex items-center gap-2 shadow-2xl">
@@ -239,8 +253,8 @@
     </div>
   </div>
 
-  <!-- トップヘッダー -->
-  <header class="shrink-0 h-12 sm:h-13 px-2.5 sm:px-5 bg-gradient-to-r from-[#120d0a] via-[#1e1511] to-[#120d0a] border-b border-[#7a5c2e] flex items-center justify-between z-20 gap-1.5">
+  <!-- トップヘッダー（スマホ縦スクロール時も上部に追従） -->
+  <header class="sticky top-0 lg:static shrink-0 h-12 sm:h-13 px-2.5 sm:px-5 bg-gradient-to-r from-[#120d0a] via-[#1e1511] to-[#120d0a] border-b border-[#7a5c2e] flex items-center justify-between z-20 gap-1.5">
     <div class="flex items-center gap-2 min-w-0">
       <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#3a1216] border border-[#c59b48] flex items-center justify-center shrink-0 shadow-inner">
         <svg class="w-4 h-4 sm:w-5 sm:h-5 text-amber-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -282,32 +296,32 @@
     </div>
   </header>
 
-  <!-- メイン3ペインコンテナ（スマホでは上下2段＋医学書ドロワーで1画面完結） -->
-  <main class="flex-1 min-h-0 w-full grid grid-cols-1 lg:grid-cols-12 gap-1.5 sm:gap-2.5 p-1.5 sm:p-2.5 overflow-hidden relative">
+  <!-- メイン3ペインコンテナ（スマホでは縦スクロール展開、PCでは3ペイン1画面固定） -->
+  <main class="flex-1 lg:min-h-0 w-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-2.5 p-2 sm:p-2.5 pb-6 lg:pb-2.5 overflow-visible lg:overflow-hidden relative">
 
     <!-- 【左ペイン】薬棚 ＋ 鑑識ウィンドウ ＋ 調合台 -->
-    <section class="lg:col-span-4 flex flex-col gap-1.5 sm:gap-2 min-h-0 overflow-hidden order-2 lg:order-1">
+    <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-2 lg:order-1">
       
       <!-- 薬棚（ボトルラック） -->
-      <div class="brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col flex-1 min-h-0">
+      <div class="brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col lg:flex-1 lg:min-h-0">
         <div class="flex items-center justify-between mb-1.5 shrink-0">
           <div class="flex items-center gap-1.5">
             <span class="text-amber-400 text-xs">✦</span>
             <h2 class="text-xs sm:text-sm font-extrabold tracking-wide text-[#ebd5ad]">薬棚 <span id="shelf-count" class="text-[11px] text-[#a88d63] font-bold">(5/20種)</span></h2>
           </div>
-          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">ドラッグで調合・処方 / ラベルで命名</span>
+          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">ドラッグ／選択で処方・ラベル命名</span>
         </div>
 
-        <div id="medicine-shelf" class="grid grid-cols-5 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 overflow-y-auto pr-0.5 flex-1 content-start overscroll-contain">
+        <div id="medicine-shelf" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 lg:overflow-y-auto pr-0.5 lg:flex-1 content-start">
           <!-- JSで薬瓶カードを生成 -->
         </div>
       </div>
 
-      <!-- 下部サブエリア：鑑識ウィンドウ & 調合台（スマホでは横並びでコンパクトに収める） -->
-      <div class="grid grid-cols-12 gap-1.5 sm:gap-2 shrink-0">
+      <!-- 下部サブエリア：鑑識ウィンドウ & 調合台 -->
+      <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 shrink-0">
         
         <!-- 鑑識ウィンドウ（5つの観察特徴のみ表示・ヒントなし） -->
-        <div class="col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
+        <div class="sm:col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
           <div class="flex items-center justify-between border-b border-[#4a371c] pb-1 mb-1">
             <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1">
               <span>🔍</span> 鑑識レンズ
@@ -320,7 +334,7 @@
         </div>
 
         <!-- 調合台（るつぼ：ドラッグ＆ドロップ対応） -->
-        <div class="col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
+        <div class="sm:col-span-6 brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col justify-between">
           <div class="flex items-center justify-between border-b border-[#4a371c] pb-1 mb-1.5">
             <span class="text-[11px] sm:text-xs font-extrabold text-amber-300 flex items-center gap-1">
               <span>⚗️</span> 調合台
@@ -353,8 +367,8 @@
     </section>
 
     <!-- 【中央ペイン】診察室（患者・セリフ・問診・処方トレイ） -->
-    <section class="lg:col-span-4 flex flex-col gap-1.5 sm:gap-2 min-h-0 overflow-hidden order-1 lg:order-2 shrink-0 lg:shrink">
-      <div class="brass-panel rounded-xl p-2.5 sm:p-3.5 flex flex-col justify-between h-full min-h-0 relative overflow-y-auto overscroll-contain">
+    <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-1 lg:order-2">
+      <div class="brass-panel rounded-xl p-2.5 sm:p-3.5 flex flex-col justify-between lg:h-full lg:min-h-0 relative lg:overflow-y-auto">
         
         <!-- 患者プロフィール＆グラフィック -->
         <div class="flex items-center gap-3 border-b border-[#4d391d] pb-2 shrink-0">
@@ -372,7 +386,7 @@
         </div>
 
         <!-- 患者の訴え＆問診ログ -->
-        <div class="my-1.5 sm:my-2 flex-1 min-h-0 overflow-y-auto space-y-1.5 pr-0.5 overscroll-contain">
+        <div class="my-2 lg:flex-1 lg:min-h-0 lg:overflow-y-auto space-y-1.5 pr-0.5">
           <div class="p-2 sm:p-2.5 rounded-lg bg-[#120d0a]/90 border border-[#5e4724]">
             <div class="text-[10px] font-cinzel tracking-wider text-amber-400 font-bold mb-0.5">SYMPTOMS // 患者の訴え</div>
             <p id="patient-dialogue" class="text-xs sm:text-sm leading-relaxed text-[#f7eedc] font-bold">「……」</p>
@@ -506,11 +520,11 @@
 
   <script>
     // =========================================================================
-    // 0. セーブデータ管理定数・下スワイプ防止ガード
+    // 0. セーブデータ管理定数（Googleサイトiframe環境向け二重ストレージ対応）
     // =========================================================================
     const SAVE_STORAGE_KEY = 'materia_obscura_save_v1';
 
-    // ブラウザ標準の下スワイプ更新ジェスチャーをタッチイベントレベルでも抑止
+    // ドラッグ中のみブラウザのスクロールを抑止（通常時のスマホ縦スクロールは通す）
     document.addEventListener('touchmove', (e) => {
       if (document.body.classList.contains('is-dragging-active')) {
         e.preventDefault();
@@ -518,28 +532,44 @@
     }, { passive: false });
 
     function saveGameState() {
+      const snapshot = {
+        ...state,
+        pickerTargetIndex: null // 一時UI状態は保存しない
+      };
+      const serialized = JSON.stringify(snapshot);
       try {
-        const snapshot = {
-          ...state,
-          pickerTargetIndex: null // 一時UI状態は保存しない
-        };
-        localStorage.setItem(SAVE_STORAGE_KEY, JSON.stringify(snapshot));
+        localStorage.setItem(SAVE_STORAGE_KEY, serialized);
       } catch (err) {
-        console.warn('セーブデータの保存に失敗しました:', err);
+        console.warn('localStorageへの保存制限:', err);
+      }
+      // Googleサイトのiframe等でlocalStorageが制限される環境向けのフォールバック保存
+      try {
+        sessionStorage.setItem(SAVE_STORAGE_KEY, serialized);
+      } catch (err) {
+        console.warn('sessionStorageへの保存制限:', err);
       }
     }
 
     function clearSavedGameState() {
       try {
         localStorage.removeItem(SAVE_STORAGE_KEY);
-      } catch (err) {
-        console.warn('セーブデータの削除に失敗しました:', err);
-      }
+      } catch (_) {}
+      try {
+        sessionStorage.removeItem(SAVE_STORAGE_KEY);
+      } catch (_) {}
     }
 
     function loadSavedGameState() {
       try {
-        const raw = localStorage.getItem(SAVE_STORAGE_KEY);
+        let raw = null;
+        try {
+          raw = localStorage.getItem(SAVE_STORAGE_KEY);
+        } catch (_) {}
+        if (!raw) {
+          try {
+            raw = sessionStorage.getItem(SAVE_STORAGE_KEY);
+          } catch (_) {}
+        }
         if (!raw) return false;
         const parsed = JSON.parse(raw);
 
@@ -566,6 +596,10 @@
         return false;
       }
     }
+
+    // ページ離脱・リロード直前にも最終状態を確実に保存
+    window.addEventListener('pagehide', saveGameState);
+    window.addEventListener('beforeunload', saveGameState);
 
     // =========================================================================
     // 1. 基本生薬データ（全20種類・5つの観察特徴＋効能＋禁忌）
@@ -1361,7 +1395,6 @@
         // セーブデータから途中復帰
         switchGrimoireTab(state.activeTab || 'guide');
         renderAll();
-        // もしリロード直前に1日の全診察が終わっていた場合（夜の仕入れ市が開く直前）は市場を再表示
         if (state.reputation <= 0) {
           triggerGameOver();
         }
@@ -1450,7 +1483,7 @@
         }
       }
 
-      let targetSolution = null; // { kind: 'single'|'recipe', id, name, contraindicationId }
+      let targetSolution = null;
       let symptomText = '';
       let caseBadge = '';
 
@@ -1717,7 +1750,7 @@
       const btnBrew = document.getElementById('btn-brew');
       btnBrew.disabled = !(state.alchemySlots[0] && state.alchemySlots[1]);
 
-      // 調合完了フラスコがある場合は調合ボタンの下またはスロット周辺に表示
+      // 調合完了フラスコがある場合は調合ボタンの下に表示
       let flaskContainer = document.getElementById('brewed-flask-banner');
       if (!flaskContainer) {
         flaskContainer = document.createElement('div');
@@ -1734,7 +1767,7 @@
             <div class="flex items-center gap-1.5 min-w-0 pointer-events-none">
               ${getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz)}
               <div class="min-w-0">
-                <div class="text-[9px] font-bold ${isHaz ? 'text-red-300' : 'text-amber-300'}">${isHaz ? '⚠ 危険変質' : '✨ 完成フラスコ（ドラッグ可）'}</div>
+                <div class="text-[9px] font-bold ${isHaz ? 'text-red-300' : 'text-amber-300'}">${isHaz ? '⚠ 危険変質' : '✨ 完成フラスコ（セット可）'}</div>
                 <div class="text-[11px] font-black text-white truncate">${escapeHTML(f.name)}</div>
               </div>
             </div>
@@ -1824,7 +1857,6 @@
       document.getElementById('picker-bottle-num').textContent = bottle.slotNum;
       document.getElementById('picker-custom-input').value = bottle.userLabel || '';
 
-      // 現在保有（アンロック済み）の生薬名をフラットな選択肢として表示（五十音/図鑑順で偏りなし）
       const unlockedMeds = MEDICINES.filter(m => state.unlockedMedIds.includes(m.id));
       const candidatesEl = document.getElementById('picker-candidates');
       candidatesEl.innerHTML = unlockedMeds.map(med => {
@@ -1880,7 +1912,6 @@
     }
 
     function syncLabelsToSlots() {
-      // 調合スロットや処方トレイにセット済みの単体瓶ラベルも同期更新
       for (let i = 0; i < 2; i++) {
         if (state.alchemySlots[i]) {
           const b = state.shelfBottles[state.alchemySlots[i].bottleIndex];
@@ -1905,32 +1936,50 @@
     }
 
     // =========================================================================
-    // 10. Pointer Events API ドラッグ＆ドロップ（スマホ・PC完全対応）
+    // 10. Pointer Events API ドラッグ＆ドロップ（スマホ縦スクロール両立対応）
     // =========================================================================
     function attachPointerDrag(element, config) {
       let startX = 0;
       let startY = 0;
       let isDragging = false;
-      const DRAG_THRESHOLD = 8;
+      let canceledByScroll = false;
+      const DRAG_THRESHOLD = 10;
 
       element.addEventListener('pointerdown', (e) => {
-        // ラベルボタン等のクリックは除外
         if (e.target.closest('button')) return;
         startX = e.clientX;
         startY = e.clientY;
         isDragging = false;
-        element.setPointerCapture(e.pointerId);
+        canceledByScroll = false;
+
+        // PC（マウス）は即座にポインターキャプチャ、スマホ（タッチ）は縦スクロール優先のため横移動判定後に開始
+        const isTouch = e.pointerType === 'touch';
+        if (!isTouch) {
+          element.setPointerCapture(e.pointerId);
+        }
 
         const ghost = document.getElementById('drag-ghost');
         const ghostIcon = document.getElementById('drag-ghost-icon');
         const ghostLabel = document.getElementById('drag-ghost-label');
 
         const onPointerMove = (moveEvent) => {
+          if (canceledByScroll) return;
           const dx = moveEvent.clientX - startX;
           const dy = moveEvent.clientY - startY;
 
+          // スマホ幅（1024px未満）のタッチ操作時、縦方向への指移動が大きい場合はページスクロールを優先
+          if (isTouch && window.innerWidth < 1024 && !isDragging) {
+            if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx)) {
+              canceledByScroll = true;
+              return;
+            }
+          }
+
           if (!isDragging && Math.hypot(dx, dy) > DRAG_THRESHOLD) {
             isDragging = true;
+            if (isTouch) {
+              try { element.setPointerCapture(e.pointerId); } catch (_) {}
+            }
             document.body.classList.add('is-dragging-active');
             ghostIcon.innerHTML = config.iconHTML;
             ghostLabel.textContent = config.label;
@@ -1956,11 +2005,9 @@
           ghost.style.display = 'none';
           clearDropZoneHighlights();
 
-          if (!isDragging) {
-            // タップとして処理
+          if (!isDragging && !canceledByScroll) {
             if (config.onTap) config.onTap();
-          } else {
-            // ドロップ判定
+          } else if (isDragging) {
             const dropTarget = getDropTargetAt(upEvent.clientX, upEvent.clientY);
             if (dropTarget) {
               handleDropAction(dropTarget, config);
@@ -2023,7 +2070,7 @@
       }
     }
 
-    // タップ操作でのスロット補助（ドラッグしづらい環境でもワンタップ併用可能）
+    // タップ操作でのスロット補助（スマホでスクロール位置を跨いでセットする際にも便利）
     function handleSlotClick(slotIdx) {
       if (state.alchemySlots[slotIdx]) {
         state.alchemySlots[slotIdx] = null;
@@ -2108,7 +2155,6 @@
           name: hazard.name,
           reason: hazard.reason
         };
-        // 調合時の小事故で評判がわずかに低下
         state.reputation = Math.max(0, state.reputation - 5);
         renderHeaderStats();
         renderAlchemyStation();
@@ -2135,7 +2181,6 @@
           contraindicationId: valid.contraindicationId
         };
       } else {
-        // 未定義の組み合わせは無効な混合液
         state.brewedFlask = {
           type: 'hazard',
           name: '効能を失った灰色の泥水',
@@ -2165,7 +2210,7 @@
       const p = state.currentPatient;
       if (!item || !p) return;
 
-      let outcome = 'fail'; // 'success' | 'contra' | 'hazard' | 'wrong'
+      let outcome = 'fail';
       let actualMedicineName = '';
       let detailMessage = '';
       let goldDelta = 0;
@@ -2181,7 +2226,6 @@
         const med = MEDICINES.find(m => m.id === item.medId);
         actualMedicineName = med.name;
 
-        // 禁忌チェック優先
         if (p.secretContraId && med.contraindicationId === p.secretContraId) {
           outcome = 'contra';
           detailMessage = `渡した瓶の正体は『${med.name}』だった！\n患者の隠された体質【${med.contraindicationText}】に触れ、激しい副作用が発生してしまった！`;
@@ -2219,12 +2263,10 @@
         }
       }
 
-      // ステータス更新
       state.gold += goldDelta;
       state.reputation = Math.max(0, Math.min(100, state.reputation + repDelta));
       if (outcome === 'success') state.curedCount++;
 
-      // 診療録へ追加
       state.records.unshift({
         day: state.day,
         patientName: p.name,
@@ -2234,7 +2276,6 @@
         success: outcome === 'success'
       });
 
-      // 調合台をリセット
       state.alchemySlots = [null, null];
       state.brewedFlask = null;
       state.prescribeItem = null;
@@ -2245,7 +2286,6 @@
       renderGrimoire();
       saveGameState();
 
-      // 結果モーダル表示
       const badgeEl = document.getElementById('result-badge');
       const titleEl = document.getElementById('result-title');
       const descEl = document.getElementById('result-desc');
@@ -2291,7 +2331,6 @@
         generateNextPatient();
         renderAll();
       } else {
-        // 1日の終わり → 夜の仕入れ市場へ
         openNightMarket();
       }
     }
@@ -2310,7 +2349,6 @@
 
       let html = '';
 
-      // 1. 新しい無銘の生薬を仕入れる
       if (lockedMeds.length > 0) {
         html += `
           <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
@@ -2331,7 +2369,6 @@
         `;
       }
 
-      // 2. 評判の回復
       html += `
         <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
           <div>
@@ -2344,7 +2381,6 @@
         </div>
       `;
 
-      // 3. 問診回数の強化
       if (state.maxInterrogations < 4) {
         html += `
           <div class="p-3 rounded-lg bg-[#16100c] border border-[#7c5f32] flex items-center justify-between gap-3">
@@ -2372,7 +2408,6 @@
       const newMed = lockedMeds[Math.floor(Math.random() * lockedMeds.length)];
       state.unlockedMedIds.push(newMed.id);
 
-      // 棚に新しい瓶を追加（瓶番号は連番、表示位置はランダム挿入して推理性を維持）
       const newBottle = {
         slotNum: state.shelfBottles.length + 1,
         medId: newMed.id,
@@ -2381,7 +2416,6 @@
       const insertPos = Math.floor(Math.random() * (state.shelfBottles.length + 1));
       state.shelfBottles.splice(insertPos, 0, newBottle);
 
-      // 挿入によるインデックスずれを防ぐため選択状態をリセット
       state.selectedBottleIndex = null;
       state.alchemySlots = [null, null];
       state.prescribeItem = null;
@@ -2475,7 +2509,7 @@
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
               <h4 class="font-black text-sm text-[#6b141a] mb-1">1. 無銘の薬瓶の鑑定とラベル貼り</h4>
               <p class="text-xs font-bold text-[#261a12]">
-                薬棚の瓶には名前が書かれていません。瓶をタップして左下の<span class="underline">鑑識レンズ</span>で「色調・瓶形・芳香・沈殿・振音」を確認し、<span class="underline">生薬図鑑タブ</span>と照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。
+                薬棚の瓶には名前が書かれていません。瓶をタップして<span class="underline">鑑識レンズ</span>で「色調・瓶形・芳香・沈殿・振音」を確認し、<span class="underline">生薬図鑑タブ</span>と照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。
               </p>
             </div>
 
@@ -2487,9 +2521,9 @@
             </div>
 
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]">
-              <h4 class="font-black text-sm text-[#6b141a] mb-1">3. ドラッグ＆ドロップでの調合と処方</h4>
+              <h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法</h4>
               <p class="text-xs font-bold text-[#261a12]">
-                複合症状の患者には<span class="underline">調合秘伝タブ</span>のレシピが必要です。薬瓶を<span class="underline">調合台（素材A・B）</span>へドラッグ（または選択タップ）して「調合する」を押し、完成したフラスコを患者の処方トレイへドラッグして治療します。
+                複合症状の患者には<span class="underline">調合秘伝タブ</span>のレシピが必要です。薬瓶を<span class="underline">調合台（素材A・B）</span>へドラッグ（または瓶を選択してスロットをタップ）して「調合する」を押し、完成したフラスコを処方トレイへセットして治療します。
               </p>
             </div>
 
@@ -2502,7 +2536,6 @@
           </div>
         `;
       } else if (tab === 'herbs') {
-        // 保有中（アンロック済み）の生薬を最上部に優先表示
         const unlockedSet = new Set(state.unlockedMedIds);
         const sortedMeds = [...MEDICINES].sort((a, b) => {
           const aHas = unlockedSet.has(a.id) ? 0 : 1;
