@@ -167,31 +167,33 @@
     <span id="drag-ghost-label" class="text-xs font-extrabold tracking-wide whitespace-nowrap"></span>
   </div>
 
-<!-- ラベル選択モーダル（画面高さ・iframe対応版） -->
-  <div id="label-picker-popover" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-[1px] overflow-y-auto p-3 sm:p-4 flex items-start sm:items-center justify-center" onclick="closeLabelPicker(event)">
-    <div class="w-full max-w-md max-h-[88dvh] my-auto rounded-xl brass-panel border-2 border-[#b58d4c] p-3.5 sm:p-4 shadow-2xl animate-fade-in flex flex-col overflow-hidden" onclick="event.stopPropagation()">
-      <!-- ヘッダー（固定） -->
-      <div class="flex items-center justify-between border-b border-[#5e4724] pb-2 mb-2.5 shrink-0">
-        <div>
-          <span class="text-[10px] sm:text-[11px] font-cinzel tracking-widest text-amber-400 block">APOTHECARY LABELING</span>
-          <h3 class="text-sm sm:text-base font-extrabold text-[#f7eedc]">瓶 #<span id="picker-bottle-num">1</span> に貼るラベルを選択</h3>
+<!-- ラベル選択モーダル（スマホ横幅・iframe完全対応版） -->
+  <div id="label-picker-popover" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-[1px] overflow-y-auto p-2.5 sm:p-4 flex items-start sm:items-center justify-center" onclick="closeLabelPicker(event)">
+    <div class="w-full max-w-[calc(100vw-20px)] sm:max-w-md max-h-[88dvh] my-auto rounded-xl brass-panel border-2 border-[#b58d4c] p-3 sm:p-4 shadow-2xl animate-fade-in flex flex-col overflow-hidden" onclick="event.stopPropagation()">
+      <!-- ヘッダー -->
+      <div class="flex items-center justify-between gap-2 border-b border-[#5e4724] pb-2 mb-2.5 shrink-0">
+        <div class="min-w-0">
+          <span class="text-[10px] font-cinzel tracking-widest text-amber-400 block truncate">APOTHECARY LABELING</span>
+          <h3 class="text-sm sm:text-base font-extrabold text-[#f7eedc] truncate">瓶 #<span id="picker-bottle-num">1</span> に貼るラベルを選択</h3>
         </div>
         <button onclick="forceCloseLabelPicker()" class="px-2.5 py-1 rounded bg-[#2d2119] border border-[#75582b] text-amber-200 text-xs font-bold hover:bg-[#3d2d22] shrink-0">✕ 閉じる</button>
       </div>
 
-      <!-- 中央スクロール領域（生薬候補リスト） -->
+      <!-- 候補リスト -->
       <div class="flex-1 min-h-0 overflow-y-auto pr-1 mb-2.5 overscroll-contain">
-        <p class="text-[11px] sm:text-xs text-[#cbb898] mb-2 font-semibold">仕入れ済みの生薬名からワンタップで貼り付け、または下で自由記述が可能です。</p>
+        <p class="text-[11px] text-[#cbb898] mb-2 font-semibold">仕入れ済みの生薬名からワンタップで貼り付け、または下で自由記述が可能です。</p>
         <div id="picker-candidates" class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2"></div>
       </div>
 
-      <!-- フッター（自由記述欄・固定） -->
+      <!-- フッター（自由記述欄：スマホでは縦2段にして右切れを完全防止） -->
       <div class="border-t border-[#4d391d] pt-2.5 shrink-0">
-        <label class="block text-[11px] sm:text-xs font-bold text-amber-300 mb-1">自由記述メモ（手書きラベル）</label>
-        <div class="flex gap-1.5 sm:gap-2">
-          <input id="picker-custom-input" type="text" maxlength="22" placeholder="推理メモや仮の名前..." class="flex-1 min-w-0 px-2.5 py-2 rounded-lg bg-[#120d0a] border border-[#7c5f32] text-[#f7eedc] text-xs sm:text-sm font-bold focus:outline-none focus:border-amber-400" onkeydown="if(event.key==='Enter') applyCustomLabel()">
-          <button onclick="applyCustomLabel()" class="px-3 py-2 rounded-lg btn-gothic text-xs whitespace-nowrap shrink-0">刻印</button>
-          <button onclick="clearBottleLabel()" class="px-2.5 py-2 rounded-lg bg-[#2b1414] border border-red-800/70 text-red-300 text-xs font-bold hover:bg-red-950 shrink-0" title="ラベルを剥がす">消去</button>
+        <label class="block text-[11px] font-bold text-amber-300 mb-1">自由記述メモ（手書きラベル）</label>
+        <div class="flex flex-col sm:flex-row gap-1.5 sm:gap-2">
+          <input id="picker-custom-input" type="text" maxlength="22" placeholder="推理メモや仮の名前を入力..." class="w-full sm:flex-1 min-w-0 px-3 py-2 rounded-lg bg-[#120d0a] border border-[#7c5f32] text-[#f7eedc] text-xs sm:text-sm font-bold focus:outline-none focus:border-amber-400" onkeydown="if(event.key==='Enter') applyCustomLabel()">
+          <div class="flex gap-1.5 shrink-0">
+            <button onclick="applyCustomLabel()" class="flex-1 sm:flex-initial px-4 py-2 rounded-lg btn-gothic text-xs whitespace-nowrap">刻印</button>
+            <button onclick="clearBottleLabel()" class="flex-1 sm:flex-initial px-3 py-2 rounded-lg bg-[#2b1414] border border-red-800/70 text-red-300 text-xs font-bold hover:bg-red-950 whitespace-nowrap" title="ラベルを剥がす">消去</button>
+          </div>
         </div>
       </div>
     </div>
