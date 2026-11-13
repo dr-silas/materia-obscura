@@ -30,7 +30,7 @@
     }
 
     html, body {
-      overscroll-behavior-y: auto;
+      overscroll-behavior: contain;
       touch-action: manipulation;
     }
 
@@ -71,8 +71,6 @@
       box-shadow: inset 0 0 18px rgba(0, 0, 0, 0.75), 0 4px 12px rgba(0, 0, 0, 0.6);
     }
 
-    .brass-border { border: 1px solid var(--border-brass); }
-
     .parchment-bg {
       background-color: var(--parchment);
       background-image:
@@ -83,19 +81,18 @@
       box-shadow: inset 0 0 30px rgba(84, 58, 28, 0.35);
     }
 
+    /* リンク直接閲覧でもiframe埋め込みでもタッチを奪われない設定 */
     .draggable-item {
-      touch-action: pan-y;
+      touch-action: none !important;
+      -ms-touch-action: none !important;
       cursor: grab;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
-    }
-    @media (min-width: 1024px) {
-      .draggable-item { touch-action: none; }
+      transition: transform 0.12s ease, box-shadow 0.12s ease, border-color 0.12s ease;
     }
     .draggable-item:active { cursor: grabbing; }
 
     .draggable-item.is-grabbed {
-      transform: scale(0.95);
-      opacity: 0.65;
+      transform: scale(0.94);
+      opacity: 0.6;
       border-color: #f59e0b !important;
     }
 
@@ -105,11 +102,11 @@
       overscroll-behavior: none !important;
     }
 
-    .drop-zone { transition: all 0.18s ease; }
+    .drop-zone { transition: all 0.15s ease; }
     .drop-zone.drag-over {
       border-color: #f59e0b !important;
-      background-color: rgba(217, 119, 6, 0.25) !important;
-      box-shadow: 0 0 18px rgba(245, 158, 11, 0.6), inset 0 0 12px rgba(245, 158, 11, 0.4) !important;
+      background-color: rgba(217, 119, 6, 0.28) !important;
+      box-shadow: 0 0 20px rgba(245, 158, 11, 0.65), inset 0 0 14px rgba(245, 158, 11, 0.45) !important;
       transform: scale(1.03);
     }
 
@@ -117,8 +114,8 @@
       position: fixed;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -85%) scale(1.12);
-      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.9));
+      transform: translate(-50%, -95%) scale(1.15);
+      filter: drop-shadow(0 12px 22px rgba(0, 0, 0, 0.92));
       display: none;
     }
 
@@ -170,6 +167,7 @@
     <span id="drag-ghost-label" class="text-xs font-extrabold tracking-wide whitespace-nowrap"></span>
   </div>
 
+  <!-- ラベル選択モーダル -->
   <div id="label-picker-popover" class="fixed inset-0 z-50 hidden bg-black/65 backdrop-blur-[1px] flex items-center justify-center p-4" onclick="closeLabelPicker(event)">
     <div class="w-full max-w-md rounded-xl brass-panel border-2 border-[#b58d4c] p-4 shadow-2xl animate-fade-in" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between border-b border-[#5e4724] pb-2.5 mb-3">
@@ -192,6 +190,7 @@
     </div>
   </div>
 
+  <!-- リセット確認モーダル -->
   <div id="reset-confirm-modal" class="fixed inset-0 z-50 hidden bg-black/75 backdrop-blur-[1px] flex items-center justify-center p-4" onclick="if(event.target.id==='reset-confirm-modal') closeResetModal()">
     <div class="w-full max-w-sm rounded-xl brass-panel border-2 border-red-800/80 p-5 shadow-2xl animate-fade-in text-center" onclick="event.stopPropagation()">
       <span class="font-cinzel text-[11px] tracking-widest text-red-400 block mb-1">RESET ARCHIVE</span>
@@ -204,6 +203,7 @@
     </div>
   </div>
 
+  <!-- ヘッダー -->
   <header class="sticky top-0 lg:static shrink-0 h-12 sm:h-13 px-2.5 sm:px-5 bg-gradient-to-r from-[#120d0a] via-[#1e1511] to-[#120d0a] border-b border-[#7a5c2e] flex items-center justify-between z-20 gap-1.5">
     <div class="flex items-center gap-2 min-w-0">
       <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-[#3a1216] border border-[#c59b48] flex items-center justify-center shrink-0 shadow-inner">
@@ -238,6 +238,10 @@
         </div>
         <span id="stat-rep-text" class="text-[11px] sm:text-xs font-black text-red-300">70</span>
       </div>
+      <!-- iframe埋め込み時のみ表示される全画面（直接リンク）起動ボタン -->
+      <a id="btn-popout-fullscreen" href="#" target="_blank" rel="noopener noreferrer" class="hidden px-2 py-1 rounded bg-amber-950/90 border border-amber-500/80 text-amber-200 hover:bg-amber-900 text-[10px] sm:text-xs font-extrabold transition" title="別タブで全画面表示">
+        ⛶<span class="hidden sm:inline"> 全画面</span>
+      </a>
       <button type="button" id="btn-sound-toggle" onclick="toggleSound()" class="px-2 py-1 rounded bg-[#1a1410] border border-[#6e5630] text-amber-300 hover:border-amber-400 text-[11px] sm:text-xs font-bold transition" title="効果音 ON/OFF">
         🔊
       </button>
@@ -247,8 +251,10 @@
     </div>
   </header>
 
+  <!-- メインレイアウト -->
   <main class="flex-1 lg:min-h-0 w-full grid grid-cols-1 lg:grid-cols-12 gap-2 sm:gap-2.5 p-2 sm:p-2.5 pb-6 lg:pb-2.5 overflow-visible lg:overflow-hidden relative">
 
+    <!-- 左カラム：薬棚・鑑識・調合台 -->
     <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-2 lg:order-1">
       <div class="brass-panel rounded-xl p-2 sm:p-2.5 flex flex-col lg:flex-1 lg:min-h-0">
         <div class="flex items-center justify-between mb-1.5 shrink-0">
@@ -256,7 +262,7 @@
             <span class="text-amber-400 text-xs">✦</span>
             <h2 class="text-xs sm:text-sm font-extrabold tracking-wide text-[#ebd5ad]">薬棚 <span id="shelf-count" class="text-[11px] text-[#a88d63] font-bold">(5/20種)</span></h2>
           </div>
-          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">長押しドラッグ／タップ選択で処方</span>
+          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">瓶を直接ドラッグ／タップで処方</span>
         </div>
         <div id="medicine-shelf" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 lg:overflow-y-auto pr-0.5 lg:flex-1 content-start"></div>
       </div>
@@ -293,6 +299,7 @@
       </div>
     </section>
 
+    <!-- 中央カラム：診察室 -->
     <section class="lg:col-span-4 flex flex-col gap-2 min-h-0 lg:overflow-hidden order-1 lg:order-2">
       <div class="brass-panel rounded-xl p-2.5 sm:p-3.5 flex flex-col justify-between lg:h-full lg:min-h-0 relative lg:overflow-y-auto">
         <div class="flex items-center gap-3 border-b border-[#4d391d] pb-2 shrink-0">
@@ -341,6 +348,7 @@
       </div>
     </section>
 
+    <!-- 右カラム：古文書（医学書） -->
     <aside id="grimoire-pane" class="fixed inset-0 z-40 lg:static lg:z-auto lg:col-span-4 hidden lg:flex flex-col min-h-0 p-2 lg:p-0 bg-black/80 lg:bg-transparent order-3">
       <div class="parchment-bg rounded-xl border-2 border-[#8c6932] flex flex-col h-full min-h-0 overflow-hidden shadow-2xl">
         <div class="bg-[#261a12] text-[#f3e6cc] px-3 pt-2.5 pb-2 border-b-2 border-[#8c6932] shrink-0">
@@ -364,6 +372,7 @@
 
   </main>
 
+  <!-- 診察結果モーダル -->
   <div id="result-modal" class="fixed inset-0 z-50 hidden bg-black/80 backdrop-blur-xs flex items-center justify-center p-4">
     <div class="w-full max-w-md brass-panel border-2 border-[#b58d4c] rounded-xl p-5 shadow-2xl animate-fade-in text-center">
       <div id="result-badge" class="inline-block px-3 py-1 rounded-full text-xs font-black tracking-widest mb-2"></div>
@@ -374,6 +383,7 @@
     </div>
   </div>
 
+  <!-- 夜の仕入れ市モーダル -->
   <div id="market-modal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
     <div class="w-full max-w-lg brass-panel border-2 border-[#c59b48] rounded-xl p-4 sm:p-5 shadow-2xl animate-fade-in max-h-[90dvh] flex flex-col">
       <div class="flex items-center justify-between border-b border-[#5e4724] pb-3 mb-3 shrink-0">
@@ -391,6 +401,7 @@
     </div>
   </div>
 
+  <!-- ゲームオーバーモーダル -->
   <div id="gameover-modal" class="fixed inset-0 z-50 hidden bg-black/90 flex items-center justify-center p-4">
     <div class="w-full max-w-md brass-panel border-2 border-red-800 rounded-xl p-6 shadow-2xl text-center">
       <span class="font-cinzel text-xs tracking-widest text-red-400 block mb-1">CLINIC CLOSED // LICENSE REVOKED</span>
@@ -408,7 +419,18 @@
 
   <script>
     /* =====================================================================
-       Web Audio API ゴシック調効果音エンジン（外部音声ファイル不要）
+       環境判定（iframe埋め込み / 直接リンク両対応）
+       ===================================================================== */
+    const IS_EMBEDDED_IFRAME = (() => {
+      try {
+        return window.self !== window.top;
+      } catch (_) {
+        return true;
+      }
+    })();
+
+    /* =====================================================================
+       Web Audio API ゴシック調効果音エンジン（リンク・iframe両対応）
        ===================================================================== */
     const SoundFX = (() => {
       let ctx = null;
@@ -426,13 +448,19 @@
         return ctx;
       }
 
+      function unlock() {
+        const ac = getContext();
+        if (ac && ac.state === 'suspended') {
+          ac.resume().catch(() => {});
+        }
+      }
+
       // ガラス瓶を掴む・揺らす音（ガラスの高音＋液体の揺れ）
       function playBottlePickup(soundDesc = '') {
         const ac = getContext();
         if (!ac) return;
         const now = ac.currentTime;
 
-        // 1. ガラスの硬質な「チリン」音
         const glassOsc = ac.createOscillator();
         const glassGain = ac.createGain();
         glassOsc.type = 'sine';
@@ -448,7 +476,6 @@
         glassOsc.start(now);
         glassOsc.stop(now + 0.17);
 
-        // 2. 液体が揺れる「チャプン」音（バンドパスノイズ）
         const bufferSize = Math.floor(ac.sampleRate * 0.18);
         const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
         const data = buffer.getChannelData(0);
@@ -499,7 +526,6 @@
         if (!ac) return;
         const now = ac.currentTime;
 
-        // 泡音（ポコポコ）
         for (let i = 0; i < 5; i++) {
           const t = now + i * 0.055;
           const bOsc = ac.createOscillator();
@@ -516,7 +542,6 @@
           bOsc.stop(t + 0.06);
         }
 
-        // 神秘の和音（Dマイナー9th風）
         const notes = [293.66, 440.00, 523.25, 659.25];
         notes.forEach((freq, idx) => {
           const osc = ac.createOscillator();
@@ -534,7 +559,7 @@
         });
       }
 
-      // 調合危険・失敗SE（不協和音＋警告ブザー）
+      // 調合危険・失敗SE
       function playBrewHazard() {
         const ac = getContext();
         if (!ac) return;
@@ -555,12 +580,12 @@
         });
       }
 
-      // 治療成功ファンファーレ（重厚な鐘・オルガン風和音）
+      // 治療成功ファンファーレ
       function playTreatmentSuccess() {
         const ac = getContext();
         if (!ac) return;
         const now = ac.currentTime;
-        const chord = [261.63, 329.63, 392.00, 523.25]; // C major
+        const chord = [261.63, 329.63, 392.00, 523.25];
         chord.forEach((freq, idx) => {
           const osc = ac.createOscillator();
           const gain = ac.createGain();
@@ -577,7 +602,7 @@
         });
       }
 
-      // 治療失敗・誤診SE（重苦しい下降音）
+      // 治療失敗・誤診SE
       function playTreatmentFail() {
         const ac = getContext();
         if (!ac) return;
@@ -630,6 +655,7 @@
       }
 
       return {
+        unlock,
         playBottlePickup,
         playPlaceClink,
         playBrewSuccess,
@@ -641,6 +667,9 @@
         isEnabled: () => enabled
       };
     })();
+
+    window.addEventListener('touchstart', () => SoundFX.unlock(), { once: true, passive: true });
+    window.addEventListener('mousedown', () => SoundFX.unlock(), { once: true });
 
     function toggleSound() {
       const on = SoundFX.toggle();
@@ -854,6 +883,15 @@
     };
 
     function initGame(forceNew = false) {
+      // iframe内での閲覧時は全画面起動ボタンを有効化（リンク直接アクセス時は非表示）
+      if (IS_EMBEDDED_IFRAME) {
+        const popoutBtn = document.getElementById('btn-popout-fullscreen');
+        if (popoutBtn) {
+          popoutBtn.href = window.location.href;
+          popoutBtn.classList.remove('hidden');
+        }
+      }
+
       if (!forceNew && loadSavedGameState()) {
         switchGrimoireTab(state.activeTab || 'guide');
         renderAll();
@@ -1015,9 +1053,9 @@
         const card = document.createElement('div');
         card.className = `draggable-item rounded-lg bg-[#16100c] border ${isSelected ? 'bottle-selected' : 'border-[#594222] hover:border-[#a88246]'} p-1.5 flex flex-col items-center justify-between relative`;
         card.innerHTML = `
-          <div class="w-full flex items-center justify-between text-[9px] font-cinzel text-[#a68a5c] font-bold"><span>#${bottle.slotNum}</span><span class="w-2 h-2 rounded-full" style="background:${med.colorHex}"></span></div>
+          <div class="w-full flex items-center justify-between text-[9px] font-cinzel text-[#a68a5c] font-bold pointer-events-none"><span>#${bottle.slotNum}</span><span class="w-2 h-2 rounded-full" style="background:${med.colorHex}"></span></div>
           <div class="my-0.5 pointer-events-none">${getBottleSVG(med, 'w-7 h-8 sm:w-8 sm:h-9')}</div>
-          <button type="button" onclick="event.stopPropagation(); openLabelPicker(${index})" class="w-full px-1 py-1 rounded text-[10px] sm:text-[11px] font-extrabold truncate text-center transition ${hasLabel ? 'bg-[#efe5cf] text-[#1c130d] border border-[#8c6932] shadow-xs' : 'bg-[#261c15] text-[#9e8663] border border-dashed border-[#664d27] hover:text-amber-300'}" title="タップしてラベルを貼る">${hasLabel ? escapeHTML(bottle.userLabel) : '＋ラベル'}</button>
+          <button type="button" data-label-btn="true" onclick="event.stopPropagation(); openLabelPicker(${index})" class="w-full px-1 py-1 rounded text-[10px] sm:text-[11px] font-extrabold truncate text-center transition ${hasLabel ? 'bg-[#efe5cf] text-[#1c130d] border border-[#8c6932] shadow-xs' : 'bg-[#261c15] text-[#9e8663] border border-dashed border-[#664d27] hover:text-amber-300'}" title="タップしてラベルを貼る">${hasLabel ? escapeHTML(bottle.userLabel) : '＋ラベル'}</button>
         `;
 
         attachUniversalDrag(card, {
@@ -1096,7 +1134,7 @@
               ${getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz)}
               <div class="min-w-0"><div class="text-[9px] font-bold ${isHaz ? 'text-red-300' : 'text-amber-300'}">${isHaz ? '⚠ 危険変質' : '✨ 完成フラスコ（セット可）'}</div><div class="text-[11px] font-black text-white truncate">${escapeHTML(f.name)}</div></div>
             </div>
-            <button type="button" onclick="event.stopPropagation(); setPrescribeItem(state.brewedFlask)" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black text-[10px] font-black shrink-0">セット</button>
+            <button type="button" data-label-btn="true" onclick="event.stopPropagation(); setPrescribeItem(state.brewedFlask)" class="px-2 py-1 rounded bg-amber-600 hover:bg-amber-500 text-black text-[10px] font-black shrink-0">セット</button>
           </div>
         `;
         const dragEl = document.getElementById('brewed-flask-draggable');
@@ -1224,134 +1262,124 @@
     function forceCloseLabelPicker() { document.getElementById('label-picker-popover').classList.add('hidden'); state.pickerTargetIndex = null; }
 
     /* =====================================================================
-       スマホ（タッチ）・PC（マウス）・iframe埋め込み完全対応 ドラッグ＆ドロップ
+       リンク（直接アクセス）・Googleサイト iframe埋め込み 両対応 D&Dエンジン
        ===================================================================== */
-    function attachUniversalDrag(element, config) {
-      let startX = 0, startY = 0;
-      let isDragging = false;
-      let canceledByScroll = false;
-      let holdTimer = null;
-      const DRAG_THRESHOLD = 8;
+    let activeDragSession = null;
 
-      const ghost = document.getElementById('drag-ghost');
-      const ghostIcon = document.getElementById('drag-ghost-icon');
-      const ghostLabel = document.getElementById('drag-ghost-label');
+    document.addEventListener('touchmove', (e) => {
+      if (!activeDragSession) return;
+      if (e.cancelable) e.preventDefault();
+      const touch = e.touches[0];
+      if (!touch) return;
 
-      function beginDragVisual(x, y) {
-        if (isDragging) return;
-        isDragging = true;
-        element.classList.add('is-grabbed');
+      const dx = touch.clientX - activeDragSession.startX;
+      const dy = touch.clientY - activeDragSession.startY;
+
+      if (!activeDragSession.isDragging && Math.hypot(dx, dy) > 6) {
+        activeDragSession.isDragging = true;
+        activeDragSession.element.classList.add('is-grabbed');
         document.body.classList.add('is-dragging-active');
-        ghostIcon.innerHTML = config.iconHTML;
-        ghostLabel.textContent = config.label;
-        ghost.style.left = `${x}px`;
-        ghost.style.top = `${y}px`;
+        const ghost = document.getElementById('drag-ghost');
+        document.getElementById('drag-ghost-icon').innerHTML = activeDragSession.config.iconHTML;
+        document.getElementById('drag-ghost-label').textContent = activeDragSession.config.label;
         ghost.style.display = 'flex';
-        if (config.onGrab) config.onGrab();
-        highlightDropZoneAt(x, y);
+        if (activeDragSession.config.onGrab) activeDragSession.config.onGrab();
       }
 
-      function updateDragVisual(x, y) {
-        ghost.style.left = `${x}px`;
-        ghost.style.top = `${y}px`;
-        highlightDropZoneAt(x, y);
+      if (activeDragSession.isDragging) {
+        const ghost = document.getElementById('drag-ghost');
+        ghost.style.left = `${touch.clientX}px`;
+        ghost.style.top = `${touch.clientY}px`;
+        highlightDropZoneAt(touch.clientX, touch.clientY);
       }
+    }, { passive: false });
 
-      function endDragVisual(x, y, wasCanceled = false) {
-        clearTimeout(holdTimer);
-        holdTimer = null;
-        element.classList.remove('is-grabbed');
-        document.body.classList.remove('is-dragging-active');
-        ghost.style.display = 'none';
-        clearDropZoneHighlights();
+    document.addEventListener('touchend', (e) => {
+      if (!activeDragSession) return;
+      const session = activeDragSession;
+      activeDragSession = null;
 
-        if (isDragging && !wasCanceled && typeof x === 'number' && typeof y === 'number') {
-          const dropTarget = getDropTargetAt(x, y);
-          if (dropTarget) handleDropAction(dropTarget, config);
-        } else if (!isDragging && !canceledByScroll && !wasCanceled) {
-          if (config.onTap) config.onTap();
-        }
-        isDragging = false;
+      session.element.classList.remove('is-grabbed');
+      document.body.classList.remove('is-dragging-active');
+      document.getElementById('drag-ghost').style.display = 'none';
+      clearDropZoneHighlights();
+
+      const touch = e.changedTouches[0];
+      if (session.isDragging && touch) {
+        const dropTarget = getDropTargetAt(touch.clientX, touch.clientY);
+        if (dropTarget) handleDropAction(dropTarget, session.config);
+      } else if (!session.isDragging) {
+        if (session.config.onTap) session.config.onTap();
       }
+    }, { passive: true });
 
-      // --- 1. タッチデバイス専用（スマホ・タブレット・Googleサイト埋め込み対策） ---
+    document.addEventListener('touchcancel', () => {
+      if (!activeDragSession) return;
+      activeDragSession.element.classList.remove('is-grabbed');
+      document.body.classList.remove('is-dragging-active');
+      document.getElementById('drag-ghost').style.display = 'none';
+      clearDropZoneHighlights();
+      activeDragSession = null;
+    }, { passive: true });
+
+    function attachUniversalDrag(element, config) {
+      // スマホ（タッチ操作）
       element.addEventListener('touchstart', (e) => {
-        if (e.target.closest('button')) return;
+        if (e.target.closest('[data-label-btn]')) return;
         if (e.touches.length !== 1) return;
+        SoundFX.unlock();
         const touch = e.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-        isDragging = false;
-        canceledByScroll = false;
-
-        // 170msホールドで即座に瓶を掴む（縦スクロールに奪われない）
-        holdTimer = setTimeout(() => {
-          if (!canceledByScroll) {
-            beginDragVisual(startX, startY);
-          }
-        }, 170);
+        activeDragSession = {
+          element,
+          config,
+          startX: touch.clientX,
+          startY: touch.clientY,
+          isDragging: false
+        };
       }, { passive: true });
 
-      element.addEventListener('touchmove', (e) => {
-        if (e.touches.length !== 1) return;
-        const touch = e.touches[0];
-        const dx = touch.clientX - startX;
-        const dy = touch.clientY - startY;
-
-        if (!isDragging) {
-          if (canceledByScroll) return;
-          // まだホールド成立前に縦方向へ大きく動いたら、通常の棚スクロールを優先
-          if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.2) {
-            canceledByScroll = true;
-            clearTimeout(holdTimer);
-            return;
-          }
-          // 横方向への明確なドラッグなら即座に掴む
-          if (Math.abs(dx) > DRAG_THRESHOLD) {
-            clearTimeout(holdTimer);
-            beginDragVisual(touch.clientX, touch.clientY);
-          }
-        }
-
-        if (isDragging) {
-          // ドラッグ中は画面スクロールを完全に抑止
-          if (e.cancelable) e.preventDefault();
-          updateDragVisual(touch.clientX, touch.clientY);
-        }
-      }, { passive: false });
-
-      element.addEventListener('touchend', (e) => {
-        const touch = e.changedTouches[0];
-        endDragVisual(touch ? touch.clientX : null, touch ? touch.clientY : null, false);
-      }, { passive: true });
-
-      element.addEventListener('touchcancel', () => {
-        endDragVisual(null, null, true);
-      }, { passive: true });
-
-      // --- 2. マウス・PC向け ---
+      // PC（マウス操作）
       element.addEventListener('mousedown', (e) => {
-        if (e.button !== 0 || e.target.closest('button')) return;
-        startX = e.clientX;
-        startY = e.clientY;
-        isDragging = false;
-        canceledByScroll = false;
+        if (e.button !== 0 || e.target.closest('[data-label-btn]')) return;
+        SoundFX.unlock();
+        const startX = e.clientX;
+        const startY = e.clientY;
+        let isDragging = false;
+        const ghost = document.getElementById('drag-ghost');
 
         const onMouseMove = (moveEvent) => {
           const dx = moveEvent.clientX - startX;
           const dy = moveEvent.clientY - startY;
-          if (!isDragging && Math.hypot(dx, dy) > DRAG_THRESHOLD) {
-            beginDragVisual(moveEvent.clientX, moveEvent.clientY);
+          if (!isDragging && Math.hypot(dx, dy) > 6) {
+            isDragging = true;
+            element.classList.add('is-grabbed');
+            document.body.classList.add('is-dragging-active');
+            document.getElementById('drag-ghost-icon').innerHTML = config.iconHTML;
+            document.getElementById('drag-ghost-label').textContent = config.label;
+            ghost.style.display = 'flex';
+            if (config.onGrab) config.onGrab();
           }
           if (isDragging) {
-            updateDragVisual(moveEvent.clientX, moveEvent.clientY);
+            ghost.style.left = `${moveEvent.clientX}px`;
+            ghost.style.top = `${moveEvent.clientY}px`;
+            highlightDropZoneAt(moveEvent.clientX, moveEvent.clientY);
           }
         };
 
         const onMouseUp = (upEvent) => {
           window.removeEventListener('mousemove', onMouseMove);
           window.removeEventListener('mouseup', onMouseUp);
-          endDragVisual(upEvent.clientX, upEvent.clientY, false);
+          element.classList.remove('is-grabbed');
+          document.body.classList.remove('is-dragging-active');
+          ghost.style.display = 'none';
+          clearDropZoneHighlights();
+
+          if (isDragging) {
+            const dropTarget = getDropTargetAt(upEvent.clientX, upEvent.clientY);
+            if (dropTarget) handleDropAction(dropTarget, config);
+          } else {
+            if (config.onTap) config.onTap();
+          }
         };
 
         window.addEventListener('mousemove', onMouseMove);
@@ -1715,7 +1743,7 @@
             <div class="border-b-2 border-[#8c6932] pb-1.5"><span class="font-cinzel text-[11px] font-black tracking-widest text-[#7a1c1c]">PRACTITIONER'S MANUAL</span><h3 class="text-lg font-black text-[#1c130d]">診療と鑑定の手引き</h3></div>
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">1. 無銘の薬瓶の鑑定とラベル貼り</h4><p class="text-xs font-bold text-[#261a12]">薬棚の瓶には名前が書かれていません。瓶をタップして鑑識レンズで「色調・瓶形・芳香・沈殿・振音」を確認し、生薬図鑑タブと照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。</p></div>
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">2. 問診で「隠された禁忌」を暴く</h4><p class="text-xs font-bold text-[#261a12]">患者は最初の訴えだけでは持病を隠しています。「🩺 問診する」を押して体質や禁忌を聞き出してください。症状に効く薬であっても、患者の禁忌に触れる薬を渡すと深刻な副作用で失敗します。</p></div>
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法（スマホ対応）</h4><p class="text-xs font-bold text-[#261a12]">スマホでは薬瓶を<strong>少し長押し（ホールド）</strong>して指を動かすと、そのまま調合台（素材A・B）や処方トレイへドラッグできます。また、瓶をタップして選択した状態でスロットをタップしてもセット可能です。</p></div>
+            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法</h4><p class="text-xs font-bold text-[#261a12]">薬瓶をそのまま指でドラッグして調合台（素材A・B）や処方トレイへドロップできます。また、瓶をタップして選択した状態でスロットをタップしてもセット可能です。</p></div>
           </div>
         `;
       } else if (tab === 'herbs') {
@@ -1741,6 +1769,14 @@
               const m2 = MEDICINES.find(m => m.id === rec.ingredients[1]);
               const canMake = unlockedSet.has(m1.id) && unlockedSet.has(m2.id);
               return `<div class="p-2.5 rounded-lg border ${canMake ? 'bg-[#f5ecd8] border-[#8c6932]' : 'bg-[#dfd0b2]/70 border-[#b39c74] opacity-80'}"><div class="flex items-center justify-between mb-1"><span class="text-sm font-black text-[#1c130d]">${rec.name}</span><span class="text-[10px] font-black px-1.5 py-0.5 rounded ${canMake ? 'bg-[#1f4d36] text-white' : 'bg-[#6e5d44] text-white'}">${canMake ? '✨ 調合可能' : '素材未揃い'}</span></div><div class="text-xs font-extrabold text-[#4a2e16] mb-1">【素材】${m1.name} ＋ ${m2.name}</div><div class="text-xs font-bold text-[#14532d]">✦ 効能: ${rec.effect}</div><div class="text-[11px] font-extrabold text-[#881337]">⚠ 禁忌: ${rec.contraindicationText}</div></div>`;
+            }).join('')}
+          </div>
+          <h4 class="text-xs font-black text-[#881337] tracking-wider uppercase pt-2">☠ 禁忌調合（混ぜると危険な10組）</h4>
+          <div class="space-y-2">
+            ${HAZARD_RECIPES.map(haz => {
+              const m1 = MEDICINES.find(m => m.id === haz.ingredients[0]);
+              const m2 = MEDICINES.find(m => m.id === haz.ingredients[1]);
+              return `<div class="p-2.5 rounded-lg border bg-[#f3dede] border-[#a84444]"><div class="text-xs font-black text-[#7f1d1d] mb-0.5">⚠ ${haz.name}（${m1.name} ＋ ${m2.name}）</div><div class="text-[11px] font-bold text-[#450a0a]">${haz.reason}</div></div>`;
             }).join('')}
           </div>
         `;
