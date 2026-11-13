@@ -49,7 +49,6 @@
       -webkit-user-select: none;
     }
 
-    /* PC画面（1024px以上）のみ1画面固定レイアウトにする */
     @media (min-width: 1024px) {
       body {
         overflow: hidden;
@@ -84,7 +83,6 @@
       box-shadow: inset 0 0 30px rgba(84, 58, 28, 0.35);
     }
 
-    /* スマホでは縦スクロールを完全に邪魔しないよう pan-y を明示 */
     .draggable-item {
       touch-action: pan-y;
       cursor: grab;
@@ -95,6 +93,12 @@
     }
     .draggable-item:active { cursor: grabbing; }
 
+    .draggable-item.is-grabbed {
+      transform: scale(0.95);
+      opacity: 0.65;
+      border-color: #f59e0b !important;
+    }
+
     body.is-dragging-active,
     body.is-dragging-active * {
       touch-action: none !important;
@@ -104,17 +108,17 @@
     .drop-zone { transition: all 0.18s ease; }
     .drop-zone.drag-over {
       border-color: #f59e0b !important;
-      background-color: rgba(217, 119, 6, 0.22) !important;
-      box-shadow: 0 0 18px rgba(245, 158, 11, 0.55), inset 0 0 12px rgba(245, 158, 11, 0.35) !important;
-      transform: scale(1.02);
+      background-color: rgba(217, 119, 6, 0.25) !important;
+      box-shadow: 0 0 18px rgba(245, 158, 11, 0.6), inset 0 0 12px rgba(245, 158, 11, 0.4) !important;
+      transform: scale(1.03);
     }
 
     #drag-ghost {
       position: fixed;
       pointer-events: none;
       z-index: 9999;
-      transform: translate(-50%, -50%) scale(1.08);
-      filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.85));
+      transform: translate(-50%, -85%) scale(1.12);
+      filter: drop-shadow(0 12px 20px rgba(0, 0, 0, 0.9));
       display: none;
     }
 
@@ -161,7 +165,7 @@
 </head>
 <body class="flex flex-col min-h-[100dvh] lg:h-[100dvh] w-full lg:w-screen overflow-y-auto lg:overflow-hidden select-none">
 
-  <div id="drag-ghost" class="px-3 py-2 rounded-lg bg-[#241913] border-2 border-amber-400 text-amber-100 flex items-center gap-2 shadow-2xl">
+  <div id="drag-ghost" class="px-3.5 py-2 rounded-xl bg-[#241913] border-2 border-amber-400 text-amber-100 flex items-center gap-2 shadow-2xl">
     <span id="drag-ghost-icon" class="w-6 h-6 flex items-center justify-center"></span>
     <span id="drag-ghost-label" class="text-xs font-extrabold tracking-wide whitespace-nowrap"></span>
   </div>
@@ -216,7 +220,7 @@
       </div>
     </div>
 
-    <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+    <div class="flex items-center gap-1 sm:gap-2.5 shrink-0">
       <div class="px-1.5 sm:px-3 py-1 rounded bg-[#140f0c] border border-[#5e4724] flex items-center gap-1">
         <span class="text-[10px] sm:text-[11px] text-[#b89f78] font-bold hidden sm:inline">営業</span>
         <span id="stat-day" class="text-[11px] sm:text-sm font-black text-amber-300">1日目</span>
@@ -229,13 +233,16 @@
       </div>
       <div class="px-1.5 sm:px-3 py-1 rounded bg-[#140f0c] border border-[#5e4724] flex items-center gap-1">
         <span class="text-[11px] text-[#b89f78] font-bold hidden md:inline">評判</span>
-        <div class="w-10 sm:w-20 h-2 sm:h-2.5 bg-[#2a1818] rounded-full overflow-hidden border border-[#593a3a]">
+        <div class="w-8 sm:w-20 h-2 sm:h-2.5 bg-[#2a1818] rounded-full overflow-hidden border border-[#593a3a]">
           <div id="stat-rep-bar" class="h-full bg-gradient-to-r from-red-800 via-red-600 to-amber-500 transition-all duration-300" style="width: 70%;"></div>
         </div>
         <span id="stat-rep-text" class="text-[11px] sm:text-xs font-black text-red-300">70</span>
       </div>
+      <button type="button" id="btn-sound-toggle" onclick="toggleSound()" class="px-2 py-1 rounded bg-[#1a1410] border border-[#6e5630] text-amber-300 hover:border-amber-400 text-[11px] sm:text-xs font-bold transition" title="効果音 ON/OFF">
+        🔊
+      </button>
       <button type="button" onclick="openResetModal()" class="px-2 py-1 rounded bg-[#211512] border border-[#6e463a] text-[#d9a79c] hover:border-red-400 hover:text-red-200 text-[10px] sm:text-xs font-bold transition" title="データを初期化して最初からやり直す">
-        ↺ 最初へ
+        ↺<span class="hidden sm:inline"> 最初へ</span>
       </button>
     </div>
   </header>
@@ -249,7 +256,7 @@
             <span class="text-amber-400 text-xs">✦</span>
             <h2 class="text-xs sm:text-sm font-extrabold tracking-wide text-[#ebd5ad]">薬棚 <span id="shelf-count" class="text-[11px] text-[#a88d63] font-bold">(5/20種)</span></h2>
           </div>
-          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">ドラッグ／選択で処方・ラベル命名</span>
+          <span class="text-[10px] sm:text-[11px] text-[#b89e74] font-bold">長押しドラッグ／タップ選択で処方</span>
         </div>
         <div id="medicine-shelf" class="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-4 gap-1.5 lg:overflow-y-auto pr-0.5 lg:flex-1 content-start"></div>
       </div>
@@ -400,6 +407,246 @@
   </div>
 
   <script>
+    /* =====================================================================
+       Web Audio API ゴシック調効果音エンジン（外部音声ファイル不要）
+       ===================================================================== */
+    const SoundFX = (() => {
+      let ctx = null;
+      let enabled = true;
+
+      function getContext() {
+        if (!enabled) return null;
+        if (!ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          if (AudioCtx) ctx = new AudioCtx();
+        }
+        if (ctx && ctx.state === 'suspended') {
+          ctx.resume().catch(() => {});
+        }
+        return ctx;
+      }
+
+      // ガラス瓶を掴む・揺らす音（ガラスの高音＋液体の揺れ）
+      function playBottlePickup(soundDesc = '') {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+
+        // 1. ガラスの硬質な「チリン」音
+        const glassOsc = ac.createOscillator();
+        const glassGain = ac.createGain();
+        glassOsc.type = 'sine';
+        const baseFreq = soundDesc.includes('高い') || soundDesc.includes('澄んだ') ? 2650 :
+                         soundDesc.includes('重い') || soundDesc.includes('鈍い') ? 1750 : 2200;
+        glassOsc.frequency.setValueAtTime(baseFreq, now);
+        glassOsc.frequency.exponentialRampToValueAtTime(baseFreq * 1.04, now + 0.09);
+        glassGain.gain.setValueAtTime(0.001, now);
+        glassGain.gain.linearRampToValueAtTime(0.11, now + 0.008);
+        glassGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+        glassOsc.connect(glassGain);
+        glassGain.connect(ac.destination);
+        glassOsc.start(now);
+        glassOsc.stop(now + 0.17);
+
+        // 2. 液体が揺れる「チャプン」音（バンドパスノイズ）
+        const bufferSize = Math.floor(ac.sampleRate * 0.18);
+        const buffer = ac.createBuffer(1, bufferSize, ac.sampleRate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          data[i] = (Math.random() * 2 - 1) * Math.sin((i / bufferSize) * Math.PI);
+        }
+        const noise = ac.createBufferSource();
+        noise.buffer = buffer;
+
+        const filter = ac.createBiquadFilter();
+        filter.type = 'bandpass';
+        filter.Q.value = soundDesc.includes('粘性') || soundDesc.includes('ねっとり') ? 4.5 : 7.0;
+        filter.frequency.setValueAtTime(420, now + 0.02);
+        filter.frequency.exponentialRampToValueAtTime(980, now + 0.14);
+
+        const liqGain = ac.createGain();
+        liqGain.gain.setValueAtTime(0.001, now + 0.02);
+        liqGain.gain.linearRampToValueAtTime(0.18, now + 0.06);
+        liqGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.19);
+
+        noise.connect(filter);
+        filter.connect(liqGain);
+        liqGain.connect(ac.destination);
+        noise.start(now + 0.02);
+      }
+
+      // スロットに置く・ラベル刻印の「コツッ」音
+      function playPlaceClink() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(160, now + 0.07);
+        gain.gain.setValueAtTime(0.16, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now);
+        osc.stop(now + 0.085);
+      }
+
+      // 調合成功SE（泡立つ音＋神秘的な和音）
+      function playBrewSuccess() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+
+        // 泡音（ポコポコ）
+        for (let i = 0; i < 5; i++) {
+          const t = now + i * 0.055;
+          const bOsc = ac.createOscillator();
+          const bGain = ac.createGain();
+          bOsc.type = 'sine';
+          const f = 350 + Math.random() * 450;
+          bOsc.frequency.setValueAtTime(f, t);
+          bOsc.frequency.exponentialRampToValueAtTime(f * 1.6, t + 0.05);
+          bGain.gain.setValueAtTime(0.07, t);
+          bGain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+          bOsc.connect(bGain);
+          bGain.connect(ac.destination);
+          bOsc.start(t);
+          bOsc.stop(t + 0.06);
+        }
+
+        // 神秘の和音（Dマイナー9th風）
+        const notes = [293.66, 440.00, 523.25, 659.25];
+        notes.forEach((freq, idx) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          const start = now + 0.18 + idx * 0.05;
+          osc.frequency.setValueAtTime(freq, start);
+          gain.gain.setValueAtTime(0.001, start);
+          gain.gain.linearRampToValueAtTime(0.08, start + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, start + 0.65);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(start);
+          osc.stop(start + 0.68);
+        });
+      }
+
+      // 調合危険・失敗SE（不協和音＋警告ブザー）
+      function playBrewHazard() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const freqs = [145, 154, 210];
+        freqs.forEach((f) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(f, now);
+          osc.frequency.linearRampToValueAtTime(f * 0.78, now + 0.42);
+          gain.gain.setValueAtTime(0.07, now);
+          gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.45);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(now);
+          osc.stop(now + 0.46);
+        });
+      }
+
+      // 治療成功ファンファーレ（重厚な鐘・オルガン風和音）
+      function playTreatmentSuccess() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const chord = [261.63, 329.63, 392.00, 523.25]; // C major
+        chord.forEach((freq, idx) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'triangle';
+          const t = now + idx * 0.07;
+          osc.frequency.setValueAtTime(freq, t);
+          gain.gain.setValueAtTime(0.001, t);
+          gain.gain.linearRampToValueAtTime(0.11, t + 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.85);
+          osc.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(t);
+          osc.stop(t + 0.9);
+        });
+      }
+
+      // 治療失敗・誤診SE（重苦しい下降音）
+      function playTreatmentFail() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const notes = [220, 207.65, 146.83];
+        notes.forEach((freq, idx) => {
+          const osc = ac.createOscillator();
+          const gain = ac.createGain();
+          osc.type = 'sawtooth';
+          const t = now + idx * 0.14;
+          osc.frequency.setValueAtTime(freq, t);
+          osc.frequency.exponentialRampToValueAtTime(freq * 0.88, t + 0.28);
+
+          const filter = ac.createBiquadFilter();
+          filter.type = 'lowpass';
+          filter.frequency.value = 650;
+
+          gain.gain.setValueAtTime(0.11, t);
+          gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.34);
+          osc.connect(filter);
+          filter.connect(gain);
+          gain.connect(ac.destination);
+          osc.start(t);
+          osc.stop(t + 0.36);
+        });
+      }
+
+      // 問診・ページめくり音
+      function playPaperFlip() {
+        const ac = getContext();
+        if (!ac) return;
+        const now = ac.currentTime;
+        const osc = ac.createOscillator();
+        const gain = ac.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(680, now);
+        osc.frequency.exponentialRampToValueAtTime(920, now + 0.06);
+        gain.gain.setValueAtTime(0.06, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.07);
+        osc.connect(gain);
+        gain.connect(ac.destination);
+        osc.start(now);
+        osc.stop(now + 0.075);
+      }
+
+      function toggle() {
+        enabled = !enabled;
+        if (enabled) playPlaceClink();
+        return enabled;
+      }
+
+      return {
+        playBottlePickup,
+        playPlaceClink,
+        playBrewSuccess,
+        playBrewHazard,
+        playTreatmentSuccess,
+        playTreatmentFail,
+        playPaperFlip,
+        toggle,
+        isEnabled: () => enabled
+      };
+    })();
+
+    function toggleSound() {
+      const on = SoundFX.toggle();
+      document.getElementById('btn-sound-toggle').textContent = on ? '🔊' : '🔇';
+    }
+
     const SAVE_STORAGE_KEY = 'materia_obscura_save_v1';
 
     function saveGameState() {
@@ -574,11 +821,11 @@
       'liver_weak': ['「若い頃の深酒が祟って肝臓を悪くしており、白目が黄色いとよく言われます」', '「毒を分解する肝臓が弱っているため、劇薬の希釈水は危険だと止められています」'],
       'sun_sensitivity': ['「生まれつき肌が極端に弱く、わずかな日光に当たっただけで水ぶくれができる光線過敏症です」', '「太陽の光を浴びる作用のある薬草油は、皮膚を焼き尽くすので使えません」'],
       'fast_pulse': ['「今は心臓が早鐘のようにバクバクと速く打ちすぎていて、動悸が激しいのです」', '「脈拍をさらに刺激する草の汁は、心臓が暴走してしまうので禁忌なのです」'],
-      'epilepsy': ['("実は子供の頃からてんかんの持病があり、強い刺激臭や覚醒剤で発作が起きます")', '「樟脳のような強い香りの気付け薬を嗅ぐと、痙攣発作を誘発してしまうのです」'],
-      'poor_circulation': ['「手足の先の血の巡りが極端に悪く、冬場は指先が紫色になって感覚がなくなります」', '("血管を強く収縮させる薬を使うと、指先が壊疽してしまうと言われました")'],
+      'epilepsy': ['「実は子供の頃からてんかんの持病があり、強い刺激臭や覚醒剤で発作が起きます」', '「樟脳のような強い香りの気付け薬を嗅ぐと、痙攣発作を誘発してしまうのです」'],
+      'poor_circulation': ['「手足の先の血の巡りが極端に悪く、冬場は指先が紫色になって感覚がなくなります」', '「血管を強く収縮させる薬を使うと、指先が壊疽してしまうと言われました」'],
       'jaw_decay': ['「奥歯の虫歯がひどく、顎の骨まで炎症が広がって歯茎が腫れているのです」', '「燐を含む薬は顎の骨を腐らせると聞いたので、絶対に避けなければなりません」'],
       'alcohol_intolerance': ['「体質的にアルコールを一滴も受け付けず、強い酒を飲むと胃潰瘍から吐血します」', '「薬用酒であっても、酒精が入っていると激しい中毒を起こすのです」'],
-      'shallow_breath': ['「肺炎を患ってから呼吸が浅く、眠ってしまうとそのまま息が止まりそうで怖いのです」', '「眠기를誘う強い鎮痛剤は呼吸を止めてしまうため、使えない体質です」'],
+      'shallow_breath': ['「肺炎を患ってから呼吸が浅く、眠ってしまうとそのまま息が止まりそうで怖いのです」', '「眠気を誘う強い鎮痛剤は呼吸を止めてしまうため、使えない体質です」'],
       'thyroid_hyper': ['「異常なほど汗をかきやすく、常に手が小刻みに震える体質（甲状腺の異常）なのです」', '「海藻やヨウ素を多く含む薬を摂ると、動悸と震えが悪化してしまいます」'],
       'kidney_stone': ['「以前に尿路結石で七転八倒したことがあり、石灰分が溜まりやすい体質なのです」', '「石の粉やカルシウム分を多く含む白濁液は、結石が再発するので禁忌です」'],
       'numbness': ['「実は数日前から左半身の感覚が鈍く、神経が麻痺し始めているのです……」', '「神経を冷やして感覚を奪う毒草の類を使うと、全身が動かなくなる恐れがあります」']
@@ -773,9 +1020,21 @@
           <button type="button" onclick="event.stopPropagation(); openLabelPicker(${index})" class="w-full px-1 py-1 rounded text-[10px] sm:text-[11px] font-extrabold truncate text-center transition ${hasLabel ? 'bg-[#efe5cf] text-[#1c130d] border border-[#8c6932] shadow-xs' : 'bg-[#261c15] text-[#9e8663] border border-dashed border-[#664d27] hover:text-amber-300'}" title="タップしてラベルを貼る">${hasLabel ? escapeHTML(bottle.userLabel) : '＋ラベル'}</button>
         `;
 
-        attachPointerDrag(card, {
-          type: 'bottle', bottleIndex: index, medId: med.id, label: hasLabel ? bottle.userLabel : `無銘の瓶 #${bottle.slotNum}`, iconHTML: getBottleSVG(med, 'w-6 h-6'),
-          onTap: () => { state.selectedBottleIndex = index; renderShelf(); renderInspectWindow(); saveGameState(); }
+        attachUniversalDrag(card, {
+          type: 'bottle',
+          bottleIndex: index,
+          medId: med.id,
+          soundDesc: med.sound,
+          label: hasLabel ? bottle.userLabel : `無銘の瓶 #${bottle.slotNum}`,
+          iconHTML: getBottleSVG(med, 'w-6 h-6'),
+          onGrab: () => SoundFX.playBottlePickup(med.sound),
+          onTap: () => {
+            SoundFX.playBottlePickup(med.sound);
+            state.selectedBottleIndex = index;
+            renderShelf();
+            renderInspectWindow();
+            saveGameState();
+          }
         });
         shelfEl.appendChild(card);
       });
@@ -841,8 +1100,12 @@
           </div>
         `;
         const dragEl = document.getElementById('brewed-flask-draggable');
-        attachPointerDrag(dragEl, {
-          type: 'brewed', flaskData: f, label: f.name, iconHTML: getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz),
+        attachUniversalDrag(dragEl, {
+          type: 'brewed',
+          flaskData: f,
+          label: f.name,
+          iconHTML: getFlaskSVG(isHaz ? '#dc2626' : f.colorHex, isHaz),
+          onGrab: () => SoundFX.playBottlePickup('澄んだ'),
           onTap: () => setPrescribeItem(f)
         });
       } else {
@@ -889,6 +1152,7 @@
     }
 
     function openLabelPicker(bottleIndex) {
+      SoundFX.playPaperFlip();
       state.pickerTargetIndex = bottleIndex;
       state.selectedBottleIndex = bottleIndex;
       renderShelf();
@@ -909,6 +1173,7 @@
 
     function selectCandidateLabel(name) {
       if (state.pickerTargetIndex === null) return;
+      SoundFX.playPlaceClink();
       state.shelfBottles[state.pickerTargetIndex].userLabel = name;
       syncLabelsToSlots();
       forceCloseLabelPicker();
@@ -920,6 +1185,7 @@
 
     function applyCustomLabel() {
       if (state.pickerTargetIndex === null) return;
+      SoundFX.playPlaceClink();
       state.shelfBottles[state.pickerTargetIndex].userLabel = document.getElementById('picker-custom-input').value.trim();
       syncLabelsToSlots();
       forceCloseLabelPicker();
@@ -931,6 +1197,7 @@
 
     function clearBottleLabel() {
       if (state.pickerTargetIndex === null) return;
+      SoundFX.playPaperFlip();
       state.shelfBottles[state.pickerTargetIndex].userLabel = '';
       syncLabelsToSlots();
       forceCloseLabelPicker();
@@ -956,80 +1223,139 @@
     function closeLabelPicker(e) { if (e.target.id === 'label-picker-popover') forceCloseLabelPicker(); }
     function forceCloseLabelPicker() { document.getElementById('label-picker-popover').classList.add('hidden'); state.pickerTargetIndex = null; }
 
-    /* iframe埋め込み環境に特化した頑強な Pointer Events ドラッグ＆ドロップ実装 */
-    function attachPointerDrag(element, config) {
+    /* =====================================================================
+       スマホ（タッチ）・PC（マウス）・iframe埋め込み完全対応 ドラッグ＆ドロップ
+       ===================================================================== */
+    function attachUniversalDrag(element, config) {
       let startX = 0, startY = 0;
       let isDragging = false;
       let canceledByScroll = false;
+      let holdTimer = null;
       const DRAG_THRESHOLD = 8;
 
-      element.addEventListener('pointerdown', (e) => {
+      const ghost = document.getElementById('drag-ghost');
+      const ghostIcon = document.getElementById('drag-ghost-icon');
+      const ghostLabel = document.getElementById('drag-ghost-label');
+
+      function beginDragVisual(x, y) {
+        if (isDragging) return;
+        isDragging = true;
+        element.classList.add('is-grabbed');
+        document.body.classList.add('is-dragging-active');
+        ghostIcon.innerHTML = config.iconHTML;
+        ghostLabel.textContent = config.label;
+        ghost.style.left = `${x}px`;
+        ghost.style.top = `${y}px`;
+        ghost.style.display = 'flex';
+        if (config.onGrab) config.onGrab();
+        highlightDropZoneAt(x, y);
+      }
+
+      function updateDragVisual(x, y) {
+        ghost.style.left = `${x}px`;
+        ghost.style.top = `${y}px`;
+        highlightDropZoneAt(x, y);
+      }
+
+      function endDragVisual(x, y, wasCanceled = false) {
+        clearTimeout(holdTimer);
+        holdTimer = null;
+        element.classList.remove('is-grabbed');
+        document.body.classList.remove('is-dragging-active');
+        ghost.style.display = 'none';
+        clearDropZoneHighlights();
+
+        if (isDragging && !wasCanceled && typeof x === 'number' && typeof y === 'number') {
+          const dropTarget = getDropTargetAt(x, y);
+          if (dropTarget) handleDropAction(dropTarget, config);
+        } else if (!isDragging && !canceledByScroll && !wasCanceled) {
+          if (config.onTap) config.onTap();
+        }
+        isDragging = false;
+      }
+
+      // --- 1. タッチデバイス専用（スマホ・タブレット・Googleサイト埋め込み対策） ---
+      element.addEventListener('touchstart', (e) => {
         if (e.target.closest('button')) return;
+        if (e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+        isDragging = false;
+        canceledByScroll = false;
+
+        // 170msホールドで即座に瓶を掴む（縦スクロールに奪われない）
+        holdTimer = setTimeout(() => {
+          if (!canceledByScroll) {
+            beginDragVisual(startX, startY);
+          }
+        }, 170);
+      }, { passive: true });
+
+      element.addEventListener('touchmove', (e) => {
+        if (e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        const dx = touch.clientX - startX;
+        const dy = touch.clientY - startY;
+
+        if (!isDragging) {
+          if (canceledByScroll) return;
+          // まだホールド成立前に縦方向へ大きく動いたら、通常の棚スクロールを優先
+          if (Math.abs(dy) > 10 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+            canceledByScroll = true;
+            clearTimeout(holdTimer);
+            return;
+          }
+          // 横方向への明確なドラッグなら即座に掴む
+          if (Math.abs(dx) > DRAG_THRESHOLD) {
+            clearTimeout(holdTimer);
+            beginDragVisual(touch.clientX, touch.clientY);
+          }
+        }
+
+        if (isDragging) {
+          // ドラッグ中は画面スクロールを完全に抑止
+          if (e.cancelable) e.preventDefault();
+          updateDragVisual(touch.clientX, touch.clientY);
+        }
+      }, { passive: false });
+
+      element.addEventListener('touchend', (e) => {
+        const touch = e.changedTouches[0];
+        endDragVisual(touch ? touch.clientX : null, touch ? touch.clientY : null, false);
+      }, { passive: true });
+
+      element.addEventListener('touchcancel', () => {
+        endDragVisual(null, null, true);
+      }, { passive: true });
+
+      // --- 2. マウス・PC向け ---
+      element.addEventListener('mousedown', (e) => {
+        if (e.button !== 0 || e.target.closest('button')) return;
         startX = e.clientX;
         startY = e.clientY;
         isDragging = false;
         canceledByScroll = false;
 
-        const isTouch = e.pointerType === 'touch';
-        if (!isTouch) {
-          try { element.setPointerCapture(e.pointerId); } catch (_) {}
-        }
-
-        const ghost = document.getElementById('drag-ghost');
-        const ghostIcon = document.getElementById('drag-ghost-icon');
-        const ghostLabel = document.getElementById('drag-ghost-label');
-
-        const onPointerMove = (moveEvent) => {
-          if (canceledByScroll) return;
+        const onMouseMove = (moveEvent) => {
           const dx = moveEvent.clientX - startX;
           const dy = moveEvent.clientY - startY;
-
-          if (isTouch && window.innerWidth < 1024 && !isDragging) {
-            if (Math.abs(dy) > DRAG_THRESHOLD && Math.abs(dy) > Math.abs(dx)) {
-              canceledByScroll = true;
-              return;
-            }
-          }
-
           if (!isDragging && Math.hypot(dx, dy) > DRAG_THRESHOLD) {
-            isDragging = true;
-            if (isTouch) {
-              try { element.setPointerCapture(e.pointerId); } catch (_) {}
-            }
-            document.body.classList.add('is-dragging-active');
-            ghostIcon.innerHTML = config.iconHTML;
-            ghostLabel.textContent = config.label;
-            ghost.style.display = 'flex';
+            beginDragVisual(moveEvent.clientX, moveEvent.clientY);
           }
-
           if (isDragging) {
-            ghost.style.left = `${moveEvent.clientX}px`;
-            ghost.style.top = `${moveEvent.clientY}px`;
-            highlightDropZoneAt(moveEvent.clientX, moveEvent.clientY);
+            updateDragVisual(moveEvent.clientX, moveEvent.clientY);
           }
         };
 
-        const onPointerUp = (upEvent) => {
-          try { element.releasePointerCapture(e.pointerId); } catch (_) {}
-          element.removeEventListener('pointermove', onPointerMove);
-          element.removeEventListener('pointerup', onPointerUp);
-          element.removeEventListener('pointercancel', onPointerUp);
-
-          document.body.classList.remove('is-dragging-active');
-          ghost.style.display = 'none';
-          clearDropZoneHighlights();
-
-          if (!isDragging && !canceledByScroll) {
-            if (config.onTap) config.onTap();
-          } else if (isDragging) {
-            const dropTarget = getDropTargetAt(upEvent.clientX, upEvent.clientY);
-            if (dropTarget) handleDropAction(dropTarget, config);
-          }
+        const onMouseUp = (upEvent) => {
+          window.removeEventListener('mousemove', onMouseMove);
+          window.removeEventListener('mouseup', onMouseUp);
+          endDragVisual(upEvent.clientX, upEvent.clientY, false);
         };
 
-        element.addEventListener('pointermove', onPointerMove);
-        element.addEventListener('pointerup', onPointerUp);
-        element.addEventListener('pointercancel', onPointerUp);
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mouseup', onMouseUp);
       });
     }
 
@@ -1058,12 +1384,14 @@
     function handleDropAction(target, config) {
       if (target === 'alchemy-0' || target === 'alchemy-1') {
         if (config.type !== 'bottle') return;
+        SoundFX.playPlaceClink();
         const slotIdx = target === 'alchemy-0' ? 0 : 1;
         state.alchemySlots[slotIdx] = { type: 'base', bottleIndex: config.bottleIndex, medId: config.medId, label: config.label };
         state.brewedFlask = null;
         renderAlchemyStation();
         saveGameState();
       } else if (target === 'prescribe') {
+        SoundFX.playPlaceClink();
         if (config.type === 'bottle') {
           setPrescribeItem({ type: 'base', bottleIndex: config.bottleIndex, medId: config.medId, label: config.label });
         } else if (config.type === 'brewed') {
@@ -1074,11 +1402,13 @@
 
     function handleSlotClick(slotIdx) {
       if (state.alchemySlots[slotIdx]) {
+        SoundFX.playPlaceClink();
         state.alchemySlots[slotIdx] = null;
         state.brewedFlask = null;
         renderAlchemyStation();
         saveGameState();
       } else if (state.selectedBottleIndex !== null) {
+        SoundFX.playPlaceClink();
         const b = state.shelfBottles[state.selectedBottleIndex];
         state.alchemySlots[slotIdx] = { type: 'base', bottleIndex: state.selectedBottleIndex, medId: b.medId, label: b.userLabel || `無銘の瓶 #${b.slotNum}` };
         state.brewedFlask = null;
@@ -1089,14 +1419,33 @@
 
     function handlePrescribeSlotClick() {
       if (!state.prescribeItem && state.selectedBottleIndex !== null) {
+        SoundFX.playPlaceClink();
         const b = state.shelfBottles[state.selectedBottleIndex];
         setPrescribeItem({ type: 'base', bottleIndex: state.selectedBottleIndex, medId: b.medId, label: b.userLabel || `無銘の瓶 #${b.slotNum}` });
       }
     }
 
-    function clearAlchemySlots() { state.alchemySlots = [null, null]; state.brewedFlask = null; renderAlchemyStation(); saveGameState(); }
-    function setPrescribeItem(item) { state.prescribeItem = item; renderPrescribeSlot(); saveGameState(); }
-    function clearPrescribeSlot() { state.prescribeItem = null; renderPrescribeSlot(); saveGameState(); }
+    function clearAlchemySlots() {
+      SoundFX.playPlaceClink();
+      state.alchemySlots = [null, null];
+      state.brewedFlask = null;
+      renderAlchemyStation();
+      saveGameState();
+    }
+
+    function setPrescribeItem(item) {
+      SoundFX.playPlaceClink();
+      state.prescribeItem = item;
+      renderPrescribeSlot();
+      saveGameState();
+    }
+
+    function clearPrescribeSlot() {
+      SoundFX.playPlaceClink();
+      state.prescribeItem = null;
+      renderPrescribeSlot();
+      saveGameState();
+    }
 
     function brewMixture() {
       const s0 = state.alchemySlots[0];
@@ -1104,6 +1453,7 @@
       if (!s0 || !s1) return;
 
       if (s0.medId === s1.medId) {
+        SoundFX.playBrewHazard();
         state.brewedFlask = { type: 'hazard', name: '変質した同種濃縮液', reason: '同じ生薬同士を無理に煮詰めたため、有効成分が破壊され濁った失敗液になった。' };
         renderAlchemyStation();
         saveGameState();
@@ -1114,6 +1464,7 @@
       const hazard = HAZARD_RECIPES.find(h => { const hp = [...h.ingredients].sort(); return hp[0] === pair[0] && hp[1] === pair[1]; });
 
       if (hazard) {
+        SoundFX.playBrewHazard();
         state.brewedFlask = { type: 'hazard', name: hazard.name, reason: hazard.reason };
         state.reputation = Math.max(0, state.reputation - 5);
         renderHeaderStats();
@@ -1125,8 +1476,10 @@
 
       const valid = VALID_RECIPES.find(r => { const rp = [...r.ingredients].sort(); return rp[0] === pair[0] && rp[1] === pair[1]; });
       if (valid) {
+        SoundFX.playBrewSuccess();
         state.brewedFlask = { type: 'brewed', recipeId: valid.id, name: valid.name, colorHex: valid.colorHex, effect: valid.effect, contraindicationId: valid.contraindicationId };
       } else {
+        SoundFX.playBrewHazard();
         state.brewedFlask = { type: 'hazard', name: '効能を失った灰色の泥水', reason: '互いの薬効が打ち消し合い、何の治療効果も持たない濁り水になってしまった。' };
       }
 
@@ -1139,6 +1492,7 @@
       if (!p || state.interrogationsLeft <= 0) return;
       const nextClueIndex = state.revealedClues.length;
       if (nextClueIndex < p.clues.length) {
+        SoundFX.playPaperFlip();
         state.revealedClues.push(p.clues[nextClueIndex]);
         state.interrogationsLeft--;
         renderPatientArea();
@@ -1193,6 +1547,12 @@
         }
       }
 
+      if (outcome === 'success') {
+        SoundFX.playTreatmentSuccess();
+      } else {
+        SoundFX.playTreatmentFail();
+      }
+
       state.gold += goldDelta;
       state.reputation = Math.max(0, Math.min(100, state.reputation + repDelta));
       if (outcome === 'success') state.curedCount++;
@@ -1228,6 +1588,7 @@
     }
 
     function proceedNextStep() {
+      SoundFX.playPlaceClink();
       document.getElementById('result-modal').classList.add('hidden');
       if (state.reputation <= 0) { triggerGameOver(); return; }
       if (state.patientIndexInDay < state.patientsPerDay) {
@@ -1265,6 +1626,7 @@
       if (state.gold < cost) return;
       const lockedMeds = MEDICINES.filter(m => !state.unlockedMedIds.includes(m.id));
       if (lockedMeds.length === 0) return;
+      SoundFX.playBottlePickup('澄んだ');
       state.gold -= cost;
       const newMed = lockedMeds[Math.floor(Math.random() * lockedMeds.length)];
       state.unlockedMedIds.push(newMed.id);
@@ -1284,6 +1646,7 @@
 
     function buyReputation(cost) {
       if (state.gold < cost || state.reputation >= 100) return;
+      SoundFX.playPlaceClink();
       state.gold -= cost;
       state.reputation = Math.min(100, state.reputation + 15);
       renderHeaderStats();
@@ -1293,6 +1656,7 @@
 
     function buyStethoscope(cost) {
       if (state.gold < cost || state.maxInterrogations >= 4) return;
+      SoundFX.playPlaceClink();
       state.gold -= cost;
       state.maxInterrogations++;
       saveGameState();
@@ -1300,6 +1664,7 @@
     }
 
     function startNextDay() {
+      SoundFX.playPlaceClink();
       document.getElementById('market-modal').classList.add('hidden');
       state.day++;
       state.patientIndexInDay = 1;
@@ -1318,6 +1683,7 @@
     }
 
     function switchGrimoireTab(tabName) {
+      SoundFX.playPaperFlip();
       state.activeTab = tabName;
       document.querySelectorAll('.grimoire-tab').forEach(btn => {
         btn.classList.remove('bg-[#efe5cf]', 'text-[#1c130d]');
@@ -1333,6 +1699,7 @@
     }
 
     function toggleMobileGrimoire(open) {
+      SoundFX.playPaperFlip();
       const pane = document.getElementById('grimoire-pane');
       if (open) { pane.classList.remove('hidden'); pane.classList.add('flex'); }
       else { pane.classList.add('hidden'); pane.classList.remove('flex'); }
@@ -1348,7 +1715,7 @@
             <div class="border-b-2 border-[#8c6932] pb-1.5"><span class="font-cinzel text-[11px] font-black tracking-widest text-[#7a1c1c]">PRACTITIONER'S MANUAL</span><h3 class="text-lg font-black text-[#1c130d]">診療と鑑定の手引き</h3></div>
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">1. 無銘の薬瓶の鑑定とラベル貼り</h4><p class="text-xs font-bold text-[#261a12]">薬棚の瓶には名前が書かれていません。瓶をタップして鑑識レンズで「色調・瓶形・芳香・沈殿・振音」を確認し、生薬図鑑タブと照合して正体を推理してください。瓶下の「＋ラベル」をタップすると候補からワンタップで名前を貼れます。</p></div>
             <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">2. 問診で「隠された禁忌」を暴く</h4><p class="text-xs font-bold text-[#261a12]">患者は最初の訴えだけでは持病を隠しています。「🩺 問診する」を押して体質や禁忌を聞き出してください。症状に効く薬であっても、患者の禁忌に触れる薬を渡すと深刻な副作用で失敗します。</p></div>
-            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法</h4><p class="text-xs font-bold text-[#261a12]">複合症状の患者には調合秘伝タブのレシピが必要です。薬瓶を調合台（素材A・B）へドラッグ（または瓶を選択してスロットをタップ）して「調合する」を押し、完成したフラスコを処方トレイへセットして治療します。</p></div>
+            <div class="p-2.5 rounded-lg bg-[#e3d3b4] border border-[#a6834b]"><h4 class="font-black text-sm text-[#6b141a] mb-1">3. 調合と処方の操作方法（スマホ対応）</h4><p class="text-xs font-bold text-[#261a12]">スマホでは薬瓶を<strong>少し長押し（ホールド）</strong>して指を動かすと、そのまま調合台（素材A・B）や処方トレイへドラッグできます。また、瓶をタップして選択した状態でスロットをタップしてもセット可能です。</p></div>
           </div>
         `;
       } else if (tab === 'herbs') {
